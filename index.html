@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ventosa san martino</title>
+    <meta name="description" content="arquitectura i enginyeria">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/effects.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/landing-section.css">
+    <link rel="stylesheet" href="css/backdrop.css">
+
+    <link rel="icon" href="images/favicon_Mesa de trabajo 1.svg" type="image/svg+xml">
+
+
+</head>
+<body>
+    <div id="backdrop"></div>
+  <style>
+    
+  </style>
+    <!-- Restored Slitscan Effect Initialization -->
+<script type="module">
+  import CargoSlitScan from './js/cargo-slitscan-enhanced.js';
+  import CargoBackdrop from './js/cargo-backdrop.js';
+
+  // Preloaded state following Cargo.site structure
+  window.__PRELOADED_STATE__ = {
+    site: {
+      backdrops: {
+        activeBackdrop: "legacy/slitscan",
+        backdropSettings: {
+          "legacy/slitscan": {
+            image: "images/peces2-bp3.png",
+            scan_size: 100,
+            scan_cycles: 2,
+            wiggle: 4,
+            target_speed: 40,
+            orientation: "vertical",
+            mouse_interaction: true,
+            scroll_interaction: true
+          }
+        }
+      }
+    }
+  };
+
+  const homeSection = document.getElementById('home');
+  if (!homeSection) {
+    console.error('Section #home not found');
+  } else {
+    console.log('Initializing optimized slitscan effect for #home section...');
+
+    // Get backdrop settings from preloaded state
+    const backdropSettings = window.__PRELOADED_STATE__.site.backdrops.backdropSettings["legacy/slitscan"];
+
+    // Initialize slitscan effect with optimized parameters
+    const slitScan = new CargoSlitScan({
+      container: homeSection,
+      imageUrl: backdropSettings.image,
+      width: homeSection.offsetWidth,
+      height: homeSection.offsetHeight,
+      scan_size: backdropSettings.scan_size,
+      scan_cycles: backdropSettings.scan_cycles,
+      wiggle: backdropSettings.wiggle,
+      target_speed: backdropSettings.target_speed,
+      orientation: backdropSettings.orientation,
+      mouse_interaction: backdropSettings.mouse_interaction,
+      scroll_interaction: backdropSettings.scroll_interaction,
+      mirror_horizontal: true,
+      mirror_vertical: false,
+      wave_effect: true
+    });
+
+    console.log('Optimized slitscan effect initialized successfully for #home section');
+
+    // Handle window resize with proper cleanup
+    window.addEventListener('resize', () => {
+      slitScan.destroy();
+
+      // Recreate with new dimensions
+      const newSlitScan = new CargoSlitScan({
+        container: homeSection,
+        imageUrl: backdropSettings.image,
+        width: homeSection.offsetWidth,
+        height: homeSection.offsetHeight,
+        scan_size: backdropSettings.scan_size,
+        scan_cycles: backdropSettings.scan_cycles,
+        wiggle: backdropSettings.wiggle,
+        target_speed: backdropSettings.target_speed,
+        orientation: backdropSettings.orientation,
+        mouse_interaction: backdropSettings.mouse_interaction,
+        scroll_interaction: backdropSettings.scroll_interaction,
+        mirror_horizontal: true,
+        mirror_vertical: false,
+        wave_effect: true
+      });
+    });
+  }
+</script>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        <!-- Fixed Navigation Header -->
+        <header class="main-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="site-title">
+                        <a data-section="profile" class="nav-link">
+                            MARC<br>
+                            VENTOSA<br>
+                            SAN MARTINO
+                        </a>
+                    </h1>
+                </div>
+                <div class="header-right">
+                    <nav class="main-nav">
+                        <h1 class="nav-menu">
+                            <a data-section="home" class="nav-link home-link">/</a><br>
+                            <a data-section="casa-intramurs" class="nav-link">CASA INTRAMURS</a><br>
+                            <a data-section="refact" class="nav-link">REFACT</a><br>
+                            <a data-section="abans-del-cim" class="nav-link">ABANS DEL CIM</a><br>
+                            <a data-section="envoltura" class="nav-link">ENVOLTURA</a><br>
+                            <a data-section="misc" class="nav-link">:~}</a>
+                        </h1>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Landing Section -->
+        <section id="home" class="landing-section" style="position:relative;">
+            <div id="slitscan-overlay">
+            <div id="slitscan-overlay-text">
+                <span>arquitectura</span><br>
+                <span>i enginyeria</span><br><br>
+                <span>2020 / 2025</span>
+            </div>
+            </div>
+        </section>
+
+        <!-- Project Sections -->
+        <main class="main-content">
+    <!-- Projects will be dynamically loaded here -->
+  </main>
+        <!-- Profile Section -->
+        <section id="profile" class="profile-section">
+                <div class="profile-content">
+                    <div class="profile-text">
+                        <p>Benvinguts!
+                        Més que un portfoli, aquest espai vol ser un arxiu viu de processos
+                        i anotacions passades. Una eina per tornar-hi, copiar-me, confrontar-me 
+                        amb allò que ja he fet, i construir a partir d’aquests camins i desviacions.
+                            </p>
+                        
+                        <h3>Formació</h3>
+                        <p>Grau en Enginyeria Civil  ETSECCPB 2020 / 2024<br>
+                        Grau en Arquitectura ETSAB 2021 /</p>
+                        
+                        <div class="profile-details">
+                            <div class="profile-columns">
+                                <div class="profile-column">
+                                    <h3>Trajectòria</h3>
+                                    <p>Domestic Data</p>
+                                </div>
+                                
+                                <div class="profile-column">
+                                    <h3>Registres</h3>
+                                    <p>Data pipeline for structural models of cable net systems<br>
+                                    Case study: analysis of a sector of the Olympiastadion in Munich<br>
+                                    July 2024</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+    </main>
+
+
+    <!-- JavaScript for Active Section Highlighting -->
+    <script src="js/navigation.js" type="module"></script>
+    <script src="js/project-loader.js" type="module"></script>
+    </div>
+
+    
+</body>
+</html>
+</script>
+<script src="js/project-loader.js" type="module"></script>
+    </div>
+
+    
+</body>
+</html>

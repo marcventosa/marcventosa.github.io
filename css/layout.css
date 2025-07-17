@@ -1,0 +1,579 @@
+/* Layout - Structural layout and positioning */
+
+/* Content Wrapper */
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: var(--viewport-height);
+    position: relative;
+    z-index: 1;
+    width: 100%;
+}
+
+/* Intro Section */
+.intro-section {
+    min-height: var(--viewport-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    position: relative;
+    z-index: 2;
+}
+
+.intro-content {
+    text-align: center;
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Main Header */
+.main-header {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    background: none;
+    border: none;
+    transform: translateY(-50%);
+    transition: var(--transition-medium);
+    pointer-events: none;
+}
+
+.header-left {
+    width: 15%;
+    float: left;
+    margin-left: 10px; /* Breathing space from screen margin */
+}
+
+.header-right {
+    width: 15%;
+    float: right;
+    margin-right: 10px; /* Breathing space from screen margin */
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+}
+
+.header-left, .header-right {
+    pointer-events: auto;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: var(--spacing-xl) var(--spacing-sm);
+    width: 80%; /* Adjusted to 80% to prevent overlap with the header menu */
+    margin: 0 auto; /* Center the content */
+}
+
+/* Project Sections */
+.project-section {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-color: white;
+    position: relative;
+    margin-left: calc(-50vw + 50%);
+}
+
+.project-section:last-child {
+    border-bottom: none;
+}
+
+.project-gallery {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 60vh;
+    overflow: hidden;
+    background-color: transparent;
+    padding: 0;
+}
+
+.gallery-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity var(--transition-slow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery-slide.active {
+    opacity: 1;
+}
+
+.project-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+
+.project-info {
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    max-width: 1200px; /* Constrain content width */
+    margin: 0 auto; /* Center the content */
+    width: 100%;
+}
+
+.project-title {
+    margin: 0 0 var(--spacing-sm) 0;
+    color: var(--text-secondary);
+}
+
+.project-description {
+    margin: 0 0 var(--spacing-md) 0;
+    line-height: 1.4;
+}
+
+.project-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.project-meta {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+.project-year,
+.project-type {
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+    font-weight: var(--font-weight-medium);
+}
+
+.project-specs {
+    margin-top: var(--spacing-sm);
+}
+
+.project-specs p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--text-quaternary);
+    line-height: 1.4;
+}
+
+/* Profile Section */
+.profile-section {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-xl) 0;
+    border-bottom: 1px solid var(--text-light);
+    background-color: white; /* White background for profile section */
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    margin-left: calc(-50vw + 50%); /* Center the section while making it full width */
+    position: relative;
+}
+
+.profile-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md); /* Add horizontal padding */
+    position: relative;
+    z-index: 1;
+}
+
+.profile-text {
+    margin-top: var(--spacing-md);
+}
+
+.profile-details {
+    margin-top: var(--spacing-lg);
+}
+
+.profile-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-lg);
+}
+
+
+/* Contact Section */
+.contact-section {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-xl) 0;
+    background-color: white; /* White background for contact section */
+    width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+    margin-left: calc(-50vw + 50%); /* Center the section while making it full width */
+    position: relative;
+}
+
+.contact-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md); /* Add horizontal padding */
+    position: relative;
+    z-index: 1;
+}
+
+.contact-info {
+    margin-top: var(--spacing-md);
+}
+
+.contact-info p {
+    margin-bottom: var(--spacing-xs);
+}
+
+.contact-additional {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--text-light);
+}
+
+.contact-additional p {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+    font-style: italic;
+}
+
+/* Project Section Styles */
+.project-section {
+    position: relative;
+}
+
+.project-section:hover .nav-link[href="#casa-intramurs"],
+.project-section:hover .nav-link[href="#refact"],
+.project-section:hover .nav-link[href="#abans-del-cim"],
+.project-section:hover .nav-link[href="#envoltura"] {
+    color: #555;
+}
+
+/* Fixed width misconfiguration for ABANS DEL CIM section */
+#abans-del-cim {
+    width: auto; /* Adjusted to prevent overriding centering */
+    margin: 0 auto; /* Center horizontally */
+}
+
+/* Grid System */
+.grid {
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Flexbox Utilities */
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    justify-content: space-between;
+}
+
+.flex-start {
+    justify-content: flex-start;
+}
+
+.flex-end {
+    justify-content: flex-end;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-nowrap {
+    flex-wrap: nowrap;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+/* Spacing Utilities */
+.margin-auto {
+    margin: 0 auto;
+}
+
+.margin-top-sm {
+    margin-top: var(--spacing-sm);
+}
+
+.margin-top-md {
+    margin-top: var(--spacing-md);
+}
+
+.margin-top-lg {
+    margin-top: var(--spacing-lg);
+}
+
+.margin-bottom-sm {
+    margin-bottom: var(--spacing-sm);
+}
+
+.margin-bottom-md {
+    margin-bottom: var(--spacing-md);
+}
+
+.margin-bottom-lg {
+    margin-bottom: var(--spacing-lg);
+}
+
+.padding-sm {
+    padding: var(--spacing-sm);
+}
+
+.padding-md {
+    padding: var(--spacing-md);
+}
+
+.padding-lg {
+    padding: var(--spacing-lg);
+}
+
+.padding-xl {
+    padding: var(--spacing-xl);
+}
+
+/* Width Utilities */
+.width-full {
+    width: 100%;
+}
+
+.width-auto {
+    width: auto;
+}
+
+.max-width-sm {
+    max-width: 640px;
+}
+
+.max-width-md {
+    max-width: 768px;
+}
+
+.max-width-lg {
+    max-width: 1024px;
+}
+
+.max-width-xl {
+    max-width: 1280px;
+}
+
+/* Height Utilities */
+.height-full {
+    height: 100%;
+}
+
+.height-screen {
+    height: var(--viewport-height);
+}
+
+.min-height-screen {
+    min-height: var(--viewport-height);
+}
+
+/* Position Utilities */
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.fixed {
+    position: fixed;
+}
+
+.sticky {
+    position: sticky;
+}
+
+/* Z-Index Utilities */
+.z-0 {
+    z-index: 0;
+}
+
+.z-10 {
+    z-index: 10;
+}
+
+.z-20 {
+    z-index: 20;
+}
+
+.z-30 {
+    z-index: 30;
+}
+
+.z-40 {
+    z-index: 40;
+}
+
+.z-50 {
+    z-index: 50;
+}
+
+/* Overflow Utilities */
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-auto {
+    overflow: auto;
+}
+
+.overflow-scroll {
+    overflow: scroll;
+}
+
+/* Display Utilities */
+.block {
+    display: block;
+}
+
+.inline {
+    display: inline;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Responsive Layout */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+    
+    .project-section {
+        padding: var(--spacing-lg) 0;
+        margin-bottom: var(--spacing-lg);
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: center;
+    }
+    
+    .header-right {
+        justify-content: center;
+    }
+    
+    .main-nav {
+        text-align: center;
+    }
+    
+    .main-content {
+        padding: var(--spacing-md);
+    }
+    
+    .project-section {
+        padding: var(--spacing-md) 0;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .project-gallery {
+        min-height: 300px;
+    }
+    
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .intro-section {
+        padding: var(--spacing-sm);
+    }
+    
+    .header-content {
+        padding: var(--spacing-sm);
+    }
+    
+    .main-content {
+        padding: var(--spacing-sm);
+    }
+    
+    .project-section {
+        padding: var(--spacing-sm) 0;
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .project-gallery {
+        min-height: 250px;
+    }
+}
+
+/* Print Layout */
+@media print {
+    .main-header {
+        position: static;
+        border-bottom: 1px solid #000;
+    }
+    
+    .project-section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    
+    .project-gallery {
+        max-height: 400px;
+    }
+}
+
+/* Container Queries (for future support) */
+@container (max-width: 768px) {
+    .project-section {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,489 @@
+/* Typography - Font definitions and text styles */
+
+/* Font Fallbacks (approximating Monument Grotesk) */
+@font-face {
+    font-family: "Monument Grotesk Variable";
+    src: local("Helvetica Neue"), local("Arial"), local("Helvetica"), sans-serif;
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Monument Grotesk Mono Variable";
+    src: url("../fonts/monument-grotesk-mono.woff2") format("woff2");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Uploaded Grotesk Font */
+@font-face {
+    font-family: "Uploaded Grotesk";
+    src: url("../fonts/monument-grotesk-bold.woff") format("woff");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Authentic Monument Grotesk Font Faces */
+@font-face {
+    font-family: "Monument Grotesk";
+    src: url("../fonts/monument-grotesk-regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Monument Grotesk";
+    src: url("../fonts/monument-grotesk-medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Monument Grotesk";
+    src: url("../fonts/monument-grotesk-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Monument Grotesk";
+    src: url("../fonts/monument-grotesk-black.woff2") format("woff2");
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Monument Grotesk Semi Mono Font Faces */
+@font-face {
+    font-family: "Monument Grotesk Semi Mono";
+    src: url("../fonts/monument-grotesk-semi-mono-regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Monument Grotesk Semi Mono";
+    src: url("../fonts/monument-grotesk-semi-mono-medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Monument Grotesk Semi Mono";
+    src: url("../fonts/monument-grotesk-semi-mono-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Font Variables - Authentic Monument Grotesk specifications */
+:root {
+    --font-family-sans: "Monument Grotesk Variable", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-family-mono: "Monument Grotesk Mono Variable", Monaco, Menlo, Consolas, "Courier New", monospace;
+    
+    /* Font sizes matching original */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 0.9rem;
+    --font-size-lg: 1.05rem;
+    --font-size-xl: 1.2rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 2rem;
+    
+    /* Font weights matching original */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 550;
+    --font-weight-bold: 700;
+    
+    /* Line heights */
+    --line-height-tight: 1.1;
+    --line-height-normal: 1.2;
+    --line-height-relaxed: 1.4;
+    --line-height-loose: 1.6;
+    
+    /* Letter spacing */
+    --letter-spacing-tight: -0.025em;
+    --letter-spacing-normal: 0em;
+    --letter-spacing-wide: 0.025em;
+}
+
+/* Base Typography */
+body {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    color: var(--text-primary);
+    font-variation-settings: 'slnt' 0, 'MONO' 1;
+}
+
+/* Headings */
+h1 {
+    font-family: var(--font-family-sans);
+    font-style: normal;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-normal);
+    color: var(--text-primary);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 0.5;
+}
+
+h2 {
+    font-family: var(--font-family-sans);
+    font-style: normal;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-normal);
+    color: var(--text-secondary);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 0.5;
+}
+
+h3 {
+    font-family: "Monument Grotesk Semi Mono", Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-size: 1rem; /* increased from var(--font-size-base) */
+    font-weight: 700; /* Set to 500 as requested */
+    color: var(--text-primary);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 1;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+h4, h5, h6 {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 1;
+}
+
+/* Paragraphs */
+p {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 1;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Links in Typography */
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+a:hover {
+    opacity: 0.7;
+}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
+    opacity: 0.7;
+}
+
+p a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+p a:hover {
+    opacity: 0.7;
+}
+
+/* Captions */
+.caption {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-light);
+    color: var(--text-primary);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 1;
+    display: block;
+    margin-top: var(--spacing-sm);
+}
+
+.caption a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Special Text Styles */
+.intro-text {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-light);
+    color: var(--text-primary);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 1;
+    text-align: center;
+}
+
+.site-title {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 0.5;
+}
+
+.nav-menu {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 0.5;
+    text-align: right;
+}
+
+header .nav-menu {
+    font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif;
+    font-weight: 900;
+}
+
+.project-title {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 0.5;
+    margin-bottom: var(--spacing-sm);
+}
+
+.project-description {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-light);
+    color: var(--text-primary);
+    line-height: var(--line-height-relaxed);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 1;
+    margin-bottom: var(--spacing-md);
+}
+
+.project-details {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-light);
+    color: var(--text-tertiary);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 1;
+}
+
+.project-details span {
+    margin-right: var(--spacing-md);
+}
+
+/* Active/Hover States */
+/* Moved navigation styles to typography.css */
+.nav-link {
+    color: #222;
+    text-decoration: none;
+    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #555;
+}
+
+.nav-link.active {
+    color: #000;
+    font-weight: bold;
+}
+
+/* Text Selection */
+::selection {
+    background-color: var(--accent-color);
+    color: var(--background-primary);
+}
+
+::-moz-selection {
+    background-color: var(--accent-color);
+    color: var(--background-primary);
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+    :root {
+        --font-size-base: 0.8rem;
+        --font-size-lg: 1rem;
+        --font-size-xl: 1.1rem;
+    }
+    
+    h1, .site-title, .nav-menu {
+        font-size: var(--font-size-lg);
+    }
+    
+    h2, .project-title {
+        font-size: var(--font-size-base);
+    }
+    
+    .intro-text {
+        font-size: var(--font-size-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --font-size-base: 0.75rem;
+        --font-size-lg: 0.9rem;
+        --font-size-xl: 1rem;
+    }
+}
+
+/* Print Typography */
+@media print {
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+    }
+    
+    p {
+        orphans: 3;
+        widows: 3;
+    }
+}
+
+/* Update titles and navigation menu to use the uploaded grotesk font */
+.title, .navigation-menu {
+    font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif;
+    font-weight: 900;
+}
+
+header .header-left, header .site-title {
+    font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif;
+    font-weight: 900;
+}
+
+/* Navigation Menu Typography */
+.nav-menu {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-menu:hover {
+    color: var(--text-primary);
+}
+
+.nav-menu.active {
+    color: var(--text-quaternary);
+    font-weight: var(--font-weight-bold);
+}
+
+#slitscan-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255,255,255,0.5);
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+#slitscan-overlay-text {
+    color: #2e2e2e;
+    font-family: "Monument Grotesk Mono Variable", "Monument Grotesk Mono" !important;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-align: center;
+    text-transform: lowercase;
+    opacity: 0.85;
+    user-select: none;
+    pointer-events: none;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+}
+    @media (max-width: 600px) {
+      #slitscan-overlay-text {
+        font-size: 2.8vw;
+      }
+    }
+
+
+
+.main-content {
+    width: 80%; /* Adjusted to 80% to prevent overlap with the header menu */
+    margin: 0 auto; /* Center the content */
+}
+
+.landing-section {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden;
+}
+
+.slitscan-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#slitscan-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.intro-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    font-family: var(--font-family-light); /* Use a different font for light style */
+}
+
+.intro-text {
+    font-size: 1.5rem; /* Reduced font size */
+    color: white;
+    font-family: var(--font-family-light); /* Apply light font style */
+}

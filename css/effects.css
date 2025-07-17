@@ -1,0 +1,537 @@
+/* Effects - Animations, transitions, and special effects */
+
+/* Fade Animations */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn var(--transition-medium) ease-in-out forwards;
+}
+
+.fade-out {
+    opacity: 1;
+    animation: fadeOut var(--transition-medium) ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Slide Animations */
+.slide-in-left {
+    transform: translateX(-100%);
+    animation: slideInLeft var(--transition-medium) ease-out forwards;
+}
+
+.slide-in-right {
+    transform: translateX(100%);
+    animation: slideInRight var(--transition-medium) ease-out forwards;
+}
+
+.slide-in-up {
+    transform: translateY(100%);
+    animation: slideInUp var(--transition-medium) ease-out forwards;
+}
+
+.slide-in-down {
+    transform: translateY(-100%);
+    animation: slideInDown var(--transition-medium) ease-out forwards;
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Slitscan Backdrop Effect */
+.slitscan-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.02) 25%,
+        rgba(0, 0, 0, 0.03) 50%,
+        rgba(0, 0, 0, 0.02) 75%,
+        transparent 100%
+    );
+    animation: slitscanMove 20s linear infinite;
+}
+
+.slitscan-backdrop::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.01) 2px,
+        rgba(0, 0, 0, 0.01) 4px
+    );
+    animation: slitscanScan 30s linear infinite reverse;
+}
+
+.slitscan-backdrop::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0, 0, 0, 0.005) 3px,
+        rgba(0, 0, 0, 0.005) 6px
+    );
+    animation: slitscanVertical 40s linear infinite;
+}
+
+.slitscan-backdrop canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+    mix-blend-mode: multiply;
+}
+
+@keyframes slitscanMove {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes slitscanScan {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes slitscanVertical {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+/* Gallery Transition Effects */
+.gallery-slide {
+    opacity: 0;
+    transform: scale(1.1);
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.gallery-slide.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.gallery-slide.fade-transition {
+    transition: opacity var(--transition-slow);
+}
+
+.gallery-slide.slide-transition {
+    transition: transform var(--transition-slow);
+}
+
+.gallery-slide.zoom-transition {
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+/* Hover Effects */
+.hover-lift {
+    transition: transform var(--transition-fast);
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+}
+
+.hover-scale {
+    transition: transform var(--transition-fast);
+}
+
+.hover-scale:hover {
+    transform: scale(1.02);
+}
+
+.hover-rotate {
+    transition: transform var(--transition-fast);
+}
+
+.hover-rotate:hover {
+    transform: rotate(1deg);
+}
+
+.hover-glow {
+    transition: box-shadow var(--transition-fast);
+}
+
+.hover-glow:hover {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+/* Text Effects */
+.text-glitch {
+    position: relative;
+    display: inline-block;
+}
+
+.text-glitch::before,
+.text-glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.text-glitch::before {
+    animation: glitch-1 0.5s infinite;
+    color: var(--accent-color);
+    z-index: -1;
+}
+
+.text-glitch::after {
+    animation: glitch-2 0.5s infinite;
+    color: rgba(0, 255, 255, 0.8);
+    z-index: -2;
+}
+
+@keyframes glitch-1 {
+    0%, 14%, 15%, 49%, 50%, 99%, 100% {
+        transform: translate(0);
+        opacity: 0;
+    }
+    15%, 49% {
+        transform: translate(-2px, 1px);
+        opacity: 1;
+    }
+    50%, 99% {
+        transform: translate(1px, -1px);
+        opacity: 1;
+    }
+}
+
+@keyframes glitch-2 {
+    0%, 20%, 21%, 62%, 63%, 99%, 100% {
+        transform: translate(0);
+        opacity: 0;
+    }
+    21%, 62% {
+        transform: translate(1px, 1px);
+        opacity: 1;
+    }
+    63%, 99% {
+        transform: translate(-1px, -2px);
+        opacity: 1;
+    }
+}
+
+.text-typewriter {
+    overflow: hidden;
+    border-right: 2px solid var(--text-primary);
+    white-space: nowrap;
+    animation: typewriter 2s steps(40, end), blink 1s infinite;
+}
+
+@keyframes typewriter {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+/* Parallax Effects */
+.parallax-slow {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.parallax-medium {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.parallax-fast {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Scroll Effects */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scroll-reveal.from-left {
+    transform: translateX(-30px);
+}
+
+.scroll-reveal.from-right {
+    transform: translateX(30px);
+}
+
+.scroll-reveal.from-left.revealed,
+.scroll-reveal.from-right.revealed {
+    transform: translateX(0);
+}
+
+/* Loading Effects */
+.skeleton-loader {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(0, 0, 0, 0.2) 50%,
+        rgba(0, 0, 0, 0.1) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Ripple Effect */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: width var(--transition-fast), height var(--transition-fast);
+}
+
+.ripple:active::before {
+    width: 200%;
+    height: 200%;
+}
+
+/* Pulse Effect */
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Bounce Effect */
+.bounce {
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Shake Effect */
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+/* Gradient Animations */
+.gradient-shift {
+    background: linear-gradient(
+        45deg,
+        var(--text-primary),
+        var(--accent-color),
+        var(--text-secondary)
+    );
+    background-size: 400% 400%;
+    animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .slitscan-backdrop,
+    .slitscan-backdrop::before,
+    .slitscan-backdrop::after {
+        animation: none !important;
+    }
+    
+    .parallax-slow,
+    .parallax-medium,
+    .parallax-fast {
+        transform: none !important;
+    }
+}
+
+/* Moved project section hover styles to effects.css */
+.project-section {
+    position: relative;
+    z-index: 200;
+}
+
+.main-nav {
+    z-index: 1;
+}
+
+.project-section:hover .nav-link[href="#casa-intramurs"],
+.project-section:hover .nav-link[href="#refact"],
+.project-section:hover .nav-link[href="#abans-del-cim"],
+.project-section:hover .nav-link[href="#envoltura"] {
+    color: #555;
+}
+
+/* Updated hover effect for links */
+.nav-link {
+    color: rgb(44, 44, 44) !important; /* Ensure styles are not overwritten */
+    text-decoration: none !important;
+    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    transition: color 0.3s ease !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: yellow !important; /* Ensure hover and active states are not overwritten */
+}
+

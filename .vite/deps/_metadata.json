@@ -1,0 +1,79 @@
+{
+  "hash": "d3e31ff4",
+  "configHash": "fcde02ec",
+  "lockfileHash": "8a66ca2d",
+  "browserHash": "ed548a2f",
+  "optimized": {
+    "pixi.js": {
+      "src": "../../node_modules/pixi.js/lib/index.mjs",
+      "file": "pixi__js.js",
+      "fileHash": "ba56c754",
+      "needsInterop": false
+    },
+    "pixi-filters": {
+      "src": "../../node_modules/pixi-filters/lib/index.mjs",
+      "file": "pixi-filters.js",
+      "fileHash": "a9a2fa16",
+      "needsInterop": false
+    },
+    "backbone": {
+      "src": "../../node_modules/backbone/backbone.js",
+      "file": "backbone.js",
+      "fileHash": "48f11545",
+      "needsInterop": true
+    },
+    "underscore": {
+      "src": "../../node_modules/underscore/modules/index-all.js",
+      "file": "underscore.js",
+      "fileHash": "51fd5d98",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-DQOW44NU": {
+      "file": "chunk-DQOW44NU.js"
+    },
+    "chunk-M26TZHKX": {
+      "file": "chunk-M26TZHKX.js"
+    },
+    "browserAll-LQJB4DKN": {
+      "file": "browserAll-LQJB4DKN.js"
+    },
+    "chunk-URM6FQHL": {
+      "file": "chunk-URM6FQHL.js"
+    },
+    "webworkerAll-64KJE43O": {
+      "file": "webworkerAll-64KJE43O.js"
+    },
+    "chunk-B7QLRUVF": {
+      "file": "chunk-B7QLRUVF.js"
+    },
+    "chunk-AUUDYK2C": {
+      "file": "chunk-AUUDYK2C.js"
+    },
+    "WebGPURenderer-XSWNLJGP": {
+      "file": "WebGPURenderer-XSWNLJGP.js"
+    },
+    "chunk-2UQT77GN": {
+      "file": "chunk-2UQT77GN.js"
+    },
+    "chunk-X4BWWRG2": {
+      "file": "chunk-X4BWWRG2.js"
+    },
+    "WebGLRenderer-5TXJIDBA": {
+      "file": "WebGLRenderer-5TXJIDBA.js"
+    },
+    "chunk-T4O4LL37": {
+      "file": "chunk-T4O4LL37.js"
+    },
+    "chunk-IGEBWAAQ": {
+      "file": "chunk-IGEBWAAQ.js"
+    },
+    "chunk-MYSZM7WH": {
+      "file": "chunk-MYSZM7WH.js"
+    },
+    "chunk-PLDDJCW6": {
+      "file": "chunk-PLDDJCW6.js"
+    }
+  }
+}
