@@ -1,3 +1,14 @@
+.gallery-text-title {
+  font-family: 'Monument Grotesk';
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 0em;
+  margin-top: 0.2em;
+  letter-spacing: 0.01em;
+  display: block;
+}
+
 /* Typography - Font definitions and text styles */
 
 /* Font Fallbacks (approximating Monument Grotesk) */
@@ -148,7 +159,7 @@ h2 {
 
 h3 {
     font-family: "Monument Grotesk Semi Mono", Monaco, Menlo, Consolas, "Courier New", monospace;
-    font-size: 1rem; /* increased from var(--font-size-base) */
+    font-size: 1.05em;/*increased from var(--font-size-base) */
     font-weight: 700; /* Set to 500 as requested */
     color: var(--text-primary);
     line-height: var(--line-height-normal);
@@ -156,6 +167,7 @@ h3 {
     font-variation-settings: 'slnt' 0, 'MONO' 1;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
+    text-align: left;
 }
 
 h4, h5, h6 {
@@ -334,6 +346,15 @@ header .nav-menu {
     color: var(--background-primary);
 }
 
+.gallery-text-bold {
+  font-family: 'Monument Grotesk';
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+  margin-right: 0.25em;
+  display: inline;
+}
+
 /* Responsive Typography */
 @media (max-width: 768px) {
     :root {
@@ -486,4 +507,64 @@ header .header-left, header .site-title {
     font-size: 1.5rem; /* Reduced font size */
     color: white;
     font-family: var(--font-family-light); /* Apply light font style */
+}
+
+.gallery-text {
+    font-size: 0.95rem! important; 
+    width: 75%! important; /* Ensure text does not overflow */
+}
+
+#trajectoria-list span {
+    color: #b0b0b0; /* light gray */
+}
+
+/* Registres styling */
+.registre-item {
+    margin-bottom: 1.2em;
+    transition: color 0.2s;
+    cursor: default;
+}
+
+.registre-item:hover strong,
+.registre-item:hover .registre-title,
+.registre-item:hover .registre-desc {
+    color: #888 !important;
+}
+.registre-title {
+    font-weight: 500;
+    margin-bottom: 0.1em;
+    color: inherit;
+    font-size: 1em;
+}
+.registre-desc {
+    margin: 0.1em 0 0.2em 0;
+    color: inherit;
+    font-size: 1em;
+}
+.registre-date {
+    display: block;
+    color: #aaa;
+    font-size: 0.95em;
+    font-style: italic;
+    margin-left: 0;
+    margin-top: 0.2em;
+}
+
+/* Registres styling - allow more width for title and description */
+.registre-item {
+    margin-bottom: 1.2em;
+    transition: color 0.2s;
+    cursor: default;
+    max-width: 95%;      /* Allow items to extend further right */
+    width: 95%;
+}
+
+.registre-title,
+.registre-desc {
+    display: inline-block;
+    max-width: 90vw;     /* Allow text to extend more on large screens */
+    width: 100%;
+    box-sizing: border-box;
+    word-break: break-word;
+    white-space: normal;
 }

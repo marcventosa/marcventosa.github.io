@@ -176,29 +176,7 @@
     }
 }
 
-/* Gallery Transition Effects */
-.gallery-slide {
-    opacity: 0;
-    transform: scale(1.1);
-    transition: opacity var(--transition-slow), transform var(--transition-slow);
-}
 
-.gallery-slide.active {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.gallery-slide.fade-transition {
-    transition: opacity var(--transition-slow);
-}
-
-.gallery-slide.slide-transition {
-    transition: transform var(--transition-slow);
-}
-
-.gallery-slide.zoom-transition {
-    transition: opacity var(--transition-slow), transform var(--transition-slow);
-}
 
 /* Hover Effects */
 .hover-lift {

@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/landing-section.css">
     <link rel="stylesheet" href="css/backdrop.css">
+    <link rel="stylesheet" href="css/misc-section.css">
+    <script src="js/main.js" type="module"></script>
 
     <link rel="icon" href="images/favicon_Mesa de trabajo 1.svg" type="image/svg+xml">
 
@@ -122,11 +124,12 @@
                     <nav class="main-nav">
                         <h1 class="nav-menu">
                             <a data-section="home" class="nav-link home-link">/</a><br>
-                            <a data-section="casa-intramurs" class="nav-link">CASA INTRAMURS</a><br>
+                            <a data-section="casa-intramurs" class="nav-link">INTRAMURS</a><br>
                             <a data-section="refact" class="nav-link">REFACT</a><br>
-                            <a data-section="abans-del-cim" class="nav-link">ABANS DEL CIM</a><br>
+                            <a data-section="abans-del-cim" class="nav-link">A MONT</a><br>
                             <a data-section="envoltura" class="nav-link">ENVOLTURA</a><br>
-                            <a data-section="misc" class="nav-link">:~}</a>
+                            <a data-section="pau" class="nav-link">PAUHAUS</a><br>
+                            <a data-section="misc-section" class="nav-link">:~}</a>
                         </h1>
                     </nav>
                 </div>
@@ -137,9 +140,8 @@
         <section id="home" class="landing-section" style="position:relative;">
             <div id="slitscan-overlay">
             <div id="slitscan-overlay-text">
-                <span>arquitectura</span><br>
-                <span>i enginyeria</span><br><br>
-                <span>2020 / 2025</span>
+                <span id="title-principal">arquitectura<br>i enginyeria</span>
+                <span id="data-principal">2020 / 2025</span>
             </div>
             </div>
         </section>
@@ -147,48 +149,53 @@
         <!-- Project Sections -->
         <main class="main-content">
     <!-- Projects will be dynamically loaded here -->
-  </main>
+        </main>
+        <!-- Misc Section: Freely placed images -->
+        <section id="misc-section" class="misc-section"></section>
+
         <!-- Profile Section -->
         <section id="profile" class="profile-section">
-                <div class="profile-content">
-                    <div class="profile-text">
-                        <p>Benvinguts!
-                        Més que un portfoli, aquest espai vol ser un arxiu viu de processos
-                        i anotacions passades. Una eina per tornar-hi, copiar-me, confrontar-me 
-                        amb allò que ja he fet, i construir a partir d’aquests camins i desviacions.
-                            </p>
-                        
-                        <h3>Formació</h3>
-                        <p>Grau en Enginyeria Civil  ETSECCPB 2020 / 2024<br>
-                        Grau en Arquitectura ETSAB 2021 /</p>
-                        
-                        <div class="profile-details">
-                            <div class="profile-columns">
-                                <div class="profile-column">
-                                    <h3>Trajectòria</h3>
-                                    <p>Domestic Data</p>
-                                </div>
-                                
-                                <div class="profile-column">
-                                    <h3>Registres</h3>
-                                    <p>Data pipeline for structural models of cable net systems<br>
-                                    Case study: analysis of a sector of the Olympiastadion in Munich<br>
-                                    July 2024</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-    </main>
+  <div class="profile-content">
+    <div class="profile-content-column">
+        <img src="images/dibuix-2.jpeg" alt="Dibuix" class="profile-image">
+        <h3>Parlem!</h3>
+        <p>marc.ventosa@estudiantat.upc.edu</br>+34 66 55 41 585</br><a href="https://linkedin.com/in/marc-ventosa">linkedin</a></p>
+    </div> <!-- Left column (empty or for secondary info) -->
+    <div class="profile-content-column">
+      <div class="profile-text">
+        <p>Benvinguts!
+        Més que un portfoli, aquest espai vol ser un arxiu viu de processos
+        i anotacions passades. Una eina per tornar-hi, copiar-ne, confrontar-me 
+        amb allò que ja he fet, i construir a partir d’aquests camins i desviacions.
+        L'instint de no oblidar la revista del collage; una col·lecció de trossos retallats que esperen ser enganxats. 
+        </p>
+        <h3>Formació</h3>
+        <p>Grau en Enginyeria Civil  ETSECCPB 2020 / 2024<br>
+        Grau en Arquitectura ETSAB 2021 /</p>
+        <div class="profile-details">
+          <div class="profile-columns">
+            <div class="profile-column">
+              <h3>Trajectòria</h3>
+              <div id="trajectoria-list"></div>
+            </div>
+            <div class="profile-column">
+              <h3>Registres</h3>
+              <div id="registres-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 
     <!-- JavaScript for Active Section Highlighting -->
     <script src="js/navigation.js" type="module"></script>
     <script src="js/project-loader.js" type="module"></script>
+    <script src="js/misc-loader.js" type="module"></script>
     </div>
-
-    
 </body>
 </html>
 </script>

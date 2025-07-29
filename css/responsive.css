@@ -1,9 +1,31 @@
 /* Responsive Design - Mobile-first approach */
 
+
+.project-section {
+    min-width: 0;
+    box-sizing: border-box;
+}
 /* Mobile First Base Styles (320px and up) */
 @media (min-width: 320px) {
     .container {
         padding: 0 var(--spacing-sm);
+    }
+    .header-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+        width: 100%;
+    }
+    .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    }
+    .project-grid {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
     }
     
     .header {
@@ -25,7 +47,6 @@
     .gallery-container {
         height: 250px;
     }
-}
 
 /* Small Mobile (480px and up) */
 @media (min-width: 480px) {
@@ -37,8 +58,6 @@
         height: 300px;
     }
     
-    .project-info {
-        padding: var(--spacing-lg);
     }
     
     .nav-links {
@@ -52,12 +71,9 @@
     .intro-content p {
         font-size: var(--font-size-md);
     }
-}
 
 /* Large Mobile / Small Tablet (640px and up) */
 @media (min-width: 640px) {
-    .container {
-        padding: 0 var(--spacing-lg);
     }
     
     .header {
@@ -66,7 +82,9 @@
     
     .gallery-container {
         height: 350px;
-    }
+        max-height: 60vh;
+        overflow-y: auto;
+        }
     
     .project-grid {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -87,12 +105,19 @@
     
     .intro-content h1 {
         font-size: clamp(2.5rem, 10vw, 4rem);
-    }
+        width: 100%;
+        text-align: left;
+     }
     
     .nav-links {
         gap: var(--spacing-lg);
     }
-}
+    .project-content, .project-grid {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
 
 /* Tablet (768px and up) */
 @media (min-width: 768px) {
@@ -165,12 +190,14 @@
         padding: var(--spacing-xl) 0;
     }
     
-    .gallery-container {
-        height: 500px;
+    .header-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--spacing-lg);
+        width: 100%;
     }
-    
-    .project-section {
-        padding: var(--spacing-2xl) 0;
     }
     
     .project-content {
@@ -201,7 +228,7 @@
         gap: var(--spacing-2xl);
         align-items: start;
     }
-}
+
 
 /* Large Desktop (1280px and up) */
 @media (min-width: 1280px) {
@@ -244,6 +271,11 @@
 
 /* Responsive Typography */
 @media (max-width: 768px) {
+    .mobile-nav-link {
+        display: block;
+        text-align: center;
+        margin: 2rem 0 1rem 0;
+    }
     .h1 {
         font-size: var(--font-size-2xl);
     }
@@ -340,6 +372,16 @@
     
     .nav-link:last-child {
         border-bottom: none;
+    }
+}
+a.nav-link.mobile-nav-link {
+    display: none;
+}
+@media (max-width: 767px) {
+    a.nav-link.mobile-nav-link {
+        display: block;
+        text-align: center;
+        margin: 2rem 0 1rem 0;
     }
 }
 
@@ -466,56 +508,10 @@
     }
 }
 
-/* Landscape Orientation */
-@media (orientation: landscape) and (max-height: 500px) {
-    .intro-section {
-        min-height: 100vh;
-    }
-    
-    .gallery-container {
-        height: 70vh;
-    }
-    
-    .project-section {
-        padding: var(--spacing-md) 0;
-    }
-}
 
-/* Dark Mode Support (if implemented) */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background-primary: #1a1a1a;
-        --text-primary: rgba(255, 255, 255, 0.9);
-        --text-secondary: rgba(255, 255, 255, 0.8);
-        --text-tertiary: rgba(255, 255, 255, 0.7);
-        --text-quaternary: rgba(255, 255, 255, 0.6);
-        --text-light: rgba(255, 255, 255, 0.3);
-    }
-    
-    .card {
-        background-color: #2a2a2a;
-        border-color: rgba(255, 255, 255, 0.2);
-    }
-    
-    .modal-content {
-        background-color: #2a2a2a;
-    }
-}
-
-/* Accessibility Improvements */
-@media (prefers-reduced-motion: reduce) {
-    .scroll-reveal {
-        opacity: 1;
-        transform: none;
-    }
-    
-    .gallery-slide {
-        transition: none;
-    }
-    
     .hover-lift:hover,
     .hover-scale:hover,
     .hover-rotate:hover {
         transform: none;
     }
-}
+

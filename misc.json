@@ -1,0 +1,31 @@
+[
+  {
+    "project": "fab-catenari",
+    "caption": "Fabricació d'un arc i suports catenaris transportables i muntables a partir de tauler d'aglomerat. Màquina: CNC afab Gràcia",
+    "images": [
+      { "src": "images/misc/fab-catenari.jpeg" },
+      { "src": "images/misc/right-stand.jpg" },
+      { "src": "images/misc/altar-catenari.jpg" },
+      { "src": "images/misc/left-stand.jpg" }
+    ]
+  },
+  {
+    "project": "clarisses",
+    "caption": "Maqueta d'encavallada per la nova coberta. Nova biblioteca Arenys de Mar. Fotografia i projecte: h3o",
+    "images": [
+      { "src": "images/misc/maqueta-clarisses_Mesa de trabajo 1.png" },
+      { "src": "images/misc/0047_Les-Clarisses_Arenys-de-Mar_19.gif" }
+    ]
+  },
+  {
+    "project": "espelmes-cas",
+    "caption": "Orígens: desenvolupament gràfic per a l'història de quatre famílies a través de les aromes.",
+    "images": [
+      { "src": "images/misc/general-espelmes.jpg" },
+      { "src": "images/misc/menorc.jpg" },
+      { "src": "images/misc/pirineus.jpg" },
+      { "src": "images/misc/italy.jpg" },
+      { "src": "images/misc/calamocha.jpg" }
+    ]
+  }
+]

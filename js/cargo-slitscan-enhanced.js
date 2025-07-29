@@ -36,12 +36,12 @@ class CargoSlitScan {
     this.lastMouseX = 0;
     this.lastMouseY = 0;
     this.mouseInfluence = 0;
-    this.mouseLerp = 0; // For smooth lerped mouse offset
+    this.mouseLerp = true; // For smooth lerped mouse offset
     this.scrollProgress = 1;
     
     // Performance optimizations
     this.lastFrameTime = 0;
-    this.frameRate = 1000 / 15; // Reduced to 30 FPS for optimization
+    this.frameRate = 1000 / 300; 
     
     // Initialize canvas and context
     this.initCanvas();
@@ -161,10 +161,21 @@ class CargoSlitScan {
     
     // Window resize handler
     const handleResize = () => {
-      this.config.width = window.innerWidth;
-      this.config.height = window.innerHeight;
-      this.canvas.width = this.config.width;
-      this.canvas.height = this.config.height;
+      // Calculate new width/height, but clamp to maxRenderWidth/Height
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+      if (width > this.maxRenderWidth) {
+        height = Math.round(height * (this.maxRenderWidth / width));
+        width = this.maxRenderWidth;
+      }
+      if (height > this.maxRenderHeight) {
+        width = Math.round(width * (this.maxRenderHeight / height));
+        height = this.maxRenderHeight;
+      }
+      this.config.width = width;
+      this.config.height = height;
+      this.canvas.width = width;
+      this.canvas.height = height;
       // Recalculate image scaling
       if (this.image && this.image.complete) {
         const imageAspect = this.image.width / this.image.height;
@@ -228,22 +239,8 @@ class CargoSlitScan {
 
   render(currentTime) {
     if (!this.image || !this.image.complete) return;
-    // Downscale for performance if needed
-    let renderWidth = this.config.width;
-    let renderHeight = this.config.height;
-    if (renderWidth > this.maxRenderWidth) {
-      renderHeight = Math.round(renderHeight * (this.maxRenderWidth / renderWidth));
-      renderWidth = this.maxRenderWidth;
-    }
-    if (renderHeight > this.maxRenderHeight) {
-      renderWidth = Math.round(renderWidth * (this.maxRenderHeight / renderHeight));
-      renderHeight = this.maxRenderHeight;
-    }
-    if (renderWidth !== this.config.width || renderHeight !== this.config.height) {
-      this.canvas.width = renderWidth;
-      this.canvas.height = renderHeight;
-    }
-    // Clear canvas
+    const renderWidth = this.canvas.width;
+    const renderHeight = this.canvas.height;
     this.ctx.clearRect(0, 0, renderWidth, renderHeight);
     
     // Update time for animations
@@ -255,7 +252,7 @@ class CargoSlitScan {
     
     // Mouse and scroll influences (improved for more violent and smooth effect)
     // Lerp mouseX for smoothness
-    this.mouseLerp += (this.mouseX - this.mouseLerp) * 0.15; // 0.15 = smoothing factor
+    this.mouseLerp += (this.mouseX - this.mouseLerp) * 0.08; // Lower = smoother
     // MouseWiggle is now much more pronounced
     const mouseWiggle = this.config.mouse_interaction ? (this.mouseLerp - 0.5) * this.config.width * 0.45 : 0; // 0.45 = violence factor
     const scrollWiggle = this.config.scroll_interaction ? this.scrollProgress * this.config.wiggle * 0.5 : 0;
@@ -274,7 +271,6 @@ class CargoSlitScan {
   }
 
   renderHorizontalSlitscan(scanOffset, wiggle) {
-    // Draw each row as a 1-pixel high slice directly to the main canvas for a seamless effect
     const cycleLength = this.config.height / this.config.scan_cycles;
     const half = Math.floor(this.config.height / 2);
     for (let y = 0; y < this.config.height; y++) {
@@ -287,8 +283,8 @@ class CargoSlitScan {
         mirror = true;
       }
       const sourceY = Math.max(0, Math.min(this.scaledHeight - 1, waveY - this.imageOffsetY));
-      this.ctx.save();
       if (mirror) {
+        this.ctx.save();
         this.ctx.translate(0, y + 1);
         this.ctx.scale(1, -1);
         this.ctx.drawImage(
@@ -298,7 +294,7 @@ class CargoSlitScan {
           this.imageOffsetX, 0,
           this.scaledWidth, 1
         );
-        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        this.ctx.restore();
       } else {
         this.ctx.drawImage(
           this.image,
@@ -308,7 +304,6 @@ class CargoSlitScan {
           this.scaledWidth, 1
         );
       }
-      this.ctx.restore();
     }
   }
 
@@ -337,25 +332,29 @@ class CargoSlitScan {
 
   applyMirroringEffects() {
     if (!this.config.mirror_horizontal && !this.config.mirror_vertical) return;
-    
-    // Get current canvas content
-    const imageData = this.ctx.getImageData(0, 0, this.config.width, this.config.height);
-    
-    // Apply mirroring transformations
+
+    // Create a temporary canvas to hold the current frame
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = this.config.width;
+    tempCanvas.height = this.config.height;
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCtx.drawImage(this.canvas, 0, 0);
+
     this.ctx.save();
-    
-    if (this.config.mirror_horizontal) {
-      this.ctx.scale(-1, 1);
-      this.ctx.translate(-this.config.width, 0);
-    }
-    
-    if (this.config.mirror_vertical) {
-      this.ctx.scale(1, -1);
-      this.ctx.translate(0, -this.config.height);
-    }
-    
-    // Redraw with mirroring
-    this.ctx.putImageData(imageData, 0, 0);
+
+    // Set up mirroring transforms
+    let scaleX = this.config.mirror_horizontal ? -1 : 1;
+    let scaleY = this.config.mirror_vertical ? -1 : 1;
+    let translateX = this.config.mirror_horizontal ? -this.config.width : 0;
+    let translateY = this.config.mirror_vertical ? -this.config.height : 0;
+
+    this.ctx.setTransform(scaleX, 0, 0, scaleY, translateX, translateY);
+
+    // Draw the temp canvas back with mirroring
+    this.ctx.drawImage(tempCanvas, 0, 0);
+
+    // Restore transform
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.restore();
   }
 

@@ -115,10 +115,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 0.9rem;
 }
 
 .gallery-slide.active {
     opacity: 1;
+    font-size: 0.9rem;
 }
 
 .project-image {
@@ -180,38 +182,119 @@
 }
 
 /* Profile Section */
+/* Center .profile-content in the viewport */
 .profile-section {
-    margin-bottom: var(--spacing-xl);
-    padding: var(--spacing-xl) 0;
+    display: flex;
+    align-items: center;     
+    justify-content: flex-end;
+    min-height: 100vh;
+    width: 100vw;
+    padding: 0;
+    margin-left: 0;
+    background-color: white;
     border-bottom: 1px solid var(--text-light);
-    background-color: white; /* White background for profile section */
-    width: 100vw; /* Full viewport width */
-    height: 100vh; /* Full viewport height */
-    margin-left: calc(-50vw + 50%); /* Center the section while making it full width */
+    position: relative;
+}
+
+/* Remove flex from .profile-content, use only width/margin for centering */
+.profile-content {
+    margin: 0 auto;
+    padding: var(--spacing-lg) var(--spacing-md);
+    max-width: 75vw; /* or your preferred width */
+    width: 100%;
+    display: block; /* Remove flex */
+    background: none;
+    border: none;
     position: relative;
 }
 
 .profile-content {
-    max-width: 800px;
     margin: 0 auto;
-    padding: 0 var(--spacing-md); /* Add horizontal padding */
-    position: relative;
-    z-index: 1;
-}
-
-.profile-text {
-    margin-top: var(--spacing-md);
-}
-
-.profile-details {
-    margin-top: var(--spacing-lg);
+    width: 100%;
+    padding: var(--spacing-lg) var(--spacing-md);
+    /* max-width and width as you prefer */
 }
 
 .profile-columns {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    padding: 0;
+    width: inherit;
+    grid-template-columns: 1fr 3fr; /* 1/3 for trajectoria, 2/3 for registres */
     gap: var(--spacing-xl);
     margin-top: var(--spacing-lg);
+}
+
+.profile-column:last-child {
+    grid-column: 2 / span 1;
+    justify-self: stretch;
+    width: 100%;
+    max-width: 100%;
+    padding-right: 0;
+}
+
+.profile-content-column:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center image horizontally */
+    justify-content: center;
+    text-align: right;
+    margin-top: 0.5em;
+    width: auto;
+}
+
+.profile-content-column:first-child h3, 
+.profile-content-column:first-child p {
+    align-self: flex-end;      /* Right-align only the h3 */
+    text-align: right;
+    margin-right: 7vw;  /* Small gap from the edge */
+    width: 100%;
+}
+
+.profile-column:last-child,
+.profile-content-column {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.profile-image {
+    display: block;
+    max-width: 60%;
+    height: auto;
+    margin: 1.7em 17em;
+    transform: rotate(-4deg);
+}
+.profile-column:last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Left-align content */
+}
+
+.profile-column:last-child p {
+    padding-right: 0;
+    line-height: 1.4;
+    white-space: normal;
+    word-break: normal; }
+
+
+#title-principal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin-top: 6px;
+    box-sizing: border-box;
+    line-height: 120%;
+}
+
+/* Data at the very bottom */
+#data-principal {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin-bottom: 6px;
+    padding-bottom: 0;
 }
 
 
@@ -482,6 +565,10 @@
 
 .hidden {
     display: none;
+}
+
+#trajectoria-list div {
+    margin-bottom: 1.1em; /* Add vertical space between positions */
 }
 
 /* Responsive Layout */

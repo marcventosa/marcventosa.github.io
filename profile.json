@@ -1,0 +1,42 @@
+{
+  "trajectoria": [
+    {
+      "position": "Domestic Data Streamers",
+      "learnings": "Data pipeline for structural models of cable net systems"
+    },
+    {
+      "position": "META Engineering",
+      "learnings": "Project management, teamwork"
+    },
+    {
+      "position": "DOPEC",
+      "learnings": "Project management, teamwork"
+    },
+    {
+      "position": "h3o",
+      "learnings": "Project management, teamwork"
+    },
+    {
+      "position": "KU Leuven",
+      "learnings": "Project management, teamwork"
+    },
+    {
+      "position": "LMDEC",
+      "learnings": "Project management, teamwork"
+    }
+  ],
+  "registres": [
+    {
+      "title": "Data pipeline for structural models of cable net systems",
+      "description": "Case study: analysis of a sector of the Olympiastadion in Munich",
+      "date": "Juliol 2024",
+      "link": "https://upcommons.upc.edu/entities/publication/506051b9-0bdb-420d-9336-28eebff2968f"
+    },
+    {
+      "title": "Semantic Digital Twins for Masonry Bridges: Structuring Processes, Geometrical and Material Field Data",
+      "description": "Case study: analysis of a masonry bridge in Manresa - Súria railway line",
+      "date": "Agost 2025",
+      "link": "https://example.com/semantic-twins"
+    }
+  ]
+}

@@ -5,6 +5,15 @@ async function loadProjects() {
   const mainContent = document.querySelector('.main-content');
 
   projects.forEach(project => {
+    // Create a nav link above each project section for mobile
+    const mobileNavLink = document.createElement('a');
+    mobileNavLink.className = 'nav-link mobile-nav-link';
+    mobileNavLink.setAttribute('data-section', project.id);
+    // No href for mobile nav, use data-section only
+    mobileNavLink.textContent = project.id.replace(/-/g, ' ').toUpperCase();
+
+    // Rely on CSS for display and styling (mobile only)
+
     const section = document.createElement('section');
     section.id = project.id;
     section.className = 'project-section';
@@ -19,6 +28,7 @@ async function loadProjects() {
       slide.style.width = '100%';
       slide.style.height = '100%';
       slide.style.display = 'flex';
+      slide.style.flexDirection = 'column';
       slide.style.justifyContent = 'center';
       slide.style.alignItems = 'center';
 
@@ -34,18 +44,25 @@ async function loadProjects() {
         img.style.maxWidth = '100%';
         slide.appendChild(img);
       } else if (item.text) {
-        // Handle text annotation
+        // Handle text annotation with optional firstWord as a title
+        if (item.firstWord) {
+          const title = document.createElement('div');
+          title.className = 'gallery-text-title';
+          title.textContent = item.firstWord;
+          slide.appendChild(title);
+        }
         const paragraph = document.createElement('p');
-        paragraph.textContent = item.text;
         paragraph.className = 'gallery-text';
         paragraph.style.fontSize = '1.2rem';
         paragraph.style.textAlign = 'center';
         paragraph.style.margin = '20px 0';
+        paragraph.textContent = item.text;
         slide.appendChild(paragraph);
       }
 
       gallery.appendChild(slide);
     });
+
 
     // Ensure each section occupies 100% of the viewport
     section.style.height = '100vh';
@@ -53,6 +70,9 @@ async function loadProjects() {
     section.style.flexDirection = 'column';
     section.style.justifyContent = 'center';
     section.style.alignItems = 'center';
+
+    // Insert the nav link above the section
+    mainContent.appendChild(mobileNavLink);
 
     // Add click functionality to cycle through gallery items
     let currentIndex = 0;

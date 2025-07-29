@@ -1,5 +1,5 @@
 // Main Application Initialization
-class VentosaApp {
+/*class VentosaApp {
     constructor() {
         this.components = {};
         this.isInitialized = false;
@@ -381,3 +381,60 @@ window.utils = utils;
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { VentosaApp, utils };
 }
+*/
+
+////// PERFIL
+fetch('profile.json')
+  .then(res => res.json())
+  .then(profile => {
+    // Trajectoria loader
+    const trajectoriaContainer = document.getElementById('trajectoria-list');
+    if (trajectoriaContainer && profile.trajectoria) {
+      const timelineList = document.createElement('div');
+      timelineList.className = 'trajectoria-timeline-list';
+      profile.trajectoria.forEach((item, idx) => {
+        const row = document.createElement('div');
+        row.className = 'trajectoria-row';
+        // Timeline point and line
+        const timelineCol = document.createElement('div');
+        timelineCol.className = 'trajectoria-timeline-col';
+        const point = document.createElement('div');
+        point.className = 'trajectoria-point';
+        if (idx === 0) point.classList.add('active');
+        timelineCol.appendChild(point);
+        if (idx < profile.trajectoria.length - 1) {
+          const line = document.createElement('div');
+          line.className = 'trajectoria-line';
+          timelineCol.appendChild(line);
+        }
+        // Item content
+        const content = document.createElement('div');
+        content.className = 'trajectoria-item';
+        content.innerHTML = `<strong>${item.position}</strong><br><span>${item.learnings}</span>`;
+        // Row layout
+        row.appendChild(timelineCol);
+        row.appendChild(content);
+        timelineList.appendChild(row);
+      });
+      trajectoriaContainer.appendChild(timelineList);
+    }
+
+    // Registres loader
+    const registresContainer = document.getElementById('registres-list');
+    if (registresContainer && profile.registres) {
+      registresContainer.innerHTML = '';
+      profile.registres.forEach(registre => {
+        const regDiv = document.createElement('div');
+        regDiv.className = 'registre-item';
+        const titleHtml = registre.link
+          ? `<a href="${registre.link}" class="registre-title" target="_blank" rel="noopener noreferrer">${registre.title}</a>`
+          : `<strong class="registre-title">${registre.title}</strong>`;
+        regDiv.innerHTML = `
+          ${titleHtml}<br>
+          <span class="registre-desc">${registre.description}</span><br>
+          <span class='registre-date'>${registre.date}</span>
+        `;
+        registresContainer.appendChild(regDiv);
+      });
+    }
+  });
