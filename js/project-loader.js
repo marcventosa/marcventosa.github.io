@@ -9,10 +9,7 @@ async function loadProjects() {
     const mobileNavLink = document.createElement('a');
     mobileNavLink.className = 'nav-link mobile-nav-link';
     mobileNavLink.setAttribute('data-section', project.id);
-    // No href for mobile nav, use data-section only
     mobileNavLink.textContent = project.id.replace(/-/g, ' ').toUpperCase();
-
-    // Rely on CSS for display and styling (mobile only)
 
     const section = document.createElement('section');
     section.id = project.id;
@@ -51,18 +48,85 @@ async function loadProjects() {
           title.textContent = item.firstWord;
           slide.appendChild(title);
         }
-        const paragraph = document.createElement('p');
-        paragraph.className = 'gallery-text';
-        paragraph.style.fontSize = '1.2rem';
-        paragraph.style.textAlign = 'center';
-        paragraph.style.margin = '20px 0';
-        paragraph.textContent = item.text;
-        slide.appendChild(paragraph);
+        // Render multi-paragraph text (array or string), no commas, keep styles
+        if (Array.isArray(item.text)) {
+          // Check if any paragraph contains a line break
+          const hasLineBreak = item.text.some(str => typeof str === 'string' && str.includes('\n'));
+          if (hasLineBreak) {
+            // Render each (sub)paragraph as its own <p>
+            item.text.forEach(paragraph => {
+              if (typeof paragraph === 'string' && paragraph.includes('\n')) {
+                paragraph.split(/\n{2,}|\n/).forEach(subParagraph => {
+                  const clean = subParagraph.trim();
+                  if (clean) {
+                    const p = document.createElement('p');
+                    p.className = 'gallery-text';
+                    p.style.fontSize = '1.2rem';
+                    p.style.textAlign = 'center';
+                    p.style.margin = '20px 0';
+                    p.textContent = clean;
+                    slide.appendChild(p);
+                  }
+                });
+              } else {
+                const clean = paragraph.trim();
+                if (clean) {
+                  const p = document.createElement('p');
+                  p.className = 'gallery-text';
+                  p.style.fontSize = '1.2rem';
+                  p.style.textAlign = 'center';
+                  p.style.margin = '20px 0';
+                  p.textContent = clean;
+                  slide.appendChild(p);
+                }
+              }
+            });
+          } else {
+            // No line breaks: join all strings as continuous text in one <p>
+            const joined = item.text.map(str => str.trim()).join(' ');
+            if (joined) {
+              const p = document.createElement('p');
+              p.className = 'gallery-text';
+              p.style.fontSize = '1.2rem';
+              p.style.textAlign = 'center';
+              p.style.margin = '20px 0';
+              p.textContent = joined;
+              slide.appendChild(p);
+            }
+          }
+        } else if (typeof item.text === 'string') {
+          // If the string contains \n, split and render each as a paragraph
+          if (item.text.includes('\n')) {
+            item.text.split(/\n{2,}|\n/).forEach(paragraph => {
+              const clean = paragraph.trim();
+              if (clean) {
+                const p = document.createElement('p');
+                p.className = 'gallery-text';
+                p.style.fontSize = '1.2rem';
+                p.style.textAlign = 'center';
+                p.style.margin = '20px 0';
+                p.textContent = clean;
+                slide.appendChild(p);
+              }
+            });
+          } else {
+            // No \n, render as a single paragraph
+            const clean = item.text.trim();
+            if (clean) {
+              const p = document.createElement('p');
+              p.className = 'gallery-text';
+              p.style.fontSize = '1.2rem';
+              p.style.textAlign = 'center';
+              p.style.margin = '20px 0';
+              p.textContent = clean;
+              slide.appendChild(p);
+            }
+          }
+        }
       }
 
       gallery.appendChild(slide);
     });
-
 
     // Ensure each section occupies 100% of the viewport
     section.style.height = '100vh';

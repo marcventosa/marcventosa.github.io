@@ -1,29 +1,34 @@
 {
   "trajectoria": [
     {
-      "position": "Domestic Data Streamers",
-      "learnings": "Data pipeline for structural models of cable net systems"
-    },
-    {
-      "position": "META Engineering",
-      "learnings": "Project management, teamwork"
+      "position": "LMDEC",
+      "learnings": "ponts obra de fàbrica, patrimoni històric, digital twins, programació web, producció científica"
     },
     {
       "position": "DOPEC",
-      "learnings": "Project management, teamwork"
+      "learnings": "urbanització, aigües, pressupost, seguiment del projecte i obra"
     },
-    {
-      "position": "h3o",
-      "learnings": "Project management, teamwork"
+     {
+      "position": "Escola de Camins",
+      "learnings": "coordinació exposició 50 anys, disseny interactiu"
     },
     {
       "position": "KU Leuven",
-      "learnings": "Project management, teamwork"
+      "learnings": "erasmus, estructures hidràuliques, disseny universal, resiliència"
     },
     {
-      "position": "LMDEC",
-      "learnings": "Project management, teamwork"
+      "position": "META Engineering",
+      "learnings": "urbanització, serveis, abastiment, sostenibilitat"
+    },
+    {
+      "position": "h3o architects",
+      "learnings": "CAD, desenvolupament concursos, model-making, rehabilitació"
+    },
+    {
+      "position": "Domestic Data Streamers",
+      "learnings": "desenvolupament creatiu, gestió de projectes, treball en equip"
     }
+    
   ],
   "registres": [
     {
@@ -33,7 +38,7 @@
       "link": "https://upcommons.upc.edu/entities/publication/506051b9-0bdb-420d-9336-28eebff2968f"
     },
     {
-      "title": "Semantic Digital Twins for Masonry Bridges: Structuring Processes, Geometrical and Material Field Data",
+      "title": "Semantic Digital Twins for Masonry Bridges Networks: Structuring Geometrical and Material Field Data",
       "description": "Case study: analysis of a masonry bridge in Manresa - Súria railway line",
       "date": "Agost 2025",
       "link": "https://example.com/semantic-twins"

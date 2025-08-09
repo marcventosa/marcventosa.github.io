@@ -51,8 +51,24 @@ export async function loadMiscImages() {
       // Function to update only the image src/alt
       function renderImage(idx) {
         const imgData = group.images[idx];
-        img.src = imgData.src;
-        img.alt = group.caption || '';
+        
+        // Create a new image element to preload
+        const newImg = new Image();
+        newImg.className = 'misc-gallery-img';
+        
+        // Apply filter class before loading
+        if (imgData.bw) {
+          newImg.classList.add('bw');
+        }
+        
+        newImg.onload = () => {
+          // Replace the current image with the preloaded one
+          img.src = newImg.src;
+          img.className = newImg.className;
+          img.alt = group.caption || '';
+        };
+        
+        newImg.src = imgData.src;
       }
 
       renderImage(currentIndex);

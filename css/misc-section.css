@@ -40,6 +40,9 @@
   padding-top: 100px;
   padding-bottom: 100px;
   overflow: visible;
+  column-count: 4;           /* 4 columns as you had */
+  column-gap: 2em;           /* Horizontal gap between columns */
+  column-fill: balance;      /* Distribute content evenly */
 }
 .misc-image-item {
   position: absolute;
@@ -76,30 +79,31 @@
 
 .misc-mini-gallery {
   position: static !important;
-  display: block;
+  display: inline-block;     /* Required for column layout */
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  height: auto;         /* Let height be automatic */
+  height: auto;
   overflow: visible;
   padding: 10px;
   box-sizing: border-box;
   background: none;
   text-align: center;
+  margin-bottom: 1.5em;      /* Gap between items in same column */
+  break-inside: avoid;       /* Don't break across columns */
+  vertical-align: top;       /* Align to top of column */
 }
 
 .misc-gallery-img {
   width: 100%;
-  height: auto;         /* Let height grow with image */
+  height: 320px;             /* Keep your fixed height */
+  max-height: 40vh;
   display: block;
-  object-fit: contain;  /* Prevent cropping */
-}
-
-.misc-gallery-img {
-  width: 100%;       /* Fixed height for cropping */
-  max-height: 60vh;      /* Optional: limit for very tall screens */
-  display: block;
-  object-fit: cover;     /* Crop to fill the box */
+  object-fit: cover;
   margin-left: auto;
   margin-right: auto;
+}
+
+.misc-gallery-img.bw {
+  filter: grayscale(100%);
 }
