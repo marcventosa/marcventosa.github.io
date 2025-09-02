@@ -10,18 +10,25 @@
         "Quan va topar amb la finca on passaria els propers estius, tot semblava dispers, com si haguessin anat ajuntant trossos de murs, de cobertes, d’espais buits i d’horts, recollint-los un a un, com qui munta una paret amb pedres trobades.",
         "Però de mica en mica, amb cada alineació, amb cada nova paret aixecada, es descobria un compàs de volums modulat, reconeixent-hi el caràcter dinàmic dels carrerons, cobertes i embarcacions de Matosinhos."
     ]},
+    {"src": "images/intramurs/traces_latents.png", "alt": "Casa Intramurs - Traces Latents" },
       { "src": "images/intramurs/02. Planta 1_200-01.png", "alt": "Casa Intramurs - Planta 1" },
       { "src": "images/intramurs/03. Seccio3-1.png", "alt": "Casa Intramurs - Secció 3" },
       {
         "firstWord": "tres cases, horts i un bosc",
         "text": [
           "Els murs de formigó, més enllà de delimitar les finques, són canals de reg vivents.",
-          "Aquests recullen l’aigua de la pluja i la distribueixen per la parcel·la i fins el bosc, preservant així la memòria d’un terreny testimoni de tantes generacions."
+          "Aquests recullen l’aigua de la pluja i la distribueixen per la parcel·la i fins el bosc, preservant així la memòria d’un terreny testimoni de tantes generacions.",
+          "Quan aquests murs s’interrompen, generen moments compartits entre habitacles, com apèndixs dels patis, espais de reunió i treball dels horts.",
+          "Allò que passa en el ple del mur, que deforma per acollir l'aigua, passa a ser tan important com allò que succeeix al seu voltant."
         ]
       },
-
-      { "src": "images/intramurs/DSC_0368_maqueta.png", "alt": "Casa Intramurs - Maqueta" },
       { "src": "images/intramurs/VentosaMarc-E3-maqueta100-2.jpg", "alt": "Casa Intramurs - VentosaMarc E3 Maqueta 100 2" },
+
+      { "src": "images/intramurs/DSC_0368_maqueta.png", "alt": "Casa Intramurs - Maqueta cuina" },
+      { "text": 	["La cuina es desplega mitjançant peces prefabricades que volen dialogar amb la industrialitat de les cobertes i el port.",
+                  "Els petits mòduls, fragmentats i mòbils, poden ocupar tot l’espai o replegar-se discretament, alliberant el menjador i adaptant-se a cada moment de la vida domèstica."] },
+      { "src": "images/intramurs/02_Proposta-A3_20_cuina-1.png", "alt": "Casa Intramurs - Proposta A3 20 Cuina" },
+      { "src": "images/intramurs/03. Seccio1-1.png", "alt": "Casa Intramurs - Secció 1" },
       { "src": "images/intramurs/VentosaMarc-E3-maqueta100.jpg", "alt": "Casa Intramurs - VentosaMarc E3 Maqueta 100" }
     ]
   },
@@ -51,11 +58,14 @@
   {
     "id": "abans-del-cim",
     "gallery": [
-      { "src": "images/abans del cim/DSC_0274.JPG", "alt": "Abans del Cim - DSC_0274" },
-      { "src": "images/abans del cim/DSC_0272.JPG", "alt": "Abans del Cim - DSC_0272" },
-      { "src": "images/abans del cim/DSC_0273.JPG", "alt": "Abans del Cim - DSC_0273" },
-      { "src": "images/abans del cim/planta-abanscim-01.png", "alt": "Abans del Cim - Planta Abans Cim" },
-      { "src": "images/abans del cim/collage.png", "alt": "Abans del Cim - Collage" }
+        { "src": "images/abans del cim/DSC_0274.JPG", "alt": "Abans del Cim - DSC_0274" },
+        {"src": "images/abans del cim/planta-abanscim-01.png", "alt": "Abans del Cim - Planta Abans Cim" },
+        { "src": "images/abans del cim/collage.png", "alt": "Abans del Cim - Collage" },
+        { "firstWord":"refugi, clima i barri", "text": ["Montjuïc és més que una muntanya emblemàtica dins del teixit urbà de Barcelona; és el cim que ha estat testimoni de la seva evolució històrica. En aquest context, aquesta intervenció es localitza entre dues pujades significatives de la muntanya.",
+          "Es proposa l’aparició del ‘refugi de muntanya’, activant un espai que afavoreixi la contemplació i la trobada, en un indret carregat d'història, com Casaramona o el pavelló de Mies, i monumentalitat però amb una mirada cap al barri i la seva gent. El projecte també inclou la transformació de la façana del Hall 8, fent-la més permeable i convidant a la interacció, tot reforçant l’expressió de la proposta arquitectònica."
+        ]},
+        { "src": "images/abans del cim/DSC_0272.JPG", "alt": "Abans del Cim - DSC_0272" },
+        { "src": "images/abans del cim/DSC_0273.JPG", "alt": "Abans del Cim - DSC_0273" }
     ]
   },
   {

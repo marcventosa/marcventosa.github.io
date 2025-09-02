@@ -438,3 +438,42 @@ fetch('profile.json')
       });
     }
   });
+
+  //////////////// Scroll Snap
+ document.addEventListener('DOMContentLoaded', () => {
+  // Get all project sections
+  const sections = document.querySelectorAll('.project-section');
+  if (!sections.length) return;
+
+  // Add scroll snap container class to body
+  document.body.classList.add('scroll-snap-container');
+  
+  // Optional: Smooth scroll to nearest section on scroll end
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const viewportMiddle = window.innerHeight / 2;
+      let closest = null;
+      let closestDistance = Infinity;
+
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        const sectionMiddle = rect.top + rect.height / 2;
+        const distance = Math.abs(viewportMiddle - sectionMiddle);
+        
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closest = section;
+        }
+      });
+
+      if (closest) {
+        closest.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }, 150); // Adjust timeout as needed
+  });
+});

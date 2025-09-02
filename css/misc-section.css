@@ -94,16 +94,76 @@
   vertical-align: top;       /* Align to top of column */
 }
 
-.misc-gallery-img {
-  width: 100%;
-  height: 320px;             /* Keep your fixed height */
-  max-height: 40vh;
-  display: block;
-  object-fit: cover;
-  margin-left: auto;
-  margin-right: auto;
+/* Brickwork offsets: only stylistic vertical shift for items that land in columns 2 & 4.
+   Minimal intervention, keeps all existing sizes/margins/borders unchanged. */
+.misc-mini-gallery:nth-child(4n+2),
+.misc-mini-gallery:nth-child(4n+4) {
+  margin-top: 4.4rem; /* adjust to taste (increase or decrease value) */
 }
 
-.misc-gallery-img.bw {
-  filter: grayscale(100%);
+/* Clip images to 6:5 (v:h) => width/height = 5/6.
+   Minimal intervention: keep current containers, force each image container to the target ratio
+   and make the <img> fill & crop via object-fit:cover. Adjust value if you prefer slightly different crop. */
+.misc-image-item,
+.misc-mini-gallery {
+  /* keep existing layout behaviour, add aspect and clipping */
+  aspect-ratio: 7 / 7;   /* width / height = 5:6 -> vertical:horizontal = 6:5 */
+  overflow: hidden;      /* hide overflow (crop) */
+  display: inline-block; /* preserve current inline-block behavior */
+}
+
+/* Ensure images fill the clipping box and are cropped, not distorted */
+.misc-image-item img,
+.misc-gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;     /* crop to fill the box */
+  display: block;
+}
+
+/* Fallback for older browsers without aspect-ratio support:
+   preserves the same visual crop using padding-trick when aspect-ratio not supported. */
+@supports not (aspect-ratio: 1 / 1) {
+  .misc-image-item,
+  .misc-mini-gallery {
+    position: relative;
+    height: 0;
+    padding-bottom: calc( (7 / 7) * 100% ); /* padding-bottom = height/width * 100% */
+  }
+  .misc-image-item img,
+  .misc-gallery-img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Fix: apply the 6:5 clipping to the image element only so captions remain visible.
+   Override the previous rule that applied aspect-ratio to .misc-mini-gallery. */
+
+/* Ensure gallery item container does NOT enforce an aspect-ratio (so caption sits below) */
+.misc-mini-gallery {
+  aspect-ratio: auto !important;
+  overflow: visible; /* keep captions visible */
+}
+
+/* If you have optional image wrappers, keep them clipped too */
+.misc-image-item {
+  aspect-ratio: 7 / 8;
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Apply crop directly to the image box used in the loader */
+.misc-gallery-img,
+.misc-image-item img {
+  width: 100%;
+  aspect-ratio: 7 / 8;
+  height: auto;        /* allow browser to compute height from aspect-ratio */
+  object-fit: cover;   /* crop to fill the box */
+  display: block;
 }

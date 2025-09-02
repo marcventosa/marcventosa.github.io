@@ -334,6 +334,7 @@
     transform: translateX(0);
 }
 
+
 /* Loading Effects */
 .skeleton-loader {
     background: linear-gradient(
@@ -513,3 +514,24 @@
     color: yellow !important; /* Ensure hover and active states are not overwritten */
 }
 
+/* Scroll snap - only for project sections */
+.main-content {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.project-section {
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+}
+
+/* Respect user preferences */
+@media (prefers-reduced-motion: reduce) {
+  .main-content {
+    scroll-behavior: auto;
+    scroll-snap-type: none;
+  }
+}
