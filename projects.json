@@ -1,5 +1,31 @@
 [
   {
+    "id": "gravetats",
+    "gallery": [
+      {
+        "src": "images/gravetats/comunitat.png",
+        "alt": "Gravetats - Comunitat",
+        "layout": {
+          "cover": "portrait",
+          "align": "left",
+          "textSide": "right",
+          "text": {
+            "title": "Gravetats",
+            "body": [
+              "Una proposta que treballa la relació entre massa, obertura i materialitat, buscant una porositat espacial construïda a partir de volums pesants i sensibles.",
+              "La composició deixa respirar el projecte mentre reforça la seva lectura tectònica i la qualitat del paisatge urbà."
+            ]
+          }
+        }
+      },
+      { "src": "images/gravetats/construc..png", "alt": "Gravetats - Construcció" },
+      { "src": "images/gravetats/emplaç-.png", "alt": "Gravetats - Emplaçament" },
+      { "src": "images/gravetats/foto-maqueta-arbre-2.png", "alt": "Gravetats - Foto maqueta arbre 2" },
+      { "src": "images/gravetats/gravetats.png", "alt": "Gravetats - Gravetats" },
+      { "src": "images/gravetats/habitar.png", "alt": "Gravetats - Habitar" }
+    ]
+  },
+  {
     "id": "casa-intramurs",
     "gallery": [
       { "src": "images/casa-intramurs/resum_sketch-01.png", "alt": "Casa Intramurs - Resum Sketch" },

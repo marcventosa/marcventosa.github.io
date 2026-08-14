@@ -1,3 +1,109 @@
+function protectGalleryImage(image) {
+  if (!(image instanceof HTMLImageElement)) return;
+
+  image.draggable = false;
+  image.oncontextmenu = (event) => event.preventDefault();
+  image.addEventListener('contextmenu', (event) => event.preventDefault());
+  image.addEventListener('dragstart', (event) => event.preventDefault());
+}
+
+function buildTextBlock({ title = '', body = '', align = 'center' } = {}) {
+  if (!title && !body) return null;
+
+  const textWrap = document.createElement('div');
+  textWrap.className = 'gallery-side-copy';
+  textWrap.dataset.align = align;
+
+  if (title) {
+    const titleEl = document.createElement('div');
+    titleEl.className = 'gallery-text-title';
+    titleEl.textContent = title;
+    textWrap.appendChild(titleEl);
+  }
+
+  if (body) {
+    const paragraphs = Array.isArray(body) ? body : [body];
+
+    paragraphs.forEach((paragraph) => {
+      const p = document.createElement('p');
+      p.className = 'gallery-text';
+      p.textContent = paragraph;
+      textWrap.appendChild(p);
+    });
+  }
+
+  return textWrap;
+}
+
+function applyImageLayout(slide, item, projectLayout = {}) {
+  const itemLayout = item.layout || {};
+  const layout = { ...projectLayout, ...itemLayout };
+  const mode = layout.cover || layout.mode || 'default';
+  const align = layout.align || 'center';
+  const textSide = layout.textSide || 'center';
+  const textFragment = layout.text || item.text || null;
+
+  const image = slide.querySelector('img');
+  if (!image) return;
+
+  if (mode === 'portrait' || mode === 'large') {
+    slide.innerHTML = '';
+    slide.classList.add('gallery-slide--portrait');
+    if (align === 'left') slide.classList.add('gallery-slide--left');
+    if (textSide === 'right') slide.classList.add('gallery-slide--text-right');
+    if (textSide === 'left') slide.classList.add('gallery-slide--text-left');
+
+    const inner = document.createElement('div');
+    inner.className = 'gallery-slide-content';
+    inner.style.width = 'min(92vw, 1300px)';
+    inner.style.height = '90vh';
+    inner.style.maxHeight = '90vh';
+    inner.style.gap = 'clamp(1.5rem, 2vw, 3rem)';
+
+    const mediaWrap = document.createElement('div');
+    mediaWrap.className = 'gallery-slide-media';
+    mediaWrap.style.height = '90vh';
+    mediaWrap.style.maxHeight = '90vh';
+    mediaWrap.appendChild(image);
+
+    image.style.width = 'auto';
+    image.style.height = 'auto';
+    image.style.maxWidth = 'min(62vw, 780px)';
+    image.style.maxHeight = '90vh';
+    image.style.objectFit = 'contain';
+    image.style.objectPosition = 'center';
+
+    inner.appendChild(mediaWrap);
+
+    if (textFragment) {
+      const textTitle = typeof textFragment === 'string' ? '' : (textFragment.title || '');
+      const textBody = typeof textFragment === 'string' ? textFragment : (textFragment.body || textFragment.text || '');
+      const textBlock = buildTextBlock({
+        title: mode === 'portrait' || mode === 'large' ? '' : textTitle,
+        body: textBody,
+        align: textSide === 'center' ? 'center' : 'left'
+      });
+
+      if (textBlock) {
+        textBlock.style.width = 'min(22vw, 280px)';
+        textBlock.style.maxWidth = '100%';
+        textBlock.style.flex = '0 0 min(22vw, 280px)';
+        textBlock.style.gap = '0.2rem';
+        textBlock.style.margin = '0';
+        inner.appendChild(textBlock);
+      }
+    }
+
+    slide.appendChild(inner);
+    slide.classList.add('gallery-slide--custom');
+    return;
+  }
+
+  if (!slide.contains(image)) {
+    slide.appendChild(image);
+  }
+}
+
 async function loadProjects() {
   const response = await fetch('projects.json');
   const projects = await response.json();
@@ -38,7 +144,12 @@ async function loadProjects() {
       img.style.height = 'auto';
       img.style.maxHeight = '60vh';
       img.style.maxWidth = '100%';
+      protectGalleryImage(img);
       slide.appendChild(img);
+
+      if (item.layout || project.layout) {
+        applyImageLayout(slide, item, project.layout || {});
+      }
 
       gallery.appendChild(slide);
     });

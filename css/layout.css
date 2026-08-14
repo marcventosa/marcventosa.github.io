@@ -131,6 +131,119 @@
     object-position: center;
 }
 
+.gallery-slide--custom {
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.project-gallery .gallery-slide--portrait {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.project-gallery .gallery-slide--portrait .gallery-slide-content {
+    width: min(92vw, 1300px);
+    max-width: 100%;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: clamp(1.5rem, 2vw, 3rem);
+    max-height: 90vh !important;
+    height: 90vh !important;
+}
+
+.project-gallery .gallery-slide--portrait .gallery-slide-media {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 0;
+    flex: 0 1 auto;
+    margin-left: clamp(-2vw, -1vw, 0px);
+    height: 90vh !important;
+    max-height: 90vh !important;
+}
+
+.project-gallery .gallery-slide--portrait .gallery-slide-media .project-image {
+    width: auto !important;
+    max-width: min(62vw, 780px) !important;
+    max-height: 90vh !important;
+    height: auto !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block !important;
+}
+
+.project-gallery .gallery-slide--portrait .gallery-side-copy {
+    width: min(22vw, 280px) !important;
+    max-width: 100% !important;
+    flex: 0 0 min(22vw, 280px) !important;
+    text-align: left !important;
+    color: inherit !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.2rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-items: flex-start !important;
+}
+
+.project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text-title,
+.project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text {
+    text-align: left !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text-title {
+    display: none !important;
+}
+
+.project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text {
+    margin: 0 !important;
+    line-height: 1.35 !important;
+    letter-spacing: 0.01em !important;
+    font-size: 0.78rem !important;
+}
+
+.gallery-slide--left .gallery-slide-content {
+    justify-content: flex-start;
+}
+
+.gallery-slide--text-right .gallery-slide-content {
+    flex-direction: row;
+}
+
+.gallery-slide--text-left .gallery-slide-content {
+    flex-direction: row-reverse;
+}
+
+.gallery-side-copy {
+    width: min(30vw, 360px);
+    max-width: 100%;
+    text-align: left;
+    color: inherit;
+}
+
+.gallery-side-copy .gallery-text-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.1rem;
+    text-align: left;
+}
+
+.gallery-side-copy .gallery-text {
+    margin: 0.35rem 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    text-align: left;
+}
+
 .project-info {
     padding: var(--spacing-lg);
     display: flex;

@@ -1,169 +1,147 @@
-/* Responsive adjustments for misc-section and images */
+#misc-section {
+  --drift-scale: 1;
+  position: relative;
+  width: min(92vw, 1440px);
+  min-height: 1300px;
+  margin: 0 auto;
+  padding: 120px 0 160px;
+  overflow: visible;
+  isolation: isolate;
+}
+
+.misc-mini-gallery {
+  position: absolute;
+  width: calc(min(24vw, 280px) * var(--card-scale, 1));
+  min-width: 180px;
+  padding: 0;
+  background: #fff;
+  z-index: var(--z, 1);
+  overflow: visible;
+  animation: misc-float var(--float-duration, 38s) ease-in-out var(--float-delay, 0s) infinite;
+  will-change: transform;
+  transition: width 0.8s ease;
+}
+
+.misc-mini-gallery:hover,
+.misc-mini-gallery:focus-within {
+  z-index: 100;
+  animation-play-state: paused;
+}
+
+.misc-gallery-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 6;
+  object-fit: cover;
+  background: #ededed;
+  filter: saturate(0.95) contrast(1.03);
+  transition: opacity 0.3s ease;
+}
+
+.misc-mini-gallery:hover .misc-gallery-img,
+.misc-mini-gallery:focus-within .misc-gallery-img {
+  opacity: 0.22;
+}
+
+.misc-image-caption {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  color: #1a1a1a;
+  padding: 0.9rem;
+  text-align: left;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+}
+
+.misc-mini-gallery:hover .misc-image-caption,
+.misc-mini-gallery:focus-within .misc-image-caption {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes misc-float {
+  0% {
+    transform: translate3d(
+        calc(var(--amp-x, 120px) * -0.5 * var(--drift-scale)),
+        calc(var(--dy0, 0px) * var(--drift-scale)),
+        0
+      );
+  }
+  25% {
+    transform: translate3d(
+        calc(var(--amp-x, 120px) * 0.12 * var(--drift-scale)),
+        calc(var(--dy1, -20px) * var(--drift-scale)),
+        0
+      );
+  }
+  50% {
+    transform: translate3d(
+        calc(var(--amp-x, 120px) * 0.5 * var(--drift-scale)),
+        calc(var(--dy2, 20px) * var(--drift-scale)),
+        0
+      );
+  }
+  75% {
+    transform: translate3d(
+        calc(var(--amp-x, 120px) * -0.12 * var(--drift-scale)),
+        calc(var(--dy3, -15px) * var(--drift-scale)),
+        0
+      );
+  }
+  100% {
+    transform: translate3d(
+        calc(var(--amp-x, 120px) * -0.5 * var(--drift-scale)),
+        calc(var(--dy0, 0px) * var(--drift-scale)),
+        0
+      );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .misc-mini-gallery {
+    animation: none;
+  }
+}
+
 @media (max-width: 900px) {
   #misc-section {
     width: 96vw;
-    padding-top: 60px;
-    padding-bottom: 60px;
+    min-height: 1060px;
+    padding-top: 80px;
+    padding-bottom: 100px;
   }
-  .misc-image-item {
-    max-width: 220px;
-    min-width: 100px;
-    padding: 6px;
+
+  .misc-mini-gallery {
+    width: calc(min(36vw, 240px) * var(--card-scale, 1));
+    min-width: 150px;
   }
 }
 
 @media (max-width: 600px) {
   #misc-section {
+    --drift-scale: 0.5;
     width: 100vw;
-    padding-top: 24px;
-    padding-bottom: 24px;
+    min-height: 1100px;
+    padding-top: 48px;
+    padding-bottom: 72px;
   }
-  .misc-image-item {
-    max-width: 120px;
-    min-width: 60px;
-    padding: 2px;
-    font-size: 0.85em;
-  }
-  .misc-image-caption {
-    font-size: 0.8em;
-  }
-}
-#misc-section {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Always 2 columns */
-  gap: 2em 2em;
-  position: relative;
-  width: 80vw;
-  min-height: 100vh;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 100px;
-  padding-bottom: 100px;
-  overflow: visible;
-  column-count: 4;           /* 4 columns as you had */
-  column-gap: 2em;           /* Horizontal gap between columns */
-  column-fill: balance;      /* Distribute content evenly */
-}
-.misc-image-item {
-  position: absolute;
-  max-width: 260px;
-  min-width: 140px;
-  z-index: 1;
-  padding: 10px;
-  text-align: center;
-  pointer-events: auto;
-  color: dimgray;
-}
-.misc-image-item img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-.misc-gallery-img,
-.misc-mini-gallery,
-.misc-image-item img {
-  cursor: default !important;
-}
-.misc-image-caption {
-    font-size: 0.9em;
-    color: #222;
-    margin-top: 1em;    /* Increased space between image and caption */
-    font-family: inherit;
-    max-width: calc(100% / 1.2);
-    word-break: break-word;
-    white-space: normal;
-    overflow-wrap: break-word;
-    margin-left: auto;
-    margin-right: auto;
-}
 
-.misc-mini-gallery {
-  position: static !important;
-  display: inline-block;     /* Required for column layout */
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  height: auto;
-  overflow: visible;
-  padding: 10px;
-  box-sizing: border-box;
-  background: none;
-  text-align: center;
-  margin-bottom: 1.5em;      /* Gap between items in same column */
-  break-inside: avoid;       /* Don't break across columns */
-  vertical-align: top;       /* Align to top of column */
-}
-
-/* Brickwork offsets: only stylistic vertical shift for items that land in columns 2 & 4.
-   Minimal intervention, keeps all existing sizes/margins/borders unchanged. */
-.misc-mini-gallery:nth-child(4n+2),
-.misc-mini-gallery:nth-child(4n+4) {
-  margin-top: 4.4rem; /* adjust to taste (increase or decrease value) */
-}
-
-/* Clip images to 6:5 (v:h) => width/height = 5/6.
-   Minimal intervention: keep current containers, force each image container to the target ratio
-   and make the <img> fill & crop via object-fit:cover. Adjust value if you prefer slightly different crop. */
-.misc-image-item,
-.misc-mini-gallery {
-  /* keep existing layout behaviour, add aspect and clipping */
-  aspect-ratio: 7 / 7;   /* width / height = 5:6 -> vertical:horizontal = 6:5 */
-  overflow: hidden;      /* hide overflow (crop) */
-  display: inline-block; /* preserve current inline-block behavior */
-}
-
-/* Ensure images fill the clipping box and are cropped, not distorted */
-.misc-image-item img,
-.misc-gallery-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;     /* crop to fill the box */
-  display: block;
-}
-
-/* Fallback for older browsers without aspect-ratio support:
-   preserves the same visual crop using padding-trick when aspect-ratio not supported. */
-@supports not (aspect-ratio: 1 / 1) {
-  .misc-image-item,
   .misc-mini-gallery {
-    position: relative;
-    height: 0;
-    padding-bottom: calc( (7 / 7) * 100% ); /* padding-bottom = height/width * 100% */
+    width: calc(42vw * var(--card-scale, 1));
+    min-width: 120px;
   }
-  .misc-image-item img,
-  .misc-gallery-img {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
+
+  .misc-image-caption {
+    font-size: 0.62rem;
+    line-height: 1.25;
+    padding: 0.5rem;
   }
-}
-
-/* Fix: apply the 6:5 clipping to the image element only so captions remain visible.
-   Override the previous rule that applied aspect-ratio to .misc-mini-gallery. */
-
-/* Ensure gallery item container does NOT enforce an aspect-ratio (so caption sits below) */
-.misc-mini-gallery {
-  aspect-ratio: auto !important;
-  overflow: visible; /* keep captions visible */
-}
-
-/* If you have optional image wrappers, keep them clipped too */
-.misc-image-item {
-  aspect-ratio: 7 / 8;
-  overflow: hidden;
-  display: inline-block;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Apply crop directly to the image box used in the loader */
-.misc-gallery-img,
-.misc-image-item img {
-  width: 100%;
-  aspect-ratio: 7 / 8;
-  height: auto;        /* allow browser to compute height from aspect-ratio */
-  object-fit: cover;   /* crop to fill the box */
-  display: block;
 }
