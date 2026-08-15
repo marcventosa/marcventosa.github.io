@@ -1,6 +1,11 @@
 [
   {
     "id": "gravetats",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
     "gallery": [
       {
         "src": "images/gravetats/comunitat.png",
@@ -12,8 +17,7 @@
           "text": {
             "title": "Gravetats",
             "body": [
-              "Una proposta que treballa la relació entre massa, obertura i materialitat, buscant una porositat espacial construïda a partir de volums pesants i sensibles.",
-              "La composició deixa respirar el projecte mentre reforça la seva lectura tectònica i la qualitat del paisatge urbà."
+              "00"
             ]
           }
         }
@@ -27,6 +31,11 @@
   },
   {
     "id": "casa-intramurs",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
     "gallery": [
       { "src": "images/casa-intramurs/resum_sketch-01.png", "alt": "Casa Intramurs - Resum Sketch" },
       { "src": "images/casa-intramurs/04 - collage-entradapost_compressed-1.png", "alt": "Casa Intramurs - Collage Entradapost" },
@@ -60,6 +69,11 @@
   },
   {
     "id": "refact",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
     "gallery": [
       { "src": "images/refact/01.EMPLAÇAMENT-A2-01.png", "alt": "Refact - Emplaçament" },
       { "src": "images/refact/05. pasarela2-01.png", "alt": "Refact - Pasarela" },
@@ -83,6 +97,11 @@
   },
   {
     "id": "abans-del-cim",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
     "gallery": [
         { "src": "images/abans-del-cim/DSC_0274.JPG", "alt": "Abans del Cim - DSC_0274" },
         {"src": "images/abans-del-cim/planta-abanscim-01.png", "alt": "Abans del Cim - Planta Abans Cim" },
@@ -96,6 +115,11 @@
   },
   {
     "id": "envoltura",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
     "gallery": [
       { "src": "images/envoltura/BP3RIBAS (1)-01.png", "alt": "Envoltura - BP3RIBAS 01" },
       { "src": "images/envoltura/BP3RIBAS (1)-02.png", "alt": "Envoltura - BP3RIBAS 02" },
@@ -105,7 +129,12 @@
     ]
   },
   {
-    "id": "pau",
+    "id": "pauhaus",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
     "gallery": [
       { "src": "images/pau/LAM4_Mesa de trabajo 1 copia.png", "alt": "Casa Pau - LAM4 Mesa de trabajo 1" },
       {"text":[
@@ -117,22 +146,6 @@
       ]},
       { "src": "images/pau/maquetes-tipos-pauhaus.jpg", "alt": "Casa Pau - Maquetes Tipus Pauhaus" }
     ]
-  },
-  {
-    "id": "gravetats",
-    "gallery": [
-      { "src": "images/gravetats/01_panorama.jpg", "alt": "Gravetats - Panorama" },
-      { "src": "images/gravetats/02_planta.png", "alt": "Gravetats - Planta" },
-      { "src": "images/gravetats/03_alcat.png", "alt": "Gravetats - Alçat" },
-      { "src": "images/gravetats/04_detall.jpg", "alt": "Gravetats - Detall constructiu" },
-      { "src": "images/gravetats/05_maqueta.jpg", "alt": "Gravetats - Maqueta" },
-      {
-        "firstWord": "gravetats i materials",
-        "text": [
-          "El projecte explora la relació entre massa i obertura, utilitzant materials pesats per generar porositat espacial.",
-          "Les estratègies constructives busquen resolucions austeres que accentuïn la textura i la inèrcia de les superfícies."
-        ]
-      }
-    ]
   }
+
 ]

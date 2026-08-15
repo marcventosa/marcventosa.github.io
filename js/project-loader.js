@@ -120,6 +120,13 @@ async function loadProjects() {
     section.id = project.id;
     section.className = 'project-section';
     section.dataset.section = project.id;
+    
+    // Add mobileLayout config as data attributes
+    if (project.mobileLayout) {
+      section.dataset.textPosition = project.mobileLayout.textPosition || 'below';
+      section.dataset.imageAspect = project.mobileLayout.imageAspect || 'landscape';
+      section.dataset.columnCount = project.mobileLayout.columnCount || 1;
+    }
 
     const gallery = document.createElement('div');
     gallery.className = 'project-gallery';
@@ -135,6 +142,15 @@ async function loadProjects() {
       slide.style.flexDirection = 'column';
       slide.style.justifyContent = 'center';
       slide.style.alignItems = 'center';
+
+      // Add mobile layout class based on mobileLayout config
+      if (project.mobileLayout) {
+        const textPos = project.mobileLayout.textPosition || 'below';
+        slide.classList.add(`mobile-text-${textPos}`);
+        if (project.mobileLayout.imageAspect) {
+          slide.classList.add(`mobile-aspect-${project.mobileLayout.imageAspect}`);
+        }
+      }
 
       const img = document.createElement('img');
       img.src = item.src;
@@ -216,25 +232,55 @@ async function loadProjects() {
 
     // Cycle through slides — left half goes back, right half goes forward
     let currentIndex = 0;
-    section.addEventListener('click', (event) => {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    // Function to navigate slides
+    function navigateSlides(direction) {
       const slides = gallery.querySelectorAll('.gallery-slide');
       slides.forEach(slide => slide.classList.remove('active'));
 
-      // Check if click is in left or right half of the section
+      if (direction === 'next') {
+        currentIndex = (currentIndex + 1) % slides.length;
+      } else if (direction === 'prev') {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      }
+
+      slides[currentIndex].classList.add('active');
+    }
+
+    // Click event: left half goes back, right half goes forward
+    section.addEventListener('click', (event) => {
       const sectionRect = section.getBoundingClientRect();
       const clickX = event.clientX;
       const midpoint = sectionRect.left + sectionRect.width / 2;
 
       if (clickX < midpoint) {
-        // Left half — go back
-        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        navigateSlides('prev');
       } else {
-        // Right half — go forward
-        currentIndex = (currentIndex + 1) % slides.length;
+        navigateSlides('next');
       }
-
-      slides[currentIndex].classList.add('active');
     });
+
+    // Touch event: swipe detection
+    section.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+    }, { passive: true });
+
+    section.addEventListener('touchend', (event) => {
+      touchEndX = event.changedTouches[0].screenX;
+      const swipeThreshold = 50; // Minimum swipe distance in pixels
+
+      if (Math.abs(touchEndX - touchStartX) > swipeThreshold) {
+        if (touchEndX < touchStartX) {
+          // Swiped left: go to next slide
+          navigateSlides('next');
+        } else {
+          // Swiped right: go to previous slide
+          navigateSlides('prev');
+        }
+      }
+    }, { passive: true });
 
     if (gallery.firstChild) {
       gallery.firstChild.classList.add('active');

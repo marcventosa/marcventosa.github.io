@@ -191,4 +191,320 @@
     text-decoration: underline;
     text-underline-offset: 2px;
   }
+
+  /* Mobile Project Page Layout - Single Column, Image Above Text */
+
+  /* Hide landing nav when viewing project sections (not home) */
+  .project-section #landing-nav {
+    display: none !important;
+  }
+
+  /* Project sections: full-width mobile view */
+  .project-section {
+    width: 100vw;
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+    margin-left: 0;
+    padding: 0;
+    gap: 0;
+  }
+
+  /* Mobile gallery: single-column vertical layout */
+  .project-gallery {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+    position: relative;
+    padding: 0;
+  }
+
+  /* Mobile slide: full-width, vertical stack */
+  .gallery-slide {
+    position: static;
+    width: 100%;
+    height: auto;
+    opacity: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+
+  /* Hide inactive slides on mobile */
+  .gallery-slide:not(.active) {
+    display: none;
+  }
+
+  /* Mobile slide image: responsive sizing */
+  .gallery-slide img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* Mobile text block: below image, full-width */
+  .gallery-slide-text-below {
+    width: 100%;
+    margin-top: 1rem;
+    text-align: left;
+  }
+
+  /* Mobile text block: above image, full-width */
+  .gallery-slide-text-above {
+    width: 100%;
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+
+  /* Portrait slide layout on mobile: vertical stack */
+  .gallery-slide--portrait {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    padding: 1rem !important;
+    height: auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .gallery-slide--portrait .gallery-slide-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 1rem !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .gallery-slide--portrait .gallery-slide-media {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    margin-left: 0 !important;
+    flex: none !important;
+  }
+
+  .gallery-slide--portrait .gallery-slide-media img,
+  .gallery-slide--portrait .project-image {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+
+  .gallery-slide--portrait .gallery-side-copy {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    text-align: left !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.6rem !important;
+  }
+
+  .gallery-slide--portrait .gallery-side-copy .gallery-text-title {
+    display: block !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
+    text-align: left !important;
+  }
+
+  .gallery-slide--portrait .gallery-side-copy .gallery-text {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    letter-spacing: 0 !important;
+    text-align: left !important;
+    margin: 0.4rem 0 !important;
+  }
+
+  /* Text-only slides (no image) */
+  .gallery-slide--text-only {
+    padding: 1.5rem;
+  }
+
+  .gallery-slide--text-only .gallery-side-copy {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Main content wrapper mobile adjustments */
+  .main-content {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Project info section mobile adjustments */
+  .project-info {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1rem !important;
+    margin: 0 !important;
+  }
+
+  /* Mobile Typography - Readability */
+  .gallery-text-title {
+    font-size: 1rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .gallery-text {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    letter-spacing: 0 !important;
+  }
+
+  /* Gallery left/right alignment cleanup on mobile */
+  .gallery-slide--left .gallery-slide-content {
+    justify-content: flex-start !important;
+  }
+
+  .gallery-slide--text-right .gallery-slide-content,
+  .gallery-slide--text-left .gallery-slide-content {
+    flex-direction: column !important;
+  }
+
+  /* Ensure slides are full-height for touch interactions, but content flows */
+  .gallery-slide {
+    min-height: auto;
+  }
+
+  /* Safe area spacing for notched devices */
+  .project-section {
+    padding-top: env(safe-area-inset-top, 0);
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+  }
+
+  /* Mobile Typography Optimization - Readability */
+
+  /* Ensure minimum font size to prevent iOS auto-zoom */
+  body {
+    font-size: 16px !important;
+  }
+
+  /* Headings: scale down for mobile */
+  h1 {
+    font-size: clamp(1.2rem, 5vw, 1.8rem) !important;
+    line-height: 1.3 !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  h2 {
+    font-size: clamp(1rem, 4.5vw, 1.5rem) !important;
+    line-height: 1.3 !important;
+    margin-bottom: 0.6rem !important;
+  }
+
+  h3 {
+    font-size: clamp(0.9rem, 4vw, 1.2rem) !important;
+    line-height: 1.3 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Paragraph and body text */
+  p {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    letter-spacing: 0 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Gallery text blocks: improved readability */
+  .gallery-text-title {
+    font-size: 1rem !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  .gallery-text {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    letter-spacing: 0 !important;
+    margin-bottom: 0.8rem !important;
+  }
+
+  /* Gallery side copy: full-width on mobile */
+  .gallery-side-copy {
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: left !important;
+  }
+
+  .gallery-side-copy .gallery-text-title {
+    text-align: left !important;
+  }
+
+  .gallery-side-copy .gallery-text {
+    text-align: left !important;
+  }
+
+  /* Project info text */
+  .project-info p {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* Project title */
+  .project-title {
+    font-size: 1.2rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Description text */
+  .project-description {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* Gallery description slide */
+  .gallery-description {
+    padding: 1.5rem !important;
+    text-align: left !important;
+  }
+
+  /* Mobile spacing: ensure adequate padding/margin */
+  .gallery-slide {
+    padding: 1rem !important;
+  }
+
+  /* Improve tap target sizes for accessibility */
+  a, button {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Link styling for readability */
+  a {
+    color: #333;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  a:active, a:focus {
+    outline: 2px solid #333;
+    outline-offset: 2px;
+  }
 }

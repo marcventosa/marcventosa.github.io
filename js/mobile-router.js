@@ -72,3 +72,62 @@ function initFooter() {
 
 buildLandingNav();
 initFooter();
+
+// Conditional nav visibility: hide landing nav when viewing project pages on mobile
+function initConditionalNavVisibility() {
+  const landingNav = document.getElementById('landing-nav');
+  const landingSection = document.getElementById('home');
+  
+  if (!landingNav || !landingSection) return;
+
+  // Only apply on mobile (≤768px)
+  const isMobile = () => window.innerWidth <= 768;
+  
+  // Create Intersection Observer to detect which section is in view
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.3 // Trigger when 30% of section is visible
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!isMobile()) {
+        landingNav.style.display = '';
+        return;
+      }
+
+      // Check if the entry is the landing section
+      if (entry.target.id === 'home' && entry.isIntersecting) {
+        // Show nav on landing
+        landingNav.style.display = 'flex';
+      } else if (entry.target.classList.contains('project-section') && entry.isIntersecting) {
+        // Hide nav on project sections
+        landingNav.style.display = 'none';
+      }
+    });
+  }, observerOptions);
+
+  // Observe landing section
+  observer.observe(landingSection);
+
+  // Observe all project sections
+  document.querySelectorAll('.project-section').forEach((section) => {
+    observer.observe(section);
+  });
+
+  // Handle window resize: show nav if resizing to desktop
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      landingNav.style.display = '';
+    }
+  });
+}
+
+// Run after DOM is loaded so project sections exist
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initConditionalNavVisibility);
+} else {
+  // DOM already loaded
+  initConditionalNavVisibility();
+}
