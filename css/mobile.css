@@ -1,5 +1,9 @@
 /* Mobile shell: landing menu + bottom footer. Visible only <=768px. */
 
+#landing-nav {
+  display: none;
+}
+
 #mobile-footer {
   display: none;
 }

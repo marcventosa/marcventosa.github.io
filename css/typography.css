@@ -182,13 +182,13 @@ h4, h5, h6 {
 
 /* Paragraphs */
 p {
-    font-family: var(--font-family-mono);
+    font-family: var(--font-family-sans);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-bold);
     color: var(--text-primary);
     line-height: var(--line-height-normal);
     letter-spacing: var(--letter-spacing-normal);
-    font-variation-settings: 'slnt' 0, 'MONO' 1;
+    font-variation-settings: 'slnt' 0, 'MONO' 0;
     margin-bottom: var(--spacing-sm);
 }
 

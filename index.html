@@ -27,6 +27,15 @@
   <style>
     
   </style>
+    <!-- Update current year dynamically -->
+    <script>
+      (function() {
+        const yearSpan = document.getElementById('current-year');
+        if (yearSpan) {
+          yearSpan.textContent = new Date().getFullYear();
+        }
+      })();
+    </script>
     <!-- Restored Slitscan Effect Initialization -->
 <script type="module">
   import CargoSlitScan from './js/cargo-slitscan-enhanced.js';
@@ -123,7 +132,7 @@
             <div id="slitscan-overlay">
             <div id="slitscan-overlay-text">
                 <span id="title-principal">arquitectura<br>i enginyeria</span>
-                <span id="data-principal">2020 / 2025</span>
+                <span id="data-principal">2020 / <span id="current-year">2025</span></span>
             </div>
             </div>
         </section>
@@ -147,8 +156,8 @@
       <div class="profile-text">
         <p>Benvinguts!
         Més que un portfoli, aquest espai vol ser un arxiu viu de processos
-        i anotacions passades. Una col·lecció de trossos retallats que esperen ser enganxats, ple de maons que volen ser mur. Una eina per tornar-hi, copiar-ne, confrontar-me 
-        amb allò que ja he fet, i construir a partir d’aquests camins i desviacions.
+        i anotacions passades. Una col·lecció de trossos retallats, una eina per tornar-hi, copiar-ne, confrontar-me 
+        amb allò ja creat, i construir a partir d’aquests camins i desviacions.
         
         </p>
         <h3>Formació</h3>
