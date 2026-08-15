@@ -1,7 +1,9 @@
-// Mobile shell: landing menu + expandable bottom footer.
-// Visibility is gated by CSS (css/mobile.css, <=768px); this module only builds behavior.
-// Runs at module evaluation time (before DOMContentLoaded) so navigation.js
-// click binding picks up the cloned landing links.
+// Mobile shell: landing nav + show/hide project routing.
+// Visibility is gated by CSS (css/mobile.css, <=768px).
+// Runs at module evaluation time so navigation.js click binding picks up the cloned landing links.
+
+const MOBILE_BP = 768;
+const isMobile = () => window.innerWidth <= MOBILE_BP;
 
 function buildLandingNav() {
   const overlay = document.getElementById('slitscan-overlay');
@@ -22,112 +24,82 @@ function buildLandingNav() {
     nav.appendChild(item);
   });
 
-  const profileItem = document.createElement('a');
-  profileItem.className = 'nav-link landing-nav-link';
-  profileItem.dataset.section = 'profile';
-  profileItem.textContent = 'PARLEM!';
-  nav.appendChild(profileItem);
-
   overlay.appendChild(nav);
 }
 
-function initFooter() {
-  const footer = document.getElementById('mobile-footer');
-  const toggle = document.getElementById('mobile-footer-toggle');
-  if (!footer || !toggle) return;
+function initMobileProjectRouter() {
+  const landingNav = document.getElementById('landing-nav');
+  const landingSection = document.getElementById('home');
+  if (!landingNav) return;
 
-  const setOpen = (open) => {
-    footer.classList.toggle('open', open);
-    toggle.setAttribute('aria-expanded', String(open));
+  const allHideable = () =>
+    document.querySelectorAll('.project-section, #misc-section, #profile');
+
+  const hideAll = () => {
+    allHideable().forEach((s) => {
+      s.classList.add('mobile-hidden-project');
+      s.classList.remove('mobile-active-project');
+    });
   };
 
-  toggle.addEventListener('click', () => {
-    setOpen(!footer.classList.contains('open'));
+  const showOnly = (targetId) => {
+    allHideable().forEach((s) => {
+      if (s.id === targetId) {
+        s.classList.remove('mobile-hidden-project');
+        s.classList.add('mobile-active-project');
+      } else {
+        s.classList.add('mobile-hidden-project');
+        s.classList.remove('mobile-active-project');
+      }
+    });
+    const profile = document.getElementById('profile');
+    if (profile && targetId !== 'profile') {
+      profile.classList.remove('mobile-hidden-project');
+    }
+    const footer = document.getElementById('mobile-footer');
+    if (footer) {
+      footer.classList.remove('mobile-hidden-project');
+    }
+  };
+
+  landingNav.querySelectorAll('.landing-nav-link').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (!isMobile()) return;
+      const targetId = link.dataset.section;
+      showOnly(targetId);
+    });
   });
 
-  document.addEventListener('click', (event) => {
-    if (footer.classList.contains('open') && !footer.contains(event.target)) {
-      setOpen(false);
+  if (isMobile()) hideAll();
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.target.id === 'home' && entry.isIntersecting && isMobile()) {
+          hideAll();
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  if (landingSection) observer.observe(landingSection);
+
+  window.addEventListener('resize', () => {
+    if (!isMobile()) {
+      document
+        .querySelectorAll('.mobile-hidden-project, .mobile-active-project')
+        .forEach((s) => {
+          s.classList.remove('mobile-hidden-project', 'mobile-active-project');
+        });
     }
   });
-
-  fetch('profile.json')
-    .then((response) => (response.ok ? response.json() : null))
-    .then((profile) => {
-      const box = document.getElementById('mobile-footer-trajectoria');
-      if (!box || !profile || !Array.isArray(profile.trajectoria)) return;
-
-      profile.trajectoria.slice(0, 3).forEach((item) => {
-        const row = document.createElement('div');
-        row.className = 'mobile-footer-trajectoria-row';
-        const strong = document.createElement('strong');
-        strong.textContent = item.position;
-        row.appendChild(strong);
-        row.appendChild(document.createTextNode(` ${item.learnings}`));
-        box.appendChild(row);
-      });
-    })
-    .catch(() => {});
 }
 
 buildLandingNav();
-initFooter();
 
-// Conditional nav visibility: hide landing nav when viewing project pages on mobile
-function initConditionalNavVisibility() {
-  const landingNav = document.getElementById('landing-nav');
-  const landingSection = document.getElementById('home');
-  
-  if (!landingNav || !landingSection) return;
-
-  // Only apply on mobile (≤768px)
-  const isMobile = () => window.innerWidth <= 768;
-  
-  // Create Intersection Observer to detect which section is in view
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.3 // Trigger when 30% of section is visible
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!isMobile()) {
-        landingNav.style.display = '';
-        return;
-      }
-
-      // Check if the entry is the landing section
-      if (entry.target.id === 'home' && entry.isIntersecting) {
-        // Show nav on landing
-        landingNav.style.display = 'flex';
-      } else if (entry.target.classList.contains('project-section') && entry.isIntersecting) {
-        // Hide nav on project sections
-        landingNav.style.display = 'none';
-      }
-    });
-  }, observerOptions);
-
-  // Observe landing section
-  observer.observe(landingSection);
-
-  // Observe all project sections
-  document.querySelectorAll('.project-section').forEach((section) => {
-    observer.observe(section);
-  });
-
-  // Handle window resize: show nav if resizing to desktop
-  window.addEventListener('resize', () => {
-    if (!isMobile()) {
-      landingNav.style.display = '';
-    }
-  });
-}
-
-// Run after DOM is loaded so project sections exist
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initConditionalNavVisibility);
+  document.addEventListener('DOMContentLoaded', initMobileProjectRouter);
 } else {
-  // DOM already loaded
-  initConditionalNavVisibility();
+  initMobileProjectRouter();
 }

@@ -53,23 +53,25 @@ function applyImageLayout(slide, item, projectLayout = {}) {
     if (textSide === 'right') slide.classList.add('gallery-slide--text-right');
     if (textSide === 'left') slide.classList.add('gallery-slide--text-left');
 
+    const isMobile = window.innerWidth <= 768;
+
     const inner = document.createElement('div');
     inner.className = 'gallery-slide-content';
-    inner.style.width = 'min(92vw, 1300px)';
-    inner.style.height = '90vh';
-    inner.style.maxHeight = '90vh';
-    inner.style.gap = 'clamp(1.5rem, 2vw, 3rem)';
+    inner.style.width = isMobile ? '100%' : 'min(92vw, 1300px)';
+    inner.style.height = isMobile ? 'auto' : '90vh';
+    inner.style.maxHeight = isMobile ? 'none' : '90vh';
+    inner.style.gap = isMobile ? '0.8rem' : 'clamp(1.5rem, 2vw, 3rem)';
 
     const mediaWrap = document.createElement('div');
     mediaWrap.className = 'gallery-slide-media';
-    mediaWrap.style.height = '90vh';
-    mediaWrap.style.maxHeight = '90vh';
+    mediaWrap.style.height = isMobile ? 'auto' : '90vh';
+    mediaWrap.style.maxHeight = isMobile ? 'none' : '90vh';
     mediaWrap.appendChild(image);
 
     image.style.width = 'auto';
     image.style.height = 'auto';
-    image.style.maxWidth = 'min(62vw, 780px)';
-    image.style.maxHeight = '90vh';
+    image.style.maxWidth = isMobile ? '95vw' : 'min(62vw, 780px)';
+    image.style.maxHeight = isMobile ? '85vh' : '90vh';
     image.style.objectFit = 'contain';
     image.style.objectPosition = 'center';
 
@@ -85,9 +87,9 @@ function applyImageLayout(slide, item, projectLayout = {}) {
       });
 
       if (textBlock) {
-        textBlock.style.width = 'min(22vw, 280px)';
+        textBlock.style.width = isMobile ? '100%' : 'min(22vw, 280px)';
         textBlock.style.maxWidth = '100%';
-        textBlock.style.flex = '0 0 min(22vw, 280px)';
+        textBlock.style.flex = isMobile ? 'none' : '0 0 min(22vw, 280px)';
         textBlock.style.gap = '0.2rem';
         textBlock.style.margin = '0';
         inner.appendChild(textBlock);
@@ -158,7 +160,7 @@ async function loadProjects() {
       img.className = 'project-image';
       img.style.width = 'auto';
       img.style.height = 'auto';
-      img.style.maxHeight = '60vh';
+      img.style.maxHeight = window.innerWidth <= 768 ? '80vh' : '60vh';
       img.style.maxWidth = '100%';
       protectGalleryImage(img);
       slide.appendChild(img);
