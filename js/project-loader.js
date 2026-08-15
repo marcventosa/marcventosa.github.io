@@ -59,54 +59,78 @@ function activateImage(img) {
   if (img.dataset.sizes) img.sizes = img.dataset.sizes;
 }
 
-function applyImageLayout(slide, item, projectLayout = {}) {
+// Resolve a text reference (label "text1"/"text2", inline string, or inline object)
+// into a { title, body } object. Labels are looked up in the project's texts map.
+function resolveText(textFragment, texts) {
+  if (!textFragment) return null;
+
+  if (typeof textFragment === 'string') {
+    const label = textFragment.trim().toLowerCase();
+    if (/^text\d+$/.test(label)) {
+      return texts[label] ? { title: '', body: texts[label] } : null;
+    }
+    return { title: '', body: textFragment };
+  }
+
+  if (typeof textFragment === 'object') {
+    return {
+      title: textFragment.title || textFragment.firstWord || '',
+      body: textFragment.body || textFragment.text || ''
+    };
+  }
+
+  return null;
+}
+
+function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, texts = {}) {
   const itemLayout = item.layout || {};
   const layout = { ...projectLayout, ...itemLayout };
   const mode = layout.cover || layout.mode || 'default';
-  const align = layout.align || 'center';
-  const textSide = layout.textSide || 'center';
+  const align = layout.align || item.align || 'center';
   const textFragment = layout.text || item.text || null;
 
   const image = slide.querySelector('img');
   if (!image) return;
 
-  if (mode === 'portrait' || mode === 'large') {
+  const resolvedText = resolveText(textFragment, texts);
+  const textSide = layout.textSide || item.textSide || (resolvedText ? 'right' : 'center');
+  const isSideBySide = mode === 'portrait' || mode === 'large' || !!resolvedText;
+
+  if (isSideBySide) {
     slide.innerHTML = '';
     slide.classList.add('gallery-slide--portrait');
     if (align === 'left') slide.classList.add('gallery-slide--left');
     if (textSide === 'right') slide.classList.add('gallery-slide--text-right');
     if (textSide === 'left') slide.classList.add('gallery-slide--text-left');
 
+    // imageHeight (0-100) maps to viewport height via the --portrait-h variable.
+    if (imageHeight != null) {
+      slide.style.setProperty('--portrait-h', `${imageHeight}vh`);
+    }
+
     const isMobile = window.innerWidth <= 768;
 
     const inner = document.createElement('div');
     inner.className = 'gallery-slide-content';
     inner.style.width = isMobile ? '100%' : 'min(92vw, 1300px)';
-    inner.style.height = isMobile ? 'auto' : '100vh';
-    inner.style.maxHeight = isMobile ? 'none' : '100vh';
     inner.style.gap = isMobile ? '0.8rem' : 'clamp(1.5rem, 2vw, 3rem)';
 
     const mediaWrap = document.createElement('div');
     mediaWrap.className = 'gallery-slide-media';
-    mediaWrap.style.height = isMobile ? 'auto' : '100vh';
-    mediaWrap.style.maxHeight = isMobile ? 'none' : '100vh';
     mediaWrap.appendChild(image);
 
     image.style.width = 'auto';
     image.style.height = 'auto';
     image.style.maxWidth = isMobile ? '95vw' : 'min(70vw, 820px)';
-    image.style.maxHeight = isMobile ? '85vh' : '100vh';
     image.style.objectFit = 'contain';
     image.style.objectPosition = 'center';
 
     inner.appendChild(mediaWrap);
 
-    if (textFragment) {
-      const textTitle = typeof textFragment === 'string' ? '' : (textFragment.title || '');
-      const textBody = typeof textFragment === 'string' ? textFragment : (textFragment.body || textFragment.text || '');
+    if (resolvedText) {
       const textBlock = buildTextBlock({
-        title: mode === 'portrait' || mode === 'large' ? '' : textTitle,
-        body: textBody,
+        title: (mode === 'portrait' || mode === 'large') ? '' : resolvedText.title,
+        body: resolvedText.body,
         align: textSide === 'center' ? 'center' : 'left'
       });
 
@@ -152,6 +176,30 @@ async function fetchProjects() {
     projectsCache = await response.json();
   }
   return projectsCache;
+}
+
+// Load a project's text.txt and split into labelled blocks (text1, text2, ...)
+// separated by "//" in the file.
+async function loadProjectTexts(projectId) {
+  const texts = {};
+  try {
+    const response = await fetch(`images/${projectId}/text.txt`);
+    if (response.ok) {
+      const content = await response.text();
+      if (!(content.trim().startsWith('<') || content.includes('<!DOCTYPE'))) {
+        content
+          .split('//')
+          .map((block) => block.trim())
+          .filter((block) => block)
+          .forEach((block, i) => {
+            texts[`text${i + 1}`] = block;
+          });
+      }
+    }
+  } catch (e) {
+    // no text file — leave texts empty
+  }
+  return texts;
 }
 
 function attachGalleryNavigation(section, gallery) {
@@ -231,11 +279,13 @@ async function buildProjectSection(project) {
   gallery.className = 'project-gallery';
 
   const manifest = await getManifest();
+  const texts = await loadProjectTexts(project.id);
 
   project.gallery.forEach((item) => {
     if (!item.src) return;
     const slide = document.createElement('div');
     slide.className = 'gallery-slide';
+    const imageHeight = (typeof item.imageHeight === 'number') ? item.imageHeight : null;
 
     if (project.mobileLayout) {
       const textPos = project.mobileLayout.textPosition || 'below';
@@ -250,56 +300,20 @@ async function buildProjectSection(project) {
     img.className = 'project-image';
     img.style.width = 'auto';
     img.style.height = 'auto';
-    img.style.maxHeight = window.innerWidth <= 768 ? '80vh' : '60vh';
+    img.style.maxHeight = imageHeight != null
+      ? `${imageHeight}vh`
+      : (window.innerWidth <= 768 ? '80vh' : '60vh');
     img.style.maxWidth = '100%';
     protectGalleryImage(img);
     prepareImage(img, item.src, manifest);
     slide.appendChild(img);
 
-    if (item.layout || project.layout) {
-      applyImageLayout(slide, item, project.layout || {});
+    if (item.layout || item.text || item.textSide || project.layout) {
+      applyImageLayout(slide, item, project.layout || {}, imageHeight, texts);
     }
 
     gallery.appendChild(slide);
   });
-
-  try {
-    const textResponse = await fetch(`images/${project.id}/text.txt`);
-    if (textResponse.ok) {
-      const textContent = await textResponse.text();
-
-      if (!(textContent.trim().startsWith('<') || textContent.includes('<!DOCTYPE'))) {
-        const blocks = textContent.split(/\n\s*\n/).map((block) => block.trim()).filter((block) => block);
-
-        if (blocks.length > 0) {
-          const titleLine = blocks[0];
-          const bodyText = blocks.slice(1).join('\n\n');
-
-          const descSlide = document.createElement('div');
-          descSlide.className = 'gallery-slide';
-          descSlide.style.padding = '2rem';
-
-          const descInner = document.createElement('div');
-          descInner.className = 'gallery-description';
-
-          const title = document.createElement('div');
-          title.className = 'gallery-text-title';
-          title.textContent = titleLine;
-          descInner.appendChild(title);
-
-          const p = document.createElement('p');
-          p.className = 'gallery-text';
-          p.textContent = bodyText;
-          descInner.appendChild(p);
-
-          descSlide.appendChild(descInner);
-          gallery.appendChild(descSlide);
-        }
-      }
-    }
-  } catch (error) {
-    console.warn(`Could not load text.txt for project ${project.id}:`, error);
-  }
 
   if (window.innerWidth > 768) {
     section.style.height = '100vh';

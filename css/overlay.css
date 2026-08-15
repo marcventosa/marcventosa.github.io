@@ -38,8 +38,7 @@ body.overlay-mode #misc-section {
   margin-left: 0 !important;
   z-index: 40;
   background: #fff !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
+  overflow: hidden !important;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -54,6 +53,11 @@ body.overlay-mode #misc-section.open {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+}
+
+/* Profile content can be long, so it scrolls; projects + misc stay fixed to viewport */
+body.overlay-mode #profile {
+  overflow-y: auto !important;
 }
 
 /* Neutralize desktop scroll-snap so the landing is the only "page" */

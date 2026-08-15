@@ -335,6 +335,19 @@ header .nav-menu {
     font-weight: bold;
 }
 
+/* Responsive scaling for the header: name (left) + nav titles (right).
+   Scales with viewport width on desktop/medium/large screens.
+   Name and nav titles share the same size. */
+.header-left .site-title .nav-link {
+    font-size: clamp(1.05rem, 1.1vw, 1.4rem) !important;
+    line-height: 1.3;
+}
+
+.header-right .nav-menu .nav-link {
+    font-size: clamp(1.05rem, 1.1vw, 1.4rem) !important;
+    line-height: 1.3;
+}
+
 /* Text Selection */
 ::selection {
     background-color: var(--accent-color);
