@@ -12,10 +12,10 @@
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/effects.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="css/landing-section.css">
     <link rel="stylesheet" href="css/backdrop.css">
     <link rel="stylesheet" href="css/misc-section.css">
     <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/overlay.css">
     <script src="js/main.js" type="module"></script>
 
     <link rel="icon" href="images/favicon_Mesa de trabajo 1.svg" type="image/svg+xml" color="var(--accent-color)">
@@ -23,6 +23,14 @@
 
 </head>
 <body>
+    <script>
+      (function () {
+        if (window.innerWidth > 768) {
+          document.documentElement.classList.add('overlay-mode');
+          document.body.classList.add('overlay-mode');
+        }
+      })();
+    </script>
     <div id="backdrop"></div>
   <style>
     
@@ -92,6 +100,9 @@
     });
 
     console.log('Optimized slitscan effect initialized successfully for #home section');
+
+    // Expose instance so the overlay router can fade it in/out.
+    window.slitScan = slitScan;
   }
 </script>
 
@@ -189,6 +200,7 @@
     <script src="js/project-loader.js" type="module"></script>
     <script src="js/misc-loader.js" type="module"></script>
     <script src="js/mobile-router.js" type="module"></script>
+    <script src="js/overlay-router.js" type="module"></script>
     </div>
 </body>
 </html>

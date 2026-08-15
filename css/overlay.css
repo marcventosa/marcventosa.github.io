@@ -1,0 +1,99 @@
+/* Desktop overlay mode: a single dynamic landing page.
+   Sections fade in on top of the landing while the slitscan fades to white.
+   Only active when <body class="overlay-mode"> is present (set by js/overlay-router.js).
+   Reversible: remove the class / set OVERLAY_MODE = false to restore scroll-snap. */
+
+html.overlay-mode,
+body.overlay-mode {
+  overflow: hidden;
+}
+
+/* Landing is fixed to the viewport (no scrolling) */
+body.overlay-mode .landing-section {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  margin: 0 !important;
+}
+
+/* Content sections become full-screen overlays, hidden by default */
+body.overlay-mode .project-section,
+body.overlay-mode #profile,
+body.overlay-mode #misc-section {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  margin-left: 0 !important;
+  z-index: 40;
+  background: #fff !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.85s ease, visibility 0.85s ease;
+  transform: none !important;
+  scroll-snap-align: none !important;
+}
+
+body.overlay-mode .project-section.open,
+body.overlay-mode #profile.open,
+body.overlay-mode #misc-section.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Neutralize desktop scroll-snap so the landing is the only "page" */
+body.overlay-mode .main-content {
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+/* Slitscan canvas fades to white when an overlay opens */
+body.overlay-mode .landing-section canvas {
+  transition: opacity 0.85s ease !important;
+}
+
+/* Title/date slide animations: title exits upward, date exits downward */
+body.overlay-mode #title-principal,
+body.overlay-mode #data-principal {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  will-change: transform;
+}
+
+body.overlay-mode.has-overlay #title-principal {
+  transform: translateY(-120%);
+  opacity: 0;
+}
+
+body.overlay-mode.has-overlay #data-principal {
+  transform: translateY(120%);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.overlay-mode .project-section,
+  body.overlay-mode #profile,
+  body.overlay-mode #misc-section,
+  body.overlay-mode .landing-section canvas,
+  body.overlay-mode #title-principal,
+  body.overlay-mode #data-principal {
+    transition: none !important;
+  }
+}

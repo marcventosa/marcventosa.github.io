@@ -1,3 +1,7 @@
+import { getManifest, buildSrcset } from './image-helper.js';
+
+const GALLERY_SIZES = '(max-width: 768px) 100vw, 70vw';
+
 function protectGalleryImage(image) {
   if (!(image instanceof HTMLImageElement)) return;
 
@@ -35,6 +39,26 @@ function buildTextBlock({ title = '', body = '', align = 'center' } = {}) {
   return textWrap;
 }
 
+// Prepare an image for deferred loading: store src/srcset in data-* attrs.
+function prepareImage(img, src, manifest) {
+  img.decoding = 'async';
+  img.dataset.src = src;
+  const srcset = buildSrcset(manifest, src);
+  if (srcset) {
+    img.dataset.srcset = srcset;
+    img.dataset.sizes = GALLERY_SIZES;
+  }
+}
+
+// Activate an image (set real src/srcset) when its slide becomes visible.
+function activateImage(img) {
+  if (!img || img.dataset.activated) return;
+  img.dataset.activated = '1';
+  if (img.dataset.src) img.src = img.dataset.src;
+  if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+  if (img.dataset.sizes) img.sizes = img.dataset.sizes;
+}
+
 function applyImageLayout(slide, item, projectLayout = {}) {
   const itemLayout = item.layout || {};
   const layout = { ...projectLayout, ...itemLayout };
@@ -58,20 +82,20 @@ function applyImageLayout(slide, item, projectLayout = {}) {
     const inner = document.createElement('div');
     inner.className = 'gallery-slide-content';
     inner.style.width = isMobile ? '100%' : 'min(92vw, 1300px)';
-    inner.style.height = isMobile ? 'auto' : '90vh';
-    inner.style.maxHeight = isMobile ? 'none' : '90vh';
+    inner.style.height = isMobile ? 'auto' : '100vh';
+    inner.style.maxHeight = isMobile ? 'none' : '100vh';
     inner.style.gap = isMobile ? '0.8rem' : 'clamp(1.5rem, 2vw, 3rem)';
 
     const mediaWrap = document.createElement('div');
     mediaWrap.className = 'gallery-slide-media';
-    mediaWrap.style.height = isMobile ? 'auto' : '90vh';
-    mediaWrap.style.maxHeight = isMobile ? 'none' : '90vh';
+    mediaWrap.style.height = isMobile ? 'auto' : '100vh';
+    mediaWrap.style.maxHeight = isMobile ? 'none' : '100vh';
     mediaWrap.appendChild(image);
 
     image.style.width = 'auto';
     image.style.height = 'auto';
-    image.style.maxWidth = isMobile ? '95vw' : 'min(62vw, 780px)';
-    image.style.maxHeight = isMobile ? '85vh' : '90vh';
+    image.style.maxWidth = isMobile ? '95vw' : 'min(70vw, 820px)';
+    image.style.maxHeight = isMobile ? '85vh' : '100vh';
     image.style.objectFit = 'contain';
     image.style.objectPosition = 'center';
 
@@ -135,6 +159,13 @@ function attachGalleryNavigation(section, gallery) {
   let touchStartX = 0;
   let touchEndX = 0;
 
+  function activateSlideAt(index) {
+    const slides = gallery.querySelectorAll('.gallery-slide');
+    if (!slides.length) return;
+    const slide = slides[index];
+    if (slide) activateImage(slide.querySelector('img'));
+  }
+
   function navigateSlides(direction) {
     const slides = gallery.querySelectorAll('.gallery-slide');
     if (!slides.length) return;
@@ -147,6 +178,11 @@ function attachGalleryNavigation(section, gallery) {
     }
 
     slides[currentIndex].classList.add('active');
+    activateSlideAt(currentIndex);
+
+    // Preload adjacent slides for smooth transitions.
+    activateSlideAt((currentIndex + 1) % slides.length);
+    activateSlideAt((currentIndex - 1 + slides.length) % slides.length);
   }
 
   section.addEventListener('click', (event) => {
@@ -194,6 +230,8 @@ async function buildProjectSection(project) {
   const gallery = document.createElement('div');
   gallery.className = 'project-gallery';
 
+  const manifest = await getManifest();
+
   project.gallery.forEach((item) => {
     if (!item.src) return;
     const slide = document.createElement('div');
@@ -208,7 +246,6 @@ async function buildProjectSection(project) {
     }
 
     const img = document.createElement('img');
-    img.src = item.src;
     img.alt = item.alt || '';
     img.className = 'project-image';
     img.style.width = 'auto';
@@ -216,6 +253,7 @@ async function buildProjectSection(project) {
     img.style.maxHeight = window.innerWidth <= 768 ? '80vh' : '60vh';
     img.style.maxWidth = '100%';
     protectGalleryImage(img);
+    prepareImage(img, item.src, manifest);
     slide.appendChild(img);
 
     if (item.layout || project.layout) {
@@ -271,12 +309,14 @@ async function buildProjectSection(project) {
     section.style.alignItems = 'center';
   }
 
-  if (gallery.firstChild) {
-    gallery.firstChild.classList.add('active');
-  }
-
   section.appendChild(gallery);
   attachGalleryNavigation(section, gallery);
+
+  // Activate the first slide (and its image).
+  if (gallery.firstChild) {
+    gallery.firstChild.classList.add('active');
+    activateImage(gallery.firstChild.querySelector('img'));
+  }
 
   return section;
 }

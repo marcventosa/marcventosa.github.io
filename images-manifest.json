@@ -1,0 +1,998 @@
+{
+  "images/abans-del-cim/collage.png": {
+    "variants": [
+      {
+        "src": "images/abans-del-cim/collage@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/abans-del-cim/collage@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/abans-del-cim/collage@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/abans-del-cim/collage@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/abans-del-cim/DSC_0272.JPG": {
+    "variants": [
+      {
+        "src": "images/abans-del-cim/DSC_0272@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0272@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0272@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0272@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/abans-del-cim/DSC_0273.JPG": {
+    "variants": [
+      {
+        "src": "images/abans-del-cim/DSC_0273@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0273@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0273@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0273@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/abans-del-cim/DSC_0274.JPG": {
+    "variants": [
+      {
+        "src": "images/abans-del-cim/DSC_0274@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0274@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0274@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0274@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/abans-del-cim/planta-abanscim-01.png": {
+    "variants": [
+      {
+        "src": "images/abans-del-cim/planta-abanscim-01@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/abans-del-cim/planta-abanscim-01@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/abans-del-cim/planta-abanscim-01@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/abans-del-cim/planta-abanscim-01@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/casa-intramurs/02. Planta 1_200-01.png": {
+    "variants": [
+      {
+        "src": "images/casa-intramurs/02. Planta 1_200-01@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/casa-intramurs/02. Planta 1_200-01@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/casa-intramurs/02. Planta 1_200-01@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/casa-intramurs/02. Planta 1_200-01@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/casa-intramurs/02_Proposta-A3_20_cuina-1.png": {
+    "variants": [
+      {
+        "src": "images/casa-intramurs/02_Proposta-A3_20_cuina-1@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/casa-intramurs/02_Proposta-A3_20_cuina-1@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/casa-intramurs/02_Proposta-A3_20_cuina-1@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/casa-intramurs/02_Proposta-A3_20_cuina-1@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/casa-intramurs/03. Seccio1-1.png": {
+    "variants": [
+      {
+        "src": "images/casa-intramurs/03. Seccio1-1@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/casa-intramurs/03. Seccio1-1@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/casa-intramurs/03. Seccio1-1@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/casa-intramurs/03. Seccio1-1@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/casa-intramurs/03. Seccio3-1.png": {
+    "variants": [
+      {
+        "src": "images/casa-intramurs/03. Seccio3-1@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/casa-intramurs/03. Seccio3-1@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/casa-intramurs/03. Seccio3-1@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/casa-intramurs/03. Seccio3-1@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/casa-intramurs/04 - collage-entradapost_compressed-1.png": {
+    "variants": [
+      {
+        "src": "images/casa-intramurs/04 - collage-entradapost_compressed-1@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/casa-intramurs/04 - collage-entradapost_compressed-1@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/casa-intramurs/04 - collage-entradapost_compressed-1@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/casa-intramurs/04 - collage-entradapost_compressed-1@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/casa-intramurs/DSC_0368_maqueta.png": {
+    "variants": [
+      {
+        "src": "images/casa-intramurs/DSC_0368_maqueta@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/casa-intramurs/DSC_0368_maqueta@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/casa-intramurs/DSC_0368_maqueta@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/casa-intramurs/DSC_0368_maqueta@1485w.webp",
+        "w": 1485
+      }
+    ]
+  },
+  "images/casa-intramurs/resum_sketch-01.png": {
+    "variants": [
+      {
+        "src": "images/casa-intramurs/resum_sketch-01@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/casa-intramurs/resum_sketch-01@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/casa-intramurs/resum_sketch-01@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/casa-intramurs/resum_sketch-01@1754w.webp",
+        "w": 1754
+      }
+    ]
+  },
+  "images/casa-intramurs/traces_latents.png": {
+    "variants": [
+      {
+        "src": "images/casa-intramurs/traces_latents@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/casa-intramurs/traces_latents@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/casa-intramurs/traces_latents@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/casa-intramurs/traces_latents@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/casa-intramurs/VentosaMarc-E3-maqueta100-2.jpg": {
+    "variants": [
+      {
+        "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100-2@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100-2@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100-2@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100-2@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/casa-intramurs/VentosaMarc-E3-maqueta100.jpg": {
+    "variants": [
+      {
+        "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100@969w.webp",
+        "w": 969
+      }
+    ]
+  },
+  "images/dibuix-2.jpeg": {
+    "variants": [
+      {
+        "src": "images/dibuix-2@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/dibuix-2@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/dibuix-2@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/dibuix-2@1600w.webp",
+        "w": 1600
+      }
+    ]
+  },
+  "images/envoltura/BP3RIBAS (1)-01.png": {
+    "variants": [
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-01@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-01@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-01@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-01@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/envoltura/BP3RIBAS (1)-02.png": {
+    "variants": [
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-02@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-02@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-02@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-02@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/envoltura/BP3RIBAS (1)-03.png": {
+    "variants": [
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/envoltura/BP3RIBAS (1)-03_proces.png": {
+    "variants": [
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03_proces@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03_proces@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03_proces@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03_proces@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/envoltura/BP3RIBAS (1)-1_peces.png": {
+    "variants": [
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-1_peces@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-1_peces@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-1_peces@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-1_peces@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/gravetats/comunitat.png": {
+    "variants": [
+      {
+        "src": "images/gravetats/comunitat@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/gravetats/comunitat@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/gravetats/comunitat@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/gravetats/comunitat@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/gravetats/construc..png": {
+    "variants": [
+      {
+        "src": "images/gravetats/construc.@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/gravetats/construc.@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/gravetats/construc.@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/gravetats/construc.@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/gravetats/emplaç-.png": {
+    "variants": [
+      {
+        "src": "images/gravetats/emplaç-@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/gravetats/emplaç-@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/gravetats/emplaç-@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/gravetats/emplaç-@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/gravetats/foto-maqueta-arbre-2.png": {
+    "variants": [
+      {
+        "src": "images/gravetats/foto-maqueta-arbre-2@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/gravetats/foto-maqueta-arbre-2@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/gravetats/foto-maqueta-arbre-2@832w.webp",
+        "w": 832
+      }
+    ]
+  },
+  "images/gravetats/gravetats.png": {
+    "variants": [
+      {
+        "src": "images/gravetats/gravetats@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/gravetats/gravetats@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/gravetats/gravetats@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/gravetats/gravetats@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/gravetats/habitar.png": {
+    "variants": [
+      {
+        "src": "images/gravetats/habitar@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/gravetats/habitar@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/gravetats/habitar@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/gravetats/habitar@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/altar-catenari.jpg": {
+    "variants": [
+      {
+        "src": "images/misc/altar-catenari@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/altar-catenari@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/altar-catenari@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/altar-catenari@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/calamocha.jpg": {
+    "variants": [
+      {
+        "src": "images/misc/calamocha@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/calamocha@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/calamocha@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/calamocha@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/datastrings-mv-1.jpeg": {
+    "variants": [
+      {
+        "src": "images/misc/datastrings-mv-1@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/datastrings-mv-1@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/datastrings-mv-1@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/datastrings-mv-1@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/datastrings-mv-2.jpeg": {
+    "variants": [
+      {
+        "src": "images/misc/datastrings-mv-2@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/datastrings-mv-2@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/datastrings-mv-2@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/datastrings-mv-2@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/fab-catenari.jpeg": {
+    "variants": [
+      {
+        "src": "images/misc/fab-catenari@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/fab-catenari@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/fab-catenari@1200w.webp",
+        "w": 1200
+      }
+    ]
+  },
+  "images/misc/general-espelmes.jpg": {
+    "variants": [
+      {
+        "src": "images/misc/general-espelmes@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/general-espelmes@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/general-espelmes@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/general-espelmes@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/italy.jpg": {
+    "variants": [
+      {
+        "src": "images/misc/italy@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/italy@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/italy@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/italy@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/left-stand.jpg": {
+    "variants": [
+      {
+        "src": "images/misc/left-stand@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/left-stand@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/left-stand@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/left-stand@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/maqueta-clarisses_Mesa de trabajo 1.png": {
+    "variants": [
+      {
+        "src": "images/misc/maqueta-clarisses_Mesa de trabajo 1@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/maqueta-clarisses_Mesa de trabajo 1@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/maqueta-clarisses_Mesa de trabajo 1@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/maqueta-clarisses_Mesa de trabajo 1@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/menorc.jpg": {
+    "variants": [
+      {
+        "src": "images/misc/menorc@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/menorc@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/menorc@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/menorc@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/parc03-1.png": {
+    "variants": [
+      {
+        "src": "images/misc/parc03-1@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/parc03-1@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/parc03-1@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/parc03-1@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/parc03-2.jpeg": {
+    "variants": [
+      {
+        "src": "images/misc/parc03-2@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/parc03-2@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/parc03-2@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/parc03-2@1600w.webp",
+        "w": 1600
+      }
+    ]
+  },
+  "images/misc/pirineus.jpg": {
+    "variants": [
+      {
+        "src": "images/misc/pirineus@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/pirineus@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/pirineus@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/misc/pirineus@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/misc/right-stand.jpg": {
+    "variants": [
+      {
+        "src": "images/misc/right-stand@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/misc/right-stand@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/misc/right-stand@1031w.webp",
+        "w": 1031
+      }
+    ]
+  },
+  "images/pau/BPT_06.jpg": {
+    "variants": [
+      {
+        "src": "images/pau/BPT_06@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/pau/BPT_06@622w.webp",
+        "w": 622
+      }
+    ]
+  },
+  "images/pau/LAM4_Mesa de trabajo 1 copia.png": {
+    "variants": [
+      {
+        "src": "images/pau/LAM4_Mesa de trabajo 1 copia@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/pau/LAM4_Mesa de trabajo 1 copia@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/pau/LAM4_Mesa de trabajo 1 copia@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/pau/LAM4_Mesa de trabajo 1 copia@1755w.webp",
+        "w": 1755
+      }
+    ]
+  },
+  "images/pau/maquetes-tipos-pauhaus.jpg": {
+    "variants": [
+      {
+        "src": "images/pau/maquetes-tipos-pauhaus@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/pau/maquetes-tipos-pauhaus@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/pau/maquetes-tipos-pauhaus@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/pau/maquetes-tipos-pauhaus@1592w.webp",
+        "w": 1592
+      }
+    ]
+  },
+  "images/peces2-bp3.png": {
+    "variants": [
+      {
+        "src": "images/peces2-bp3@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/peces2-bp3@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/peces2-bp3@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/peces2-bp3@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/refact/01.EMPLAÇAMENT-A2-01.png": {
+    "variants": [
+      {
+        "src": "images/refact/01.EMPLAÇAMENT-A2-01@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/refact/01.EMPLAÇAMENT-A2-01@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/refact/01.EMPLAÇAMENT-A2-01@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/refact/01.EMPLAÇAMENT-A2-01@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/refact/05. pasarela2-01.png": {
+    "variants": [
+      {
+        "src": "images/refact/05. pasarela2-01@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/refact/05. pasarela2-01@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/refact/05. pasarela2-01@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/refact/05. pasarela2-01@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/refact/carto_antiga-01.png": {
+    "variants": [
+      {
+        "src": "images/refact/carto_antiga-01@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/refact/carto_antiga-01@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/refact/carto_antiga-01@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/refact/carto_antiga-01@1754w.webp",
+        "w": 1754
+      }
+    ]
+  },
+  "images/refact/collage-ext-01.png": {
+    "variants": [
+      {
+        "src": "images/refact/collage-ext-01@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/refact/collage-ext-01@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/refact/collage-ext-01@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/refact/collage-ext-01@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/refact/collage_interior.jpg": {
+    "variants": [
+      {
+        "src": "images/refact/collage_interior@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/refact/collage_interior@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/refact/collage_interior@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/refact/collage_interior@1800w.webp",
+        "w": 1800
+      }
+    ]
+  },
+  "images/refact/p6-titol-projecte-01.png": {
+    "variants": [
+      {
+        "src": "images/refact/p6-titol-projecte-01@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/refact/p6-titol-projecte-01@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/refact/p6-titol-projecte-01@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/refact/p6-titol-projecte-01@1754w.webp",
+        "w": 1754
+      }
+    ]
+  }
+}

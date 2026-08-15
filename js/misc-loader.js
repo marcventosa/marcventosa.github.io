@@ -1,10 +1,13 @@
 // Load misc.json and scatter images as a freely floating, overlapping collage
 
+import { getManifest, buildSrcset } from './image-helper.js';
+
 const rand = (min, max) => Math.random() * (max - min) + min;
 
 const ASPECT = 6 / 5;
 const DRIFT_BUFFER = 48;
 const MAX_VERTICAL_DRIFT = 40;
+const MISC_SIZES = '(max-width: 600px) 50vw, 300px';
 
 function baseCardWidth(viewportWidth) {
   if (viewportWidth <= 600) return { base: viewportWidth * 0.42, minWidth: 120 };
@@ -38,14 +41,17 @@ async function loadMiscImages() {
       if (!response.ok) return;
       const groups = await response.json();
 
+      const manifest = await getManifest();
+
       section.innerHTML = '';
 
       const viewportWidth = window.innerWidth;
       const isSmallMobile = viewportWidth <= 600;
 
       // Mobile: spread cards wider + cap overlap to ~50% max
+      // Desktop: cap overlap to 40% so each card stays at least ~60% visible
       const leftMax = isSmallMobile ? 55 : viewportWidth <= 900 ? 54 : 72;
-      const thresholds = isSmallMobile ? [0.2, 0.35, 0.5] : [0.4, 0.65, 0.9];
+      const thresholds = isSmallMobile ? [0.2, 0.35, 0.5] : [0.2, 0.35, 0.4];
       const minScale = isSmallMobile ? 0.55 : 0.7;
       const maxScale = isSmallMobile ? 1.0 : 1.5;
 
@@ -58,10 +64,12 @@ async function loadMiscImages() {
       const placedRects = [];
 
       const findSpot = (w, h, reachX, leftMaxPx, topMin, topMax) => {
+        let globalBest = null;
+        let globalBestRatio = Infinity;
         for (const threshold of thresholds) {
           let best = null;
           let bestOverlap = Infinity;
-          for (let attempt = 0; attempt < 120; attempt++) {
+          for (let attempt = 0; attempt < 200; attempt++) {
             const left = rand(0, leftMaxPx);
             const top = rand(topMin, topMax);
             const inflated = inflateRect({ left, top, w, h }, reachX, MAX_VERTICAL_DRIFT);
@@ -74,6 +82,10 @@ async function loadMiscImages() {
                 maxRatio = Math.max(maxRatio, overlap / Math.min(w * h, placed.area));
               }
             }
+            if (maxRatio < globalBestRatio) {
+              globalBestRatio = maxRatio;
+              globalBest = { left, top };
+            }
             if (maxRatio <= threshold && totalOverlap < bestOverlap) {
               best = { left, top };
               bestOverlap = totalOverlap;
@@ -82,7 +94,7 @@ async function loadMiscImages() {
           }
           if (best) return best;
         }
-        return { left: rand(0, leftMaxPx), top: rand(topMin, topMax) };
+        return globalBest || { left: rand(0, leftMaxPx), top: rand(topMin, topMax) };
       };
 
       groups.forEach((group) => {
@@ -109,6 +121,8 @@ async function loadMiscImages() {
 
         const img = document.createElement('img');
         img.className = 'misc-gallery-img';
+        img.decoding = 'async';
+        img.loading = 'lazy';
         galleryDiv.appendChild(img);
 
         if (group.caption) {
@@ -157,6 +171,11 @@ async function loadMiscImages() {
             img.className = newImg.className;
             img.alt = group.project || group.caption || '';
             img.style.filter = imgData.bw ? 'grayscale(1) contrast(1.08)' : 'none';
+            const srcset = buildSrcset(manifest, imgData.src);
+            if (srcset) {
+              img.srcset = srcset;
+              img.sizes = MISC_SIZES;
+            }
           };
 
           newImg.src = imgData.src;
