@@ -106,191 +106,214 @@ function applyImageLayout(slide, item, projectLayout = {}) {
   }
 }
 
-async function loadProjects() {
-  const response = await fetch('projects.json');
-  const projects = await response.json();
+let projectsCache = null;
+let slideStyleInjected = false;
 
+function injectSlideStyle() {
+  if (slideStyleInjected) return;
+  slideStyleInjected = true;
+  const style = document.createElement('style');
+  style.textContent = `
+    .gallery-slide {
+      transition: none !important;
+      animation: none !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+async function fetchProjects() {
+  if (!projectsCache) {
+    const response = await fetch('projects.json');
+    projectsCache = await response.json();
+  }
+  return projectsCache;
+}
+
+function attachGalleryNavigation(section, gallery) {
+  let currentIndex = 0;
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  function navigateSlides(direction) {
+    const slides = gallery.querySelectorAll('.gallery-slide');
+    if (!slides.length) return;
+    slides.forEach((slide) => slide.classList.remove('active'));
+
+    if (direction === 'next') {
+      currentIndex = (currentIndex + 1) % slides.length;
+    } else if (direction === 'prev') {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    }
+
+    slides[currentIndex].classList.add('active');
+  }
+
+  section.addEventListener('click', (event) => {
+    const sectionRect = section.getBoundingClientRect();
+    const clickX = event.clientX;
+    const midpoint = sectionRect.left + sectionRect.width / 2;
+
+    if (clickX < midpoint) {
+      navigateSlides('prev');
+    } else {
+      navigateSlides('next');
+    }
+  });
+
+  section.addEventListener('touchstart', (event) => {
+    touchStartX = event.changedTouches[0].screenX;
+  }, { passive: true });
+
+  section.addEventListener('touchend', (event) => {
+    touchEndX = event.changedTouches[0].screenX;
+    const swipeThreshold = 50;
+
+    if (Math.abs(touchEndX - touchStartX) > swipeThreshold) {
+      if (touchEndX < touchStartX) {
+        navigateSlides('next');
+      } else {
+        navigateSlides('prev');
+      }
+    }
+  }, { passive: true });
+}
+
+async function buildProjectSection(project) {
+  const section = document.createElement('section');
+  section.id = project.id;
+  section.className = 'project-section';
+  section.dataset.section = project.id;
+
+  if (project.mobileLayout) {
+    section.dataset.textPosition = project.mobileLayout.textPosition || 'below';
+    section.dataset.imageAspect = project.mobileLayout.imageAspect || 'landscape';
+    section.dataset.columnCount = project.mobileLayout.columnCount || 1;
+  }
+
+  const gallery = document.createElement('div');
+  gallery.className = 'project-gallery';
+
+  project.gallery.forEach((item) => {
+    if (!item.src) return;
+    const slide = document.createElement('div');
+    slide.className = 'gallery-slide';
+
+    if (project.mobileLayout) {
+      const textPos = project.mobileLayout.textPosition || 'below';
+      slide.classList.add(`mobile-text-${textPos}`);
+      if (project.mobileLayout.imageAspect) {
+        slide.classList.add(`mobile-aspect-${project.mobileLayout.imageAspect}`);
+      }
+    }
+
+    const img = document.createElement('img');
+    img.src = item.src;
+    img.alt = item.alt || '';
+    img.className = 'project-image';
+    img.style.width = 'auto';
+    img.style.height = 'auto';
+    img.style.maxHeight = window.innerWidth <= 768 ? '80vh' : '60vh';
+    img.style.maxWidth = '100%';
+    protectGalleryImage(img);
+    slide.appendChild(img);
+
+    if (item.layout || project.layout) {
+      applyImageLayout(slide, item, project.layout || {});
+    }
+
+    gallery.appendChild(slide);
+  });
+
+  try {
+    const textResponse = await fetch(`images/${project.id}/text.txt`);
+    if (textResponse.ok) {
+      const textContent = await textResponse.text();
+
+      if (!(textContent.trim().startsWith('<') || textContent.includes('<!DOCTYPE'))) {
+        const blocks = textContent.split(/\n\s*\n/).map((block) => block.trim()).filter((block) => block);
+
+        if (blocks.length > 0) {
+          const titleLine = blocks[0];
+          const bodyText = blocks.slice(1).join('\n\n');
+
+          const descSlide = document.createElement('div');
+          descSlide.className = 'gallery-slide';
+          descSlide.style.padding = '2rem';
+
+          const descInner = document.createElement('div');
+          descInner.className = 'gallery-description';
+
+          const title = document.createElement('div');
+          title.className = 'gallery-text-title';
+          title.textContent = titleLine;
+          descInner.appendChild(title);
+
+          const p = document.createElement('p');
+          p.className = 'gallery-text';
+          p.textContent = bodyText;
+          descInner.appendChild(p);
+
+          descSlide.appendChild(descInner);
+          gallery.appendChild(descSlide);
+        }
+      }
+    }
+  } catch (error) {
+    console.warn(`Could not load text.txt for project ${project.id}:`, error);
+  }
+
+  if (window.innerWidth > 768) {
+    section.style.height = '100vh';
+    section.style.display = 'flex';
+    section.style.flexDirection = 'column';
+    section.style.justifyContent = 'center';
+    section.style.alignItems = 'center';
+  }
+
+  if (gallery.firstChild) {
+    gallery.firstChild.classList.add('active');
+  }
+
+  section.appendChild(gallery);
+  attachGalleryNavigation(section, gallery);
+
+  return section;
+}
+
+async function loadProject(projectId) {
   const mainContent = document.querySelector('.main-content');
+  if (!mainContent) return null;
+
+  const existing = document.getElementById(projectId);
+  if (existing) return existing;
+
+  const projects = await fetchProjects();
+  const project = projects.find((p) => p.id === projectId);
+  if (!project) return null;
+
+  injectSlideStyle();
+  const section = await buildProjectSection(project);
+  mainContent.appendChild(section);
+  return section;
+}
+
+async function loadAllProjects() {
+  const mainContent = document.querySelector('.main-content');
+  if (!mainContent) return;
+
+  const projects = await fetchProjects();
+  injectSlideStyle();
 
   for (const project of projects) {
-    const mobileNavLink = document.createElement('a');
-    mobileNavLink.className = 'nav-link mobile-nav-link';
-    mobileNavLink.setAttribute('data-section', project.id);
-    mobileNavLink.textContent = project.id.replace(/-/g, ' ').toUpperCase();
-
-    const section = document.createElement('section');
-    section.id = project.id;
-    section.className = 'project-section';
-    section.dataset.section = project.id;
-    
-    // Add mobileLayout config as data attributes
-    if (project.mobileLayout) {
-      section.dataset.textPosition = project.mobileLayout.textPosition || 'below';
-      section.dataset.imageAspect = project.mobileLayout.imageAspect || 'landscape';
-      section.dataset.columnCount = project.mobileLayout.columnCount || 1;
-    }
-
-    const gallery = document.createElement('div');
-    gallery.className = 'project-gallery';
-
-    // Add only image slides from the gallery
-    project.gallery.forEach((item) => {
-      if (!item.src) return;
-      const slide = document.createElement('div');
-      slide.className = 'gallery-slide';
-
-      // Add mobile layout class based on mobileLayout config
-      if (project.mobileLayout) {
-        const textPos = project.mobileLayout.textPosition || 'below';
-        slide.classList.add(`mobile-text-${textPos}`);
-        if (project.mobileLayout.imageAspect) {
-          slide.classList.add(`mobile-aspect-${project.mobileLayout.imageAspect}`);
-        }
-      }
-
-      const img = document.createElement('img');
-      img.src = item.src;
-      img.alt = item.alt || '';
-      img.className = 'project-image';
-      img.style.width = 'auto';
-      img.style.height = 'auto';
-      img.style.maxHeight = window.innerWidth <= 768 ? '80vh' : '60vh';
-      img.style.maxWidth = '100%';
-      protectGalleryImage(img);
-      slide.appendChild(img);
-
-      if (item.layout || project.layout) {
-        applyImageLayout(slide, item, project.layout || {});
-      }
-
-      gallery.appendChild(slide);
-    });
-
-    // Fetch and parse the .txt file for this project
-    try {
-      const textResponse = await fetch(`images/${project.id}/text.txt`);
-      if (textResponse.ok) {
-        const textContent = await textResponse.text();
-        
-        // Validate that we got actual text, not HTML (check if response starts with HTML tags)
-        if (textContent.trim().startsWith('<') || textContent.includes('<!DOCTYPE')) {
-          console.warn(`Project ${project.id}: fetch returned HTML instead of text, skipping.`);
-        } else {
-          // Split by double newline to separate title from body text
-          const blocks = textContent.split(/\n\s*\n/).map(block => block.trim()).filter(block => block);
-          
-          if (blocks.length > 0) {
-            const titleLine = blocks[0];
-            const bodyText = blocks.slice(1).join('\n\n'); // Rejoin remaining blocks with blank lines
-
-            // Create the text slide (added AFTER all image slides)
-            const descSlide = document.createElement('div');
-            descSlide.className = 'gallery-slide';
-            descSlide.style.padding = '2rem';
-
-            const descInner = document.createElement('div');
-            descInner.className = 'gallery-description';
-
-            // Add title
-            const title = document.createElement('div');
-            title.className = 'gallery-text-title';
-            title.textContent = titleLine;
-            descInner.appendChild(title);
-
-            // Add body text as a single paragraph
-            const p = document.createElement('p');
-            p.className = 'gallery-text';
-            p.textContent = bodyText;
-            descInner.appendChild(p);
-
-            descSlide.appendChild(descInner);
-            gallery.appendChild(descSlide); // Appended last, so text slide is at the end
-          }
-        }
-      }
-    } catch (error) {
-      console.warn(`Could not load text.txt for project ${project.id}:`, error);
-    }
-
-    const isMobile = window.innerWidth <= 768;
-    if (!isMobile) {
-      section.style.height = '100vh';
-      section.style.display = 'flex';
-      section.style.flexDirection = 'column';
-      section.style.justifyContent = 'center';
-      section.style.alignItems = 'center';
-    }
-
-    mainContent.appendChild(mobileNavLink);
-
-    // Cycle through slides — left half goes back, right half goes forward
-    let currentIndex = 0;
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    // Function to navigate slides
-    function navigateSlides(direction) {
-      const slides = gallery.querySelectorAll('.gallery-slide');
-      slides.forEach(slide => slide.classList.remove('active'));
-
-      if (direction === 'next') {
-        currentIndex = (currentIndex + 1) % slides.length;
-      } else if (direction === 'prev') {
-        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-      }
-
-      slides[currentIndex].classList.add('active');
-    }
-
-    // Click event: left half goes back, right half goes forward
-    section.addEventListener('click', (event) => {
-      const sectionRect = section.getBoundingClientRect();
-      const clickX = event.clientX;
-      const midpoint = sectionRect.left + sectionRect.width / 2;
-
-      if (clickX < midpoint) {
-        navigateSlides('prev');
-      } else {
-        navigateSlides('next');
-      }
-    });
-
-    // Touch event: swipe detection
-    section.addEventListener('touchstart', (event) => {
-      touchStartX = event.changedTouches[0].screenX;
-    }, { passive: true });
-
-    section.addEventListener('touchend', (event) => {
-      touchEndX = event.changedTouches[0].screenX;
-      const swipeThreshold = 50; // Minimum swipe distance in pixels
-
-      if (Math.abs(touchEndX - touchStartX) > swipeThreshold) {
-        if (touchEndX < touchStartX) {
-          // Swiped left: go to next slide
-          navigateSlides('next');
-        } else {
-          // Swiped right: go to previous slide
-          navigateSlides('prev');
-        }
-      }
-    }, { passive: true });
-
-    if (gallery.firstChild) {
-      gallery.firstChild.classList.add('active');
-    }
-
-    const style = document.createElement('style');
-    style.textContent = `
-      .gallery-slide {
-        transition: none !important;
-        animation: none !important;
-      }
-    `;
-    document.head.appendChild(style);
-
-    section.appendChild(gallery);
+    if (document.getElementById(project.id)) continue;
+    const section = await buildProjectSection(project);
     mainContent.appendChild(section);
   }
 }
 
-loadProjects();
+export { loadProject, loadAllProjects };
+
+if (window.innerWidth > 768) {
+  loadAllProjects();
+}

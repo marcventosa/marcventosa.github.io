@@ -307,6 +307,9 @@ window.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-link');
 
     navLinks.forEach(link => {
+        // Landing nav links are handled by mobile-router.js (mobile show/hide routing)
+        if (link.classList.contains('landing-nav-link')) return;
+
         link.addEventListener('click', (event) => {
             event.preventDefault();
             const sectionId = link.getAttribute('data-section');

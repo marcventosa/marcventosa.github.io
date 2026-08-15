@@ -1,6 +1,9 @@
 // Mobile shell: landing nav + show/hide project routing.
 // Visibility is gated by CSS (css/mobile.css, <=768px).
 
+import { loadProject, loadAllProjects } from './project-loader.js';
+import { loadMiscImages } from './misc-loader.js';
+
 const MOBILE_BP = 768;
 const isMobile = () => window.innerWidth <= MOBILE_BP;
 
@@ -47,7 +50,7 @@ function initMobileProjectRouter() {
     });
   };
 
-  const showOnly = (targetId) => {
+  const showOnly = async (targetId) => {
     allHideable().forEach((s) => {
       if (s.id === targetId) {
         s.classList.remove('mobile-hidden-project');
@@ -57,6 +60,17 @@ function initMobileProjectRouter() {
         s.classList.remove('mobile-active-project');
       }
     });
+
+    if (targetId === 'misc-section') {
+      await loadMiscImages();
+    } else if (targetId !== 'profile') {
+      await loadProject(targetId);
+    }
+
+    const target = document.getElementById(targetId);
+    if (target) {
+      window.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
+    }
   };
 
   landingNav.querySelectorAll('.landing-nav-link').forEach((link) => {
@@ -66,20 +80,10 @@ function initMobileProjectRouter() {
       if (!isMobile()) return;
       const targetId = link.dataset.section;
       showOnly(targetId);
-      window.scrollTo({ top: document.getElementById(targetId).offsetTop, behavior: 'smooth' });
     });
   });
 
   if (isMobile()) hideAll();
-
-  const observer = new MutationObserver(() => {
-    if (isMobile()) hideAll();
-  });
-
-  const mainContent = document.querySelector('.main-content');
-  if (mainContent) {
-    observer.observe(mainContent, { childList: true, subtree: true });
-  }
 
   const homeObserver = new IntersectionObserver(
     (entries) => {
@@ -101,6 +105,8 @@ function initMobileProjectRouter() {
         .forEach((s) => {
           s.classList.remove('mobile-hidden-project', 'mobile-active-project');
         });
+      loadAllProjects();
+      loadMiscImages();
     } else {
       hideAll();
     }

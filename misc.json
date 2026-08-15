@@ -36,5 +36,13 @@
       { "src": "images/misc/datastrings-mv-1.jpeg", "bw": true }
 
     ]
+  },
+  {
+    "project": "parc03",
+    "caption": "Proposta PARC03 - sismografia d'una identitat",
+    "images": [
+      { "src": "images/misc/parc03-1.png" },
+      { "src": "images/misc/parc03-2.jpeg" }
+    ]
   }
 ]
