@@ -24,7 +24,7 @@
         }
       },
       { "src": "images/gravetats/construc..png", "alt": "Gravetats - Construcció", "imageHeight": 100 },
-      { "src": "images/gravetats/emplaç-.png", "alt": "Gravetats - Emplaçament" },
+      { "src": "images/gravetats/emplaç-.png", "alt": "Gravetats - Emplaçament","text": "text1","textSide": "left"},
       { "src": "images/gravetats/foto-maqueta-arbre-2.png", "alt": "Gravetats - Foto maqueta arbre 2" },
       { "src": "images/gravetats/gravetats.png", "alt": "Gravetats - Gravetats", "imageHeight": 100 },
       { "src": "images/gravetats/habitar.png", "alt": "Gravetats - Habitar" }

@@ -16,6 +16,13 @@ function fadeSlitscan(visible) {
   }
 }
 
+// Highlight the nav link (project title or personal name) for the active section.
+function setActiveNav(targetId) {
+  document.querySelectorAll('.main-header .nav-link[data-section]').forEach((link) => {
+    link.classList.toggle('active', link.dataset.section === targetId);
+  });
+}
+
 async function openSection(targetId) {
   // Ensure content is loaded (idempotent).
   if (targetId === 'misc-section') {
@@ -34,6 +41,7 @@ async function openSection(targetId) {
 
   target.classList.add('open');
   activeId = targetId;
+  setActiveNav(targetId);
 
   if (!document.body.classList.contains('has-overlay')) {
     document.body.classList.add('has-overlay');
@@ -49,6 +57,7 @@ function closeSection() {
   }
   document.body.classList.remove('has-overlay');
   fadeSlitscan(true);
+  setActiveNav('home');
 }
 
 function applyMode() {
@@ -64,6 +73,7 @@ function initOverlayRouter() {
   if (!OVERLAY_MODE) return;
 
   applyMode();
+  setActiveNav('home');
 
   // Capture-phase so we run before navigation.js's bubble handler.
   document.addEventListener(
