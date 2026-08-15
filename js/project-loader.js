@@ -138,12 +138,6 @@ async function loadProjects() {
       if (!item.src) return;
       const slide = document.createElement('div');
       slide.className = 'gallery-slide';
-      slide.style.width = '100%';
-      slide.style.height = '100%';
-      slide.style.display = 'flex';
-      slide.style.flexDirection = 'column';
-      slide.style.justifyContent = 'center';
-      slide.style.alignItems = 'center';
 
       // Add mobile layout class based on mobileLayout config
       if (project.mobileLayout) {
@@ -192,12 +186,6 @@ async function loadProjects() {
             // Create the text slide (added AFTER all image slides)
             const descSlide = document.createElement('div');
             descSlide.className = 'gallery-slide';
-            descSlide.style.width = '100%';
-            descSlide.style.height = '100%';
-            descSlide.style.display = 'flex';
-            descSlide.style.flexDirection = 'column';
-            descSlide.style.justifyContent = 'center';
-            descSlide.style.alignItems = 'center';
             descSlide.style.padding = '2rem';
 
             const descInner = document.createElement('div');

@@ -1,6 +1,5 @@
 // Mobile shell: landing nav + show/hide project routing.
 // Visibility is gated by CSS (css/mobile.css, <=768px).
-// Runs at module evaluation time so navigation.js click binding picks up the cloned landing links.
 
 const MOBILE_BP = 768;
 const isMobile = () => window.innerWidth <= MOBILE_BP;
@@ -58,23 +57,31 @@ function initMobileProjectRouter() {
         s.classList.remove('mobile-active-project');
       }
     });
-    const profile = document.getElementById('profile');
-    if (profile && targetId !== 'profile') {
-      profile.classList.remove('mobile-hidden-project');
-    }
   };
 
   landingNav.querySelectorAll('.landing-nav-link').forEach((link) => {
-    link.addEventListener('click', () => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       if (!isMobile()) return;
       const targetId = link.dataset.section;
       showOnly(targetId);
+      window.scrollTo({ top: document.getElementById(targetId).offsetTop, behavior: 'smooth' });
     });
   });
 
   if (isMobile()) hideAll();
 
-  const observer = new IntersectionObserver(
+  const observer = new MutationObserver(() => {
+    if (isMobile()) hideAll();
+  });
+
+  const mainContent = document.querySelector('.main-content');
+  if (mainContent) {
+    observer.observe(mainContent, { childList: true, subtree: true });
+  }
+
+  const homeObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.target.id === 'home' && entry.isIntersecting && isMobile()) {
@@ -85,7 +92,7 @@ function initMobileProjectRouter() {
     { threshold: 0.5 }
   );
 
-  if (landingSection) observer.observe(landingSection);
+  if (landingSection) homeObserver.observe(landingSection);
 
   window.addEventListener('resize', () => {
     if (!isMobile()) {
@@ -94,6 +101,8 @@ function initMobileProjectRouter() {
         .forEach((s) => {
           s.classList.remove('mobile-hidden-project', 'mobile-active-project');
         });
+    } else {
+      hideAll();
     }
   });
 }
