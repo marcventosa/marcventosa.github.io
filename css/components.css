@@ -8,7 +8,7 @@
     font-size: 1.2rem;
     font-weight: 700;
     transition: color 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
-    cursor: pointer; /* Normal clicking cursor */
+    cursor: pointer;
 }
 
 .nav-link:hover {
@@ -24,7 +24,7 @@
 
 /* Navigation Menu - Top State */
 .nav-link.top-state {
-    color: yellow; /* Ensure consistent color when at the top */
+    color: yellow;
     text-decoration: none;
     font-weight: 700;
 }
@@ -160,13 +160,13 @@
 }
 
 .gallery-arrow-prev::before {
-    content: "‹";
+    content: "\2039";
     font-size: 20px;
     line-height: 1;
 }
 
 .gallery-arrow-next::before {
-    content: "›";
+    content: "\203A";
     font-size: 20px;
     line-height: 1;
 }
@@ -419,14 +419,12 @@
     .gallery-arrows {
         display: none;
     }
-    
     .gallery-controls {
         position: static;
         transform: none;
         justify-content: center;
         margin-top: var(--spacing-md);
     }
-    
     .modal-content {
         margin: var(--spacing-md);
         padding: var(--spacing-md);
@@ -438,194 +436,53 @@
         padding: var(--spacing-xs) var(--spacing-sm);
         font-size: var(--font-size-xs);
     }
-    
     .card {
         padding: var(--spacing-sm);
     }
 }
 
-/* Project text: narrow, vertical, centered (overrides inline styles) */
+/* Project Gallery Text - Consolidated */
 .project-gallery .gallery-slide {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 2rem !important;
-  box-sizing: border-box !important;
-}
-
-.project-gallery .gallery-text-title {
-  font-weight: 700 !important;
-  font-size: 1rem !important;
-  margin: 0 0 1rem !important;
-  text-align: center !important;
-  letter-spacing: 0.02em !important;
-}
-
-/* Make project description a single narrow column */
-.project-gallery .gallery-text {
-  font-size: 0.95rem !important;
-  line-height: 1.6 !important;
-  margin: 0.6rem 0 !important;
-  max-width: 42ch !important;
-  width: min(90%, 42ch) !important;
-  text-align: center !important;
-  color: inherit !important;
-}
-
-/* Centered block + left-aligned text for project descriptions */
-.project-gallery .gallery-slide {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 2rem !important;
-  box-sizing: border-box !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 2rem !important;
+    box-sizing: border-box !important;
 }
 
 .project-gallery .gallery-description {
-  display: block !important;
-  max-width: 42ch !important;
-  width: min(90%, 42ch) !important;
-  margin: 0 auto !important;    /* centers the column */
-  text-align: left !important;  /* left-justify paragraphs */
-}
-
-/* Title left-aligned inside the centered column */
-.project-gallery .gallery-text-title {
-  text-align: left !important;
-  width: 100% !important;
-  margin: 0 0 0.75rem !important;
-  font-weight: 700 !important;
-  font-size: 1rem !important;
-}
-
-/* Paragraphs left-aligned, kept narrow and readable */
-.project-gallery .gallery-description .gallery-text {
-  text-align: left !important;
-  font-size: 0.95rem !important;
-  line-height: 1.6 !important;
-  margin: 0.4rem 0 !important;
-  max-width: 100% !important;
-}
-
-/* Center text block; title + paragraphs left-aligned */
-.project-gallery .gallery-slide {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 2rem !important;
-  box-sizing: border-box !important;
-}
-
-.project-gallery .gallery-text-title,
-.project-gallery .gallery-description .gallery-text {
-  font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
+    max-width: 48ch !important;
+    width: min(90%, 48ch) !important;
+    margin: 0 auto !important;
+    text-align: left !important;
+    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
 }
 
 .project-gallery .gallery-text-title {
-  margin-bottom: 0.9rem !important; /* detached spacing */
-  font-weight: 700 !important;
-  font-size: 1rem !important;
-  line-height: 1.2 !important;
+    display: block !important;
+    width: 100% !important;
+    text-align: left !important;
+    margin: 0 0 1rem !important;
+    font-weight: 800 !important;
+    font-size: 1.25rem !important;
+    line-height: 1.15 !important;
+    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
 }
 
-.project-gallery .gallery-text {
-  margin: 0.25rem 0 !important;
-  font-size: 0.95rem !important;
-  line-height: 1.6 !important;
-}
-
-/* Project description — single clean rule set
-   - centers the column in viewport
-   - title: left-aligned, larger, detached
-   - paragraph: fully justified (straight edges), slightly smaller
-   - uses !important to override inline styles set by JS
-*/
-.project-gallery .gallery-slide {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 2rem !important;
-  box-sizing: border-box !important;
-}
-
-/* column centered in viewport */
-.project-gallery .gallery-description {
-  max-width: 48ch !important;
-  width: min(90%, 48ch) !important;
-  margin: 0 auto !important;      /* centers the column */
-  text-align: left !important;    /* base alignment inside the column */
-  hyphens: auto !important;
-}
-
-/* title: left-aligned, larger and detached from body text */
-.project-gallery .gallery-text-title {
-  display: block !important;
-  width: 100% !important;
-  text-align: left !important;    /* left-align title */
-  margin: 0 0 1rem !important;     /* detached spacing */
-  font-weight: 800 !important;
-  font-size: 1.25rem !important;   /* increased title size */
-  line-height: 1.15 !important;
-  letter-spacing: 0.01em !important;
-}
-
-/* paragraph(s): fully justified, slightly smaller for readability */
 .project-gallery .gallery-description .gallery-text {
-  display: block !important;
-  text-align: justify !important;      /* straight justification (both edges) */
-  text-justify: inter-word !important;
-  -webkit-hyphens: auto !important;
-  -ms-hyphens: auto !important;
-  hyphens: auto !important;
-  font-size: 0.9rem !important;        /* reduced paragraph size */
-  line-height: 1.6 !important;
-  margin: 0.35rem 0 !important;
-}
-
-/* Force left-aligned title + left-aligned paragraphs while keeping the column centered */
-.project-gallery .gallery-slide {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  padding: 2rem !important;
-  box-sizing: border-box !important;
-}
-
-.project-gallery .gallery-description {
-  max-width: 48ch !important;
-  width: min(90%, 48ch) !important;
-  margin: 0 auto !important;          /* centers the column block */
-  text-align: left !important;        /* base alignment inside the column */
-  font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
-}
-
-/* Title: left-aligned and larger, detached from body text */
-.project-gallery .gallery-text-title {
-  display: block !important;
-  width: 100% !important;
-  text-align: left !important;        /* enforce left alignment */
-  margin: 0 0 1rem !important;
-  font-weight: 800 !important;
-  font-size: 1.25rem !important;
-  line-height: 1.15 !important;
-}
-
-/* Paragraph(s): left-aligned straight (not centered) */
-.project-gallery .gallery-description .gallery-text {
-  display: block !important;
-  text-align: left !important;        /* strict left justification */
-  font-weight: 300 !important;        /* lighter weight */
-  font-size: 0.9rem !important;
-  line-height: 1.35 !important;       /* reduced line spacing */
-  margin: 0.3rem 0 !important;
-  hyphens: auto !important;
-  font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
-  white-space: normal !important;     /* ensure text breaks normally */
-  word-wrap: break-word !important;
-  letter-spacing: 0 !important;
+    display: block !important;
+    text-align: left !important;
+    font-weight: 300 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.35 !important;
+    margin: 0.3rem 0 !important;
+    hyphens: auto !important;
+    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    letter-spacing: 0 !important;
 }
 
 p.gallery-text {
-  font-weight: 300 !important;
+    font-weight: 300 !important;
 }

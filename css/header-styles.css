@@ -1,58 +1,10 @@
-/* Header and navigation styles extracted from index.html */
-
-.nav-link {
-    color: #222;
-    text-decoration: none; /* Ensure no blinking text bar */
-    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 1.2rem; /* Increased from 1rem to 1.2rem */
-    font-weight: 700;
-    transition: color 0.5s cubic-bezier(0.25, 0.1, 0.25, 1); /* Adjusted duration and easing */
-}
-
-.nav-link:hover {
-    color: #555;
-    text-decoration: none; /* Prevent blinking effect on hover */
-}
-
-.nav-link.active {
-    color: #000;
-    font-weight: bold;
-    text-decoration: none; /* Ensure no blinking effect for active links */
-}
+/* Header and navigation styles - unique overrides rules only */
 
 .project-section {
     position: relative;
-    z-index: 200; /* Bring project images above navigation bar */
+    z-index: 200;
 }
 
 .main-nav {
-    z-index: 1; /* Ensure navigation bar stays below project images */
-}
-
-.project-section:hover .nav-link[href="#casa-intramurs"],
-.project-section:hover .nav-link[href="#refact"],
-project-section:hover .nav-link[href="#abans-del-cim"],
-project-section:hover .nav-link[href="#envoltura"] {
-    color: #555;
-}
-
-.header-left {
-    width: 15%; /* Restrict left menu to 10% width */
-    float: left;
-}
-
-.header-right {
-    width: 15%; /* Restrict right menu to 10% width */
-    float: right;
-}
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    pointer-events: none; /* Disable clicks on the middle of header content */
-}
-
-.header-left, .header-right {
-    pointer-events: auto; /* Enable clicks on left and right menus */
+    z-index: 1;
 }

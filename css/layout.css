@@ -312,20 +312,8 @@
 /* Remove flex from .profile-content, use only width/margin for centering */
 .profile-content {
     margin: 0 auto;
-    padding: var(--spacing-lg) var(--spacing-md);
-    max-width: 75vw; /* or your preferred width */
-    width: 100%;
-    display: block; /* Remove flex */
-    background: none;
-    border: none;
-    position: relative;
-}
-
-.profile-content {
-    margin: 0 auto;
     width: 100%;
     padding: var(--spacing-lg) var(--spacing-md);
-    /* max-width and width as you prefer */
 }
 
 .profile-columns {
@@ -454,13 +442,6 @@
 /* Project Section Styles */
 .project-section {
     position: relative;
-}
-
-.project-section:hover .nav-link[href="#casa-intramurs"],
-.project-section:hover .nav-link[href="#refact"],
-.project-section:hover .nav-link[href="#abans-del-cim"],
-.project-section:hover .nav-link[href="#envoltura"] {
-    color: #555;
 }
 
 /* Fixed width misconfiguration for ABANS DEL CIM section */

@@ -224,11 +224,14 @@ async function loadProjects() {
       console.warn(`Could not load text.txt for project ${project.id}:`, error);
     }
 
-    section.style.height = '100vh';
-    section.style.display = 'flex';
-    section.style.flexDirection = 'column';
-    section.style.justifyContent = 'center';
-    section.style.alignItems = 'center';
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) {
+      section.style.height = '100vh';
+      section.style.display = 'flex';
+      section.style.flexDirection = 'column';
+      section.style.justifyContent = 'center';
+      section.style.alignItems = 'center';
+    }
 
     mainContent.appendChild(mobileNavLink);
 

@@ -12,8 +12,14 @@ function buildLandingNav() {
   const nav = document.createElement('nav');
   nav.id = 'landing-nav';
 
+  const nameLink = document.createElement('a');
+  nameLink.className = 'nav-link landing-nav-link landing-name-link';
+  nameLink.dataset.section = 'profile';
+  nameLink.innerHTML = 'MARC<br>VENTOSA<br>SAN MARTINO';
+  nav.appendChild(nameLink);
+
   const headerLinks = Array.from(document.querySelectorAll('.main-nav .nav-link')).filter(
-    (link) => link.dataset.section && link.dataset.section !== 'home'
+    (link) => link.dataset.section && link.dataset.section !== 'home' && link.dataset.section !== 'profile'
   );
 
   headerLinks.forEach((link) => {
@@ -55,10 +61,6 @@ function initMobileProjectRouter() {
     const profile = document.getElementById('profile');
     if (profile && targetId !== 'profile') {
       profile.classList.remove('mobile-hidden-project');
-    }
-    const footer = document.getElementById('mobile-footer');
-    if (footer) {
-      footer.classList.remove('mobile-hidden-project');
     }
   };
 
