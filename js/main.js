@@ -1,4 +1,6 @@
 // Main Application Initialization
+import { getLang } from './i18n.js';
+
 /*class VentosaApp {
     constructor() {
         this.components = {};
@@ -384,6 +386,29 @@ if (typeof module !== 'undefined' && module.exports) {
 */
 
 ////// PERFIL
+
+// Load the profile intro paragraph (external .txt), language-aware.
+async function loadProfileIntro() {
+  const el = document.getElementById('profile-intro');
+  if (!el) return;
+  const candidates = getLang() === 'en' ? ['profile.en.txt', 'profile.txt'] : ['profile.txt'];
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const text = (await res.text()).replace(/\r\n?/g, '\n').trim();
+      if (text.startsWith('<') || text.includes('<!DOCTYPE')) continue;
+      el.textContent = text;
+      return;
+    } catch (e) {
+      // try next candidate
+    }
+  }
+}
+
+loadProfileIntro();
+window.addEventListener('languagechange', loadProfileIntro);
+
 fetch('profile.json')
   .then(res => res.json())
   .then(profile => {
@@ -475,5 +500,62 @@ fetch('profile.json')
         });
       }
     }, 150); // Adjust timeout as needed
+  });
+
+});
+
+////////////// Smooth accordion (trajectory / registers) — one open at a time
+const collapseDetails = (details) => {
+  const body = details.querySelector('.accordion-body');
+  if (!body) {
+    details.open = false;
+    return;
+  }
+  body.style.maxHeight = body.scrollHeight + 'px';
+  requestAnimationFrame(() => {
+    body.style.maxHeight = '0px';
+  });
+  const onEnd = (ev) => {
+    if (ev.propertyName !== 'max-height') return;
+    body.removeEventListener('transitionend', onEnd);
+    details.open = false;
+    body.style.maxHeight = '';
+  };
+  body.addEventListener('transitionend', onEnd);
+};
+
+const expandDetails = (details) => {
+  const body = details.querySelector('.accordion-body');
+  if (!body) {
+    details.open = true;
+    return;
+  }
+  details.open = true;
+  body.style.maxHeight = '0px';
+  requestAnimationFrame(() => {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  });
+  const onEnd = (ev) => {
+    if (ev.propertyName !== 'max-height') return;
+    body.removeEventListener('transitionend', onEnd);
+    body.style.maxHeight = '';
+  };
+  body.addEventListener('transitionend', onEnd);
+};
+
+document.querySelectorAll('.profile-accordion').forEach((details) => {
+  const summary = details.querySelector('summary');
+  if (!summary) return;
+
+  summary.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (details.open) {
+      collapseDetails(details);
+    } else {
+      document.querySelectorAll('.profile-accordion').forEach((other) => {
+        if (other !== details && other.open) collapseDetails(other);
+      });
+      expandDetails(details);
+    }
   });
 });

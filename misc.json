@@ -44,5 +44,12 @@
       { "src": "images/misc/parc03-1.png" },
       { "src": "images/misc/parc03-2.jpeg" }
     ]
+  },
+  {
+    "project": "tfg-eng",
+    "caption": "Data pipeline for structural models of cable net systems",
+    "images": [
+      { "src": "images/misc/selected_tfg-1.png" }
+    ]
   }
 ]

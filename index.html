@@ -32,15 +32,23 @@
       })();
     </script>
     <div id="backdrop"></div>
+    <button id="lang-toggle" class="lang-toggle" type="button" aria-label="Change language">CAT</button>
   <style>
     
   </style>
     <!-- Update current year dynamically -->
     <script>
       (function() {
-        const yearSpan = document.getElementById('current-year');
-        if (yearSpan) {
-          yearSpan.textContent = new Date().getFullYear();
+        const updateYear = () => {
+          const yearSpan = document.getElementById('current-year');
+          if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
+          }
+        };
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', updateYear);
+        } else {
+          updateYear();
         }
       })();
     </script>
@@ -142,7 +150,7 @@
         <section id="home" class="landing-section" style="position:relative;">
             <div id="slitscan-overlay">
             <div id="slitscan-overlay-text">
-                <span id="title-principal">arquitectura<br>i enginyeria</span>
+                <span id="title-principal" data-i18n="landing.title">arquitectura<br>i enginyeria</span>
                 <span id="data-principal">2020 / <span id="current-year">2025</span></span>
             </div>
             </div>
@@ -160,30 +168,29 @@
   <div class="profile-content">
     <div class="profile-content-column">
         <img src="images/dibuix-2.jpeg" alt="Dibuix" class="profile-image">
-        <h3>Parlem!</h3>
+        <h3 data-i18n="profile.contact.title">Parlem!</h3>
         <p>marc.ventosa@estudiantat.upc.edu</br>+34 66 55 41 585</br><a href="https://linkedin.com/in/marc-ventosa" target="_blank">linkedin</a></p>
     </div> <!-- Left column (empty or for secondary info) -->
     <div class="profile-content-column">
       <div class="profile-text">
-        <p>Benvinguts!
-        Més que un portfoli, aquest espai vol ser un arxiu viu de processos
-        i anotacions passades. Una col·lecció de trossos retallats, una eina per tornar-hi, copiar-ne, confrontar-me 
-        amb allò ja creat, i construir a partir d’aquests camins i desviacions.
-        
-        </p>
-        <h3>Formació</h3>
+        <p id="profile-intro">Benvinguts!</p>
+        <h3 data-i18n="profile.formation.title">Formació</h3>
         <p>Grau en Enginyeria Civil  ETSECCPB 2020 / 2024<br>
         Grau en Arquitectura ETSAB 2021 /</p>
         <div class="profile-details">
           <div class="profile-columns">
-            <div class="profile-column">
-              <h3>Trajectòria</h3>
-              <div id="trajectoria-list"></div>
-            </div>
-            <div class="profile-column">
-              <h3>Registres</h3>
-              <div id="registres-list"></div>
-            </div>
+            <details class="profile-accordion">
+              <summary data-i18n="profile.trajectoria.title">Trajectòria</summary>
+              <div class="accordion-body">
+                <div id="trajectoria-list"></div>
+              </div>
+            </details>
+            <details class="profile-accordion">
+              <summary data-i18n="profile.registres.title">Registres</summary>
+              <div class="accordion-body">
+                <div id="registres-list"></div>
+              </div>
+            </details>
           </div>
         </div>
       </div>

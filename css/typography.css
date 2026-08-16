@@ -477,6 +477,35 @@ header .header-left, header .site-title {
       }
     }
 
+/* Language toggle — sits just above the year/date, same small size */
+.lang-toggle {
+    position: fixed;
+    bottom: 1.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3000;
+    font-family: "Monument Grotesk Mono Variable", "Monument Grotesk Mono", monospace;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: #2e2e2e;
+    opacity: 0.85;
+    background: transparent;
+    border: none;
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+}
+.lang-toggle:hover {
+    opacity: 1;
+}
+    @media (max-width: 600px) {
+      .lang-toggle {
+        font-size: 2.6vw;
+      }
+    }
+
 
 
 .main-content {
@@ -531,9 +560,64 @@ header .header-left, header .site-title {
     color: #b0b0b0; /* light gray */
 }
 
-/* Registres styling */
+/* Trajectòria timeline */
+.trajectoria-timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.trajectoria-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+.trajectoria-timeline-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: stretch;
+    flex: 0 0 auto;
+}
+
+.trajectoria-point {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #c4c4c4;
+    margin-top: 0.35em;
+    flex: 0 0 auto;
+}
+
+.trajectoria-point.active {
+    background: #222;
+}
+
+.trajectoria-line {
+    flex: 1;
+    width: 1px;
+    background: #e0e0e0;
+    min-height: 14px;
+}
+
+.trajectoria-item {
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+
+.trajectoria-item strong {
+    display: block;
+    font-weight: 700;
+}
+
+.trajectoria-item span {
+    font-size: 0.88em;
+}
+
+/* Registres */
 .registre-item {
-    margin-bottom: 1.2em;
+    margin-bottom: 0.9rem;
     transition: color 0.2s;
     cursor: default;
 }
@@ -543,41 +627,26 @@ header .header-left, header .site-title {
 .registre-item:hover .registre-desc {
     color: #888 !important;
 }
+
 .registre-title {
+    display: block;
     font-weight: 500;
+    font-size: 0.85em;
     margin-bottom: 0.1em;
     color: inherit;
-    font-size: 1em;
 }
+
 .registre-desc {
-    margin: 0.1em 0 0.2em 0;
-    color: inherit;
-    font-size: 1em;
+    display: block;
+    font-size: 0.8em;
+    color: #555;
+    margin: 0.05em 0 0.15em 0;
 }
+
 .registre-date {
     display: block;
     color: #aaa;
-    font-size: 0.95em;
+    font-size: 0.75em;
     font-style: italic;
-    margin-left: 0;
-    margin-top: 0.2em;
-}
-
-/* Registres styling - allow more width for title and description */
-.registre-item {
-    margin-bottom: 1.2em;
-    transition: color 0.2s;
-    cursor: default;
-    max-width: 95%;      /* Allow items to extend further right */
-    width: 95%;
-}
-
-.registre-title,
-.registre-desc {
-    display: inline-block;
-    max-width: 90vw;     /* Allow text to extend more on large screens */
-    width: 100%;
-    box-sizing: border-box;
-    word-break: break-word;
-    white-space: normal;
+    margin-top: 0.15em;
 }

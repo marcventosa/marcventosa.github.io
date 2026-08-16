@@ -1,7 +1,7 @@
 // Desktop overlay router: single dynamic landing page with a fading slitscan.
 // Feature flag: set OVERLAY_MODE = false to revert to the previous scroll-snap behavior.
 
-import { loadProject } from './project-loader.js';
+import { loadProject, reloadAllProjects } from './project-loader.js';
 import { loadMiscImages } from './misc-loader.js';
 
 const OVERLAY_MODE = true;
@@ -95,6 +95,14 @@ function initOverlayRouter() {
   );
 
   window.addEventListener('resize', applyMode);
+
+  // Rebuild projects when the language changes (desktop).
+  window.addEventListener('languagechange', () => {
+    if (isDesktop()) {
+      closeSection();
+      reloadAllProjects();
+    }
+  });
 }
 
 initOverlayRouter();

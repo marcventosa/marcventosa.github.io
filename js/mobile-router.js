@@ -117,6 +117,14 @@ function initMobileProjectRouter() {
       hideAll();
     }
   });
+
+  // Rebuild projects when the language changes (mobile).
+  window.addEventListener('languagechange', () => {
+    if (isMobile()) {
+      document.querySelectorAll('.project-section').forEach((s) => s.remove());
+      hideAll();
+    }
+  });
 }
 
 buildLandingNav();

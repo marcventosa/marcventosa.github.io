@@ -3,7 +3,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "optimize:images": "node scripts/optimize-images.mjs"
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "translate": "node scripts/translate.mjs",
+    "translate:watch": "node scripts/translate.mjs --watch"
   },
   "dependencies": {
     "backbone": "^1.6.1",
@@ -13,6 +15,9 @@
     "vite": "^8.0.11"
   },
   "devDependencies": {
+    "@vitalets/google-translate-api": "^9.2.1",
+    "chokidar": "^5.0.0",
+    "deepl-node": "^1.28.0",
     "sharp": "^0.35.3"
   }
 }

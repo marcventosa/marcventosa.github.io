@@ -1,4 +1,5 @@
 import { getManifest, buildSrcset } from './image-helper.js';
+import { getLang, initLangToggle } from './i18n.js';
 
 const GALLERY_SIZES = '(max-width: 768px) 100vw, 70vw';
 
@@ -11,8 +12,23 @@ function protectGalleryImage(image) {
   image.addEventListener('dragstart', (event) => event.preventDefault());
 }
 
-function buildTextBlock({ title = '', body = '', align = 'center' } = {}) {
-  if (!title && !body) return null;
+// Append text to a node, turning any "$...$" spans into <em> (italic).
+function appendFormattedText(parent, text) {
+  const parts = String(text).split(/\$([^$]+)\$/);
+  parts.forEach((part, i) => {
+    if (part === '') return;
+    if (i % 2 === 1) {
+      const em = document.createElement('em');
+      em.textContent = part;
+      parent.appendChild(em);
+    } else {
+      parent.appendChild(document.createTextNode(part));
+    }
+  });
+}
+
+function buildTextBlock({ title = '', subtitle = '', body = '', align = 'center' } = {}) {
+  if (!title && !subtitle && !body) return null;
 
   const textWrap = document.createElement('div');
   textWrap.className = 'gallery-side-copy';
@@ -25,13 +41,20 @@ function buildTextBlock({ title = '', body = '', align = 'center' } = {}) {
     textWrap.appendChild(titleEl);
   }
 
+  if (subtitle) {
+    const subEl = document.createElement('div');
+    subEl.className = 'gallery-text-subtitle';
+    appendFormattedText(subEl, subtitle);
+    textWrap.appendChild(subEl);
+  }
+
   if (body) {
     const paragraphs = Array.isArray(body) ? body : [body];
 
     paragraphs.forEach((paragraph) => {
       const p = document.createElement('p');
       p.className = 'gallery-text';
-      p.textContent = paragraph;
+      appendFormattedText(p, paragraph);
       textWrap.appendChild(p);
     });
   }
@@ -59,22 +82,51 @@ function activateImage(img) {
   if (img.dataset.sizes) img.sizes = img.dataset.sizes;
 }
 
+// Parse a text block: a single "/" separates the header (title + subtitle,
+// not translated) from the actual text body (translated).
+// Header format: "*title*" + optional subtitle text.
+function parseTextBlock(block) {
+  let header = block;
+  let body = '';
+  const sep = block.indexOf('/');
+  if (sep !== -1) {
+    header = block.slice(0, sep);
+    body = block.slice(sep + 1);
+  }
+
+  let title = '';
+  let subtitle = '';
+  const match = header.match(/\*([^*]+)\*/);
+  if (match) {
+    title = match[1].trim();
+    subtitle = header.replace(/\*[^*]+\*/, '').trim();
+  } else {
+    subtitle = header.trim();
+  }
+
+  return { title, subtitle, body: body.trim() };
+}
+
 // Resolve a text reference (label "text1"/"text2", inline string, or inline object)
-// into a { title, body } object. Labels are looked up in the project's texts map.
+// into a { title, subtitle, body } object. Labels are looked up in the texts map.
 function resolveText(textFragment, texts) {
   if (!textFragment) return null;
 
   if (typeof textFragment === 'string') {
     const label = textFragment.trim().toLowerCase();
     if (/^text\d+$/.test(label)) {
-      return texts[label] ? { title: '', body: texts[label] } : null;
+      const block = texts[label];
+      if (!block) return null;
+      const { title, subtitle, body } = typeof block === 'object' ? block : parseTextBlock(block);
+      return { title: title || '', subtitle: subtitle || '', body: body || '' };
     }
-    return { title: '', body: textFragment };
+    return { title: '', subtitle: '', body: textFragment };
   }
 
   if (typeof textFragment === 'object') {
     return {
       title: textFragment.title || textFragment.firstWord || '',
+      subtitle: textFragment.subtitle || '',
       body: textFragment.body || textFragment.text || ''
     };
   }
@@ -129,7 +181,8 @@ function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, t
 
     if (resolvedText) {
       const textBlock = buildTextBlock({
-        title: (mode === 'portrait' || mode === 'large') ? '' : resolvedText.title,
+        title: resolvedText.title,
+        subtitle: resolvedText.subtitle,
         body: resolvedText.body,
         align: textSide === 'center' ? 'center' : 'left'
       });
@@ -178,28 +231,37 @@ async function fetchProjects() {
   return projectsCache;
 }
 
-// Load a project's text.txt and split into labelled blocks (text1, text2, ...)
-// separated by "//" in the file.
-async function loadProjectTexts(projectId) {
-  const texts = {};
-  try {
-    const response = await fetch(`images/${projectId}/text.txt`);
-    if (response.ok) {
-      const content = await response.text();
-      if (!(content.trim().startsWith('<') || content.includes('<!DOCTYPE'))) {
-        content
-          .split('//')
-          .map((block) => block.trim())
-          .filter((block) => block)
-          .forEach((block, i) => {
-            texts[`text${i + 1}`] = block;
-          });
-      }
+// Load a project's text and split into labelled blocks (text1, text2, ...)
+// separated by "//" in the file. Language-aware: uses text.txt (Catalan) or
+// text.en.txt (English), falling back to Catalan if the English file is missing.
+async function loadProjectTexts(projectId, lang = getLang()) {
+  const candidates =
+    lang === 'en'
+      ? [`images/${projectId}/text.en.txt`, `images/${projectId}/text.txt`]
+      : [`images/${projectId}/text.txt`];
+
+  for (const url of candidates) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+      const content = (await response.text()).replace(/\r\n?/g, '\n');
+      if (content.trim().startsWith('<') || content.includes('<!DOCTYPE')) continue;
+
+      const texts = {};
+      content
+        .split('//')
+        .map((block) => block.trim())
+        .filter((block) => block)
+        .forEach((block, i) => {
+          texts[`text${i + 1}`] = parseTextBlock(block);
+        });
+      return texts;
+    } catch (e) {
+      // try next candidate
     }
-  } catch (e) {
-    // no text file — leave texts empty
   }
-  return texts;
+
+  return {};
 }
 
 function attachGalleryNavigation(section, gallery) {
@@ -366,7 +428,19 @@ async function loadAllProjects() {
   }
 }
 
-export { loadProject, loadAllProjects };
+// Clear and rebuild project sections (e.g. on language change).
+async function reloadAllProjects() {
+  const mainContent = document.querySelector('.main-content');
+  if (!mainContent) return;
+  mainContent.querySelectorAll('.project-section').forEach((s) => s.remove());
+  if (window.innerWidth > 768) {
+    await loadAllProjects();
+  }
+}
+
+export { loadProject, loadAllProjects, reloadAllProjects };
+
+initLangToggle();
 
 if (window.innerWidth > 768) {
   loadAllProjects();

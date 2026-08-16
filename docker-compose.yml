@@ -1,0 +1,10 @@
+services:
+  libretranslate:
+    image: libretranslate/libretranslate
+    container_name: libretranslate
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    # Optional: preload Catalan and English models on startup.
+    environment:
+      - LT_LOAD_ONLY=ca,en

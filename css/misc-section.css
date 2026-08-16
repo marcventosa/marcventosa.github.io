@@ -32,8 +32,6 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 5 / 6;
-  object-fit: cover;
   background: #ededed;
   filter: saturate(0.95) contrast(1.03);
   transition: opacity 0.3s ease;

@@ -67,9 +67,9 @@ async function main() {
       variantCount++;
     }
 
-    manifest[rel] = { variants };
+    manifest[rel] = { w: meta.width, h: meta.height, variants };
     imageCount++;
-    console.log(`  ${rel} -> ${variants.length} variants (source ${srcW}px)`);
+    console.log(`  ${rel} -> ${variants.length} variants (source ${meta.width}x${meta.height}px)`);
   }
 
   await fs.writeFile(MANIFEST_PATH, JSON.stringify(manifest, null, 2));

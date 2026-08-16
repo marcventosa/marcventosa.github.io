@@ -1,5 +1,8 @@
-//
-primera provva de text canviable dinamic
+//*Es Molinar, Palma de Mallorca*
+Taller Arnau Sastre, $hcc etsab$
+
+Una estesa d'encavallades apareix en una parcel·la d'Es Molinar.
+sakdk
 //
 segona prorva
 //

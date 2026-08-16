@@ -7,6 +7,7 @@
       "columnCount": 1
     },
     "gallery": [
+      { "src": "images/gravetats/foto-maqueta-arbre-2.png", "alt": "Gravetats - Foto maqueta arbre 2", "imageHeight": 80 },
       {
         "src": "images/gravetats/comunitat.png",
         "alt": "Gravetats - Comunitat",
@@ -25,7 +26,7 @@
       },
       { "src": "images/gravetats/construc..png", "alt": "Gravetats - Construcció", "imageHeight": 100 },
       { "src": "images/gravetats/emplaç-.png", "alt": "Gravetats - Emplaçament","text": "text1","textSide": "left"},
-      { "src": "images/gravetats/foto-maqueta-arbre-2.png", "alt": "Gravetats - Foto maqueta arbre 2" },
+      
       { "src": "images/gravetats/gravetats.png", "alt": "Gravetats - Gravetats", "imageHeight": 100 },
       { "src": "images/gravetats/habitar.png", "alt": "Gravetats - Habitar" }
     ]
@@ -82,12 +83,9 @@
         "Antigament, un conjunt fabril era protagonista d’un terreny entre camps i alguns petits nuclis urbans.",
         "Durant dècades, aquesta zona ha estat edificada gradualment amb usos variats, ocupant espais verds que la pluja havia regat, i amagant rierols que abans eren part de la sonoritat del paisatge urbà."
       ] },
-      { "src": "images/refact/carto_antiga-01.png", "alt": "Refact - Cartografia Antiga" },
+      { "src": "images/refact/carto_antiga-01.png", "alt": "Refact - Cartografia Antiga", "text":"text1"},
       { "src": "images/refact/collage-ext-01.png", "alt": "Refact - Collage Exterior" },
-      { "firstWord": "recuperar la fàbrica", "text": [
-        "Les noves oficines es constitueixen com un conjunt fabril fent eco del passat industrial, enretirant-se a la part alta de la parcel·la, i deixant lliure la major part del sòl verd. La riera es canalitza i agafa un rol actiu a l’espai interior.",
-        "Els nous volums es destinen a ateneus de fabricació per als sectors del disseny, arquitectura i moda. D’altres espais acullen una acció administrativa més reservada."
-      ] },
+
       {"src": "images/refact/collage_interior.jpg", "alt": "Refact - Collage Interior" },
       { "src": "images/refact/p6-titol-projecte-01.png", "alt": "Refact - Títol Projecte" },
       { "firstWord": "línies d'aigua i arquitectura", "text": [
@@ -122,10 +120,10 @@
       "columnCount": 1
     },
     "gallery": [
-      { "src": "images/envoltura/BP3RIBAS (1)-01.png", "alt": "Envoltura - BP3RIBAS 01" },
+      { "src": "images/envoltura/BP3RIBAS (1)-01.png", "alt": "Envoltura - BP3RIBAS 01", "imageHeight": 70 },
       { "src": "images/envoltura/BP3RIBAS (1)-02.png", "alt": "Envoltura - BP3RIBAS 02" },
       { "src": "images/envoltura/BP3RIBAS (1)-03.png", "alt": "Envoltura - BP3RIBAS 03" },
-      { "src": "images/envoltura/BP3RIBAS (1)-1_peces.png", "alt": "Envoltura - BP3RIBAS Peces" },
+      { "src": "images/envoltura/BP3RIBAS (1)-1_peces.png", "alt": "Envoltura - BP3RIBAS Peces", "text": "text1", "imageHeight": 70},
       { "src": "images/envoltura/BP3RIBAS (1)-03_proces.png", "alt": "Envoltura - BP3RIBAS 03 Proces" }
     ]
   },

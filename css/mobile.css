@@ -61,8 +61,14 @@
     font-weight: 900 !important;
     letter-spacing: 0.02em !important;
     color: #232323 !important;
+<<<<<<< HEAD
     line-height: 1 !important;
     padding: 0;
+=======
+    line-height: 1.05 !important;
+    min-height: 48px !important;
+    padding: 0.5rem 0.7rem;
+>>>>>>> a2d00a1d411703eac896e5f7aaef3959bf78c345
     margin: 0;
   }
 
@@ -81,6 +87,7 @@
     display: flex !important;
     align-items: center;
     justify-content: flex-end;
+<<<<<<< HEAD
     padding: 0 !important;
     font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
     font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
@@ -88,6 +95,16 @@
     letter-spacing: 0.03em !important;
     color: #232323 !important;
     line-height: 1 !important;
+=======
+    min-height: 44px !important;
+    padding: 0.3rem 0.75rem !important;
+    font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
+    font-size: clamp(1.5rem, 5.5vw, 2rem) !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.03em !important;
+    color: #232323 !important;
+    line-height: 1.05 !important;
+>>>>>>> a2d00a1d411703eac896e5f7aaef3959bf78c345
     text-align: right;
   }
 
@@ -216,10 +233,22 @@
 
   .gallery-slide--portrait .gallery-side-copy .gallery-text-title {
     display: block !important;
-    font-size: 1rem !important;
+    font-size: 0.85rem !important;
     font-weight: 700 !important;
     margin-bottom: 0.3rem !important;
     text-align: left !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .gallery-slide--portrait .gallery-side-copy .gallery-text-subtitle {
+    display: block !important;
+    font-size: 0.8rem !important;
+    line-height: 1.35 !important;
+    color: #888 !important;
+    text-align: left !important;
+    margin: 0 0 0.5rem !important;
+    white-space: pre-wrap !important;
   }
 
   .gallery-slide--portrait .gallery-side-copy .gallery-text {
@@ -228,6 +257,7 @@
     letter-spacing: 0 !important;
     text-align: left !important;
     margin: 0.3rem 0 !important;
+    white-space: pre-wrap !important;
   }
 
   .gallery-slide--text-only {
@@ -323,6 +353,7 @@
 
   .gallery-side-copy .gallery-text {
     text-align: left !important;
+    white-space: pre-wrap !important;
   }
 
   .project-info p {
@@ -371,35 +402,41 @@
 
   .profile-section {
     min-height: auto !important;
-    padding: 2rem 1rem !important;
+    padding: 3rem 1.5rem !important;
   }
 
   .profile-content {
     max-width: 100% !important;
     padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important;
   }
 
   .profile-content-column:first-child {
-    align-items: center !important;
-    text-align: center !important;
-    margin-bottom: 1.5rem !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
   }
 
   .profile-content-column:first-child h3,
   .profile-content-column:first-child p {
-    align-self: center !important;
-    text-align: center !important;
+    align-self: flex-start !important;
+    text-align: left !important;
     margin-right: 0 !important;
   }
 
   .profile-image {
-    max-width: 40% !important;
-    margin: 0 auto 1rem !important;
+    position: static !important;
+    max-width: 130px !important;
+    margin: 0 0 1rem 0 !important;
+    transform: rotate(-4deg);
   }
 
   .profile-columns {
     grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
+    gap: 1.25rem !important;
   }
 
   .profile-column:last-child {
