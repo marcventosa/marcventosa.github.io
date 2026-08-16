@@ -24,13 +24,18 @@ function buildLandingNav() {
     (link) => link.dataset.section && link.dataset.section !== 'home' && link.dataset.section !== 'profile'
   );
 
+  const linksWrap = document.createElement('div');
+  linksWrap.className = 'landing-nav-links';
+
   headerLinks.forEach((link) => {
     const item = document.createElement('a');
     item.className = 'nav-link landing-nav-link';
     item.dataset.section = link.dataset.section;
     item.textContent = link.textContent.trim();
-    nav.appendChild(item);
+    linksWrap.appendChild(item);
   });
+
+  nav.appendChild(linksWrap);
 
   overlay.appendChild(nav);
 }
@@ -93,7 +98,8 @@ function initMobileProjectRouter() {
         }
       });
     },
-    { threshold: 0.5 }
+    // Only hide when fully back on the landing so the return isn't a jump.
+    { threshold: 1.0 }
   );
 
   if (landingSection) homeObserver.observe(landingSection);

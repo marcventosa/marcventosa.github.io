@@ -103,12 +103,12 @@ function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, t
     if (textSide === 'right') slide.classList.add('gallery-slide--text-right');
     if (textSide === 'left') slide.classList.add('gallery-slide--text-left');
 
+    const isMobile = window.innerWidth <= 768;
+
     // imageHeight (0-100) maps to viewport height via the --portrait-h variable.
     if (imageHeight != null) {
-      slide.style.setProperty('--portrait-h', `${imageHeight}vh`);
+      slide.style.setProperty('--portrait-h', `${imageHeight}${isMobile ? 'dvh' : 'vh'}`);
     }
-
-    const isMobile = window.innerWidth <= 768;
 
     const inner = document.createElement('div');
     inner.className = 'gallery-slide-content';
@@ -301,7 +301,7 @@ async function buildProjectSection(project) {
     img.style.width = 'auto';
     img.style.height = 'auto';
     img.style.maxHeight = imageHeight != null
-      ? `${imageHeight}vh`
+      ? `${imageHeight}${window.innerWidth <= 768 ? 'dvh' : 'vh'}`
       : (window.innerWidth <= 768 ? '80vh' : '60vh');
     img.style.maxWidth = '100%';
     protectGalleryImage(img);

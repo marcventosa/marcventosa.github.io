@@ -14,6 +14,10 @@
 }
 
 @media (max-width: 768px) {
+  :root {
+    --viewport-height: 100dvh;
+  }
+
   .main-header {
     display: none;
   }
@@ -26,9 +30,6 @@
   #slitscan-overlay {
     height: 100vh;
     height: 100dvh;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     padding-top: 0;
   }
 
@@ -38,39 +39,56 @@
   }
 
   #landing-nav {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    margin-top: 0;
-    pointer-events: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    pointer-events: none;
     z-index: 3;
   }
 
   .landing-name-link {
+    position: absolute;
+    top: calc(1.25rem + env(safe-area-inset-top, 0px));
+    left: 1rem;
+    display: block !important;
+    text-align: left;
+    pointer-events: auto;
     font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
-    font-size: 1.2rem !important;
+    font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
     font-weight: 900 !important;
-    letter-spacing: 0.03em !important;
+    letter-spacing: 0.02em !important;
     color: #232323 !important;
-    text-align: center;
     line-height: 1 !important;
-    margin-bottom: 2rem;
-    min-height: auto !important;
-    padding: 0.1rem 1.2rem;
+    padding: 0;
+    margin: 0;
   }
 
-  .landing-nav-link {
+  .landing-nav-links {
+    position: absolute;
+    bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+    pointer-events: auto;
+  }
+
+  .landing-nav-links .landing-nav-link {
     display: flex !important;
     align-items: center;
-    min-height: auto !important;
-    padding: 0.1rem 1.2rem !important;
+    justify-content: flex-end;
+    padding: 0 !important;
     font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
-    font-size: 1.2rem !important;
+    font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
     font-weight: 900 !important;
     letter-spacing: 0.03em !important;
     color: #232323 !important;
     line-height: 1 !important;
+    text-align: right;
   }
 
   .landing-nav-link.active {
@@ -179,7 +197,7 @@
     width: 100% !important;
     max-width: 95vw !important;
     height: auto !important;
-    max-height: 85vh !important;
+    max-height: var(--portrait-h, 85vh) !important;
     object-fit: contain !important;
     display: block !important;
   }
