@@ -41,24 +41,10 @@
     "gallery": [
       { "src": "images/casa-intramurs/resum_sketch-01.png", "alt": "Casa Intramurs - Resum Sketch" },
       { "src": "images/casa-intramurs/04 - collage-entradapost_compressed-1.png", "alt": "Casa Intramurs - Collage Entradapost" },
-      {
-        "firstWord": "casa-taller Intramurs",
-        "text": ["L'escultor va reconèixer amb il·lusió la casa que Souto de Moura s’havia fet construir feia dècades.",
-        "Quan va topar amb la finca on passaria els propers estius, tot semblava dispers, com si haguessin anat ajuntant trossos de murs, de cobertes, d’espais buits i d’horts, recollint-los un a un, com qui munta una paret amb pedres trobades.",
-        "Però de mica en mica, amb cada alineació, amb cada nova paret aixecada, es descobria un compàs de volums modulat, reconeixent-hi el caràcter dinàmic dels carrerons, cobertes i embarcacions de Matosinhos."
-    ]},
     {"src": "images/casa-intramurs/traces_latents.png", "alt": "Casa Intramurs - Traces Latents" },
       { "src": "images/casa-intramurs/02. Planta 1_200-01.png", "alt": "Casa Intramurs - Planta 1" },
       { "src": "images/casa-intramurs/03. Seccio3-1.png", "alt": "Casa Intramurs - Secció 3" },
-      {
-        "firstWord": "tres cases, horts i un bosc",
-        "text": [
-          "Els murs de formigó, més enllà de delimitar les finques, són canals de reg vivents.",
-          "Aquests recullen l’aigua de la pluja i la distribueixen per la parcel·la i fins el bosc, preservant així la memòria d’un terreny testimoni de tantes generacions.",
-          "Quan aquests murs s’interrompen, generen moments compartits entre habitacles, com apèndixs dels patis, espais de reunió i treball dels horts.",
-          "Allò que passa en el ple del mur, que deforma per acollir l'aigua, passa a ser tan important com allò que succeeix al seu voltant."
-        ]
-      },
+    
       { "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100-2.jpg", "alt": "Casa Intramurs - VentosaMarc E3 Maqueta 100 2" },
 
       { "src": "images/casa-intramurs/DSC_0368_maqueta.png", "alt": "Casa Intramurs - Maqueta cuina" },
@@ -66,7 +52,7 @@
                   "Els petits mòduls, fragmentats i mòbils, poden ocupar tot l’espai o replegar-se discretament, alliberant el menjador i adaptant-se a cada moment de la vida domèstica."] },
       { "src": "images/casa-intramurs/02_Proposta-A3_20_cuina-1.png", "alt": "Casa Intramurs - Proposta A3 20 Cuina" },
       { "src": "images/casa-intramurs/03. Seccio1-1.png", "alt": "Casa Intramurs - Secció 1" },
-      { "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100.jpg", "alt": "Casa Intramurs - VentosaMarc E3 Maqueta 100" }
+      { "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100.jpg", "alt": "Casa Intramurs - VentosaMarc E3 Maqueta 100", "text": "text1" }
     ]
   },
   {

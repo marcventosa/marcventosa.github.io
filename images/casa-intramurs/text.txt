@@ -1,5 +1,5 @@
-Intramurs
-
-Blablabla paràgraf per intramurs blabllbllala
-(tot seguit) blalblbblalbllabla 
-blablbllblala
+//
+"L'escultor va reconèixer amb il·lusió la casa que Souto de Moura s’havia fet construir feia dècades.",
+Quan va topar amb la finca on passaria els propers estius, tot semblava dispers, com si haguessin anat ajuntant trossos de murs, de cobertes, d’espais buits i d’horts, recollint-los un a un, com qui munta una paret amb pedres trobades.",
+Però de mica en mica, amb cada alineació, amb cada nova paret aixecada, es descobria un compàs de volums modulat, reconeixent-hi el caràcter dinàmic dels carrerons, cobertes i embarcacions de Matosinhos."
+//
