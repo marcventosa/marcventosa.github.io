@@ -61,8 +61,14 @@
     font-weight: 900 !important;
     letter-spacing: 0.02em !important;
     color: #232323 !important;
+<<<<<<< HEAD
     line-height: 1 !important;
     padding: 0;
+=======
+    line-height: 1.05 !important;
+    min-height: 48px !important;
+    padding: 0.5rem 0.7rem;
+>>>>>>> a2d00a1d411703eac896e5f7aaef3959bf78c345
     margin: 0;
   }
 
@@ -81,6 +87,7 @@
     display: flex !important;
     align-items: center;
     justify-content: flex-end;
+<<<<<<< HEAD
     padding: 0 !important;
     font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
     font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
@@ -88,6 +95,16 @@
     letter-spacing: 0.03em !important;
     color: #232323 !important;
     line-height: 1 !important;
+=======
+    min-height: 44px !important;
+    padding: 0.3rem 0.75rem !important;
+    font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
+    font-size: clamp(1.5rem, 5.5vw, 2rem) !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.03em !important;
+    color: #232323 !important;
+    line-height: 1.05 !important;
+>>>>>>> a2d00a1d411703eac896e5f7aaef3959bf78c345
     text-align: right;
   }
 
