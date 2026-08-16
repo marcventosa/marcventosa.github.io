@@ -64,11 +64,9 @@
     },
     "gallery": [
       { "src": "images/refact/01.EMPLAÇAMENT-A2-01.png", "alt": "Refact - Emplaçament", "imageHeight": 100 },
+      
       { "src": "images/refact/05. pasarela2-01.png", "alt": "Refact - Pasarela" },
-      { "firstWord": "terreny, indústria i riu", "text": [
-        "Antigament, un conjunt fabril era protagonista d’un terreny entre camps i alguns petits nuclis urbans.",
-        "Durant dècades, aquesta zona ha estat edificada gradualment amb usos variats, ocupant espais verds que la pluja havia regat, i amagant rierols que abans eren part de la sonoritat del paisatge urbà."
-      ] },
+  
       { "src": "images/refact/carto_antiga-01.png", "alt": "Refact - Cartografia Antiga", "text":"text1"},
       { "src": "images/refact/collage-ext-01.png", "alt": "Refact - Collage Exterior" },
 

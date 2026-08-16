@@ -51,5 +51,13 @@
     "images": [
       { "src": "images/misc/selected_tfg-1.png" }
     ]
+  },
+  {
+    "project": "masonry-1",
+    "caption": "Semantic digital twins for masonry bridges: Structuring geometrical, material and assessment field data",
+    "images": [
+      { "src": "images/misc/mapping-masonry.png" },
+      { "src": "images/misc/scan-to-bim-joncadella.png" }
+    ]
   }
 ]
