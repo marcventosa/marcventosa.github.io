@@ -408,12 +408,17 @@
   .profile-content {
     max-width: 100% !important;
     padding: 0 !important;
+    padding-left: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     gap: 1.5rem !important;
   }
 
   .profile-content-column:first-child {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
     align-items: flex-start !important;
     text-align: left !important;
     margin-bottom: 0 !important;
