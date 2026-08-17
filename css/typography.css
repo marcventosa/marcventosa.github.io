@@ -35,6 +35,11 @@
     font-weight: 900;
     font-style: normal;
     font-display: swap;
+    /* Correct the font's broken hhea vertical metrics (ascent 4495, descent -1212)
+       to the normal OS/2 typo metrics (1628 / -420) so text sits on the line box. */
+    ascent-override: 79.5%;
+    descent-override: 20.5%;
+    line-gap-override: 0%;
 }
 
 /* Authentic Monument Grotesk Font Faces */

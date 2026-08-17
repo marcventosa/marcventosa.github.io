@@ -67,6 +67,7 @@ function initMobileProjectRouter() {
 
   const showOnly = async (targetId) => {
     setActiveLink(targetId);
+    landingSection.classList.remove('landing-active');
 
     allHideable().forEach((s) => {
       if (s.id === targetId) {
@@ -100,18 +101,26 @@ function initMobileProjectRouter() {
     });
   });
 
-  if (isMobile()) hideAll();
+  if (isMobile()) {
+    hideAll();
+    landingSection.classList.add('landing-active');
+  }
 
   const homeObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.target.id === 'home' && entry.isIntersecting && isMobile()) {
+        if (entry.target.id !== 'home' || !isMobile()) return;
+        if (entry.intersectionRatio >= 1.0) {
           hideAll();
+          landingSection.classList.add('landing-active');
+        } else if (entry.intersectionRatio <= 0) {
+          landingSection.classList.remove('landing-active');
         }
       });
     },
-    // Only hide when fully back on the landing so the return isn't a jump.
-    { threshold: 1.0 }
+    // Close the project only when fully back on the landing, and fade the
+    // auxiliary texts in/out as the landing leaves and returns into view.
+    { threshold: [0, 1.0] }
   );
 
   if (landingSection) homeObserver.observe(landingSection);

@@ -85,7 +85,7 @@ function initOverlayRouter() {
       e.preventDefault();
       e.stopPropagation();
       const id = link.dataset.section;
-      if (id === 'home') {
+      if (id === 'home' || (activeId && activeId === id)) {
         closeSection();
       } else {
         openSection(id);

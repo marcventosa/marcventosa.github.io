@@ -74,6 +74,17 @@ body.overlay-mode .landing-section canvas {
   transition: opacity 0.85s ease !important;
 }
 
+/* Keep the language toggle visible on every desktop overlay "page". */
+body.overlay-mode .lang-toggle {
+  position: fixed !important;
+  z-index: 3000 !important;
+  opacity: 0.85 !important;
+  visibility: visible !important;
+}
+body.overlay-mode .lang-toggle:hover {
+  opacity: 1 !important;
+}
+
 /* Title/date slide animations: title exits upward, date exits downward */
 body.overlay-mode #title-principal,
 body.overlay-mode #data-principal {
