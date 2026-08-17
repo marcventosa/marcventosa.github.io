@@ -1,10 +1,7 @@
 *Es Molinar, Palma de Mallorca*
 Taller Arnau Sastre, $hcc etsab$
-
-Una estesa d'encavallades apareix en una parcel·la d'Es Molinar.
-sakdk
 /
-
+QUERY LENGTH LIMIT EXCEEDED. MAX ALLOWED QUERY : 500 CHARS
 
 //
 

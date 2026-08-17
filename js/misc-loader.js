@@ -8,11 +8,6 @@ const DRIFT_BUFFER = 48;
 const MAX_VERTICAL_DRIFT = 20;
 const MISC_SIZES = '(max-width: 600px) 50vw, 300px';
 
-// Avoid overly vertical cards: max height/width ratio before cropping.
-const MAX_VERTICAL_RATIO = 1.6;
-// Chance to randomly square-crop a landscape image when it changes.
-const SQUARE_CROP_PROBABILITY = 0.4;
-
 function baseCardWidth(viewportWidth) {
   if (viewportWidth <= 600) return { base: viewportWidth * 0.42, minWidth: 120 };
   if (viewportWidth <= 900) return { base: Math.min(viewportWidth * 0.36, 240), minWidth: 150 };
@@ -29,34 +24,19 @@ function intersectionArea(a, b) {
   return w > 0 && h > 0 ? w * h : 0;
 }
 
-// Compute the display box for an image: returns the box aspect ratio and
-// whether the image should be cropped (object-fit: cover) to fit it.
-function displayBoxFor(w, h, allowSquareRandom) {
-  let aspect = `${w} / ${h}`;
-  let crop = false;
-
-  if (h / w > MAX_VERTICAL_RATIO) {
-    // Cap overly vertical images by cropping their height.
-    aspect = `${w} / ${w * MAX_VERTICAL_RATIO}`;
-    crop = true;
-  } else if (allowSquareRandom && w > h && Math.random() < SQUARE_CROP_PROBABILITY) {
-    // Randomly crop some landscape images to a 1:1 square for variety.
-    aspect = '1 / 1';
-    crop = true;
-  }
-
-  return { aspect, crop };
+// Pre-load placeholder so cards have a stable size before the image loads.
+function setPlaceholderAspect(img, entry) {
+  const w = entry && entry.w;
+  const h = entry && entry.h;
+  img.style.aspectRatio = w && h ? `${w} / ${h}` : '5 / 6';
 }
 
-function applyImageDisplay(img, entry, allowSquareRandom) {
-  if (entry && entry.w && entry.h) {
-    const { aspect, crop } = displayBoxFor(entry.w, entry.h, allowSquareRandom);
-    img.style.aspectRatio = aspect;
-    img.style.objectFit = crop ? 'cover' : 'fill';
-  } else {
-    img.style.aspectRatio = '5 / 6';
-    img.style.objectFit = 'fill';
-  }
+// Once the real image is available, render it at its own intrinsic ratio.
+// width:100% + height:auto always preserves proportion; object-fit 'contain'
+// is a safety net so an image is never stretched or cropped non-uniformly.
+function fitImage(img) {
+  img.style.aspectRatio = '';
+  img.style.objectFit = 'contain';
 }
 
 let miscPromise = null;
@@ -151,7 +131,7 @@ async function loadMiscImages() {
         // Respect natural proportions, capping overly vertical images.
         const firstImg = group.images && group.images[0];
         const entry = firstImg && firstImg.src ? manifest[firstImg.src] : null;
-        applyImageDisplay(img, entry, false);
+        setPlaceholderAspect(img, entry);
 
         galleryDiv.appendChild(img);
 
@@ -201,8 +181,7 @@ async function loadMiscImages() {
             img.className = newImg.className;
             img.alt = group.project || group.caption || '';
             img.style.filter = imgData.bw ? 'grayscale(1) contrast(1.08)' : 'none';
-            const entry = manifest[imgData.src];
-            applyImageDisplay(img, entry, true);
+            fitImage(img);
             const srcset = buildSrcset(manifest, imgData.src);
             if (srcset) {
               img.srcset = srcset;

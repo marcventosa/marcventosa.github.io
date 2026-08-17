@@ -1,0 +1,46 @@
+{
+  "trajectoria": [
+    {
+      "position": "LMDEC",
+      "learnings": "masonry bridges, historic heritage, digital twins, web development, scientific production"
+    },
+    {
+      "position": "DOPEC",
+      "learnings": "urban development, water systems, budgeting, project and construction monitoring"
+    },
+    {
+      "position": "Escola de Camins",
+      "learnings": "coordination of the 50th anniversary exhibition, interactive design"
+    },
+    {
+      "position": "KU Leuven",
+      "learnings": "Erasmus, hydraulic structures, universal design, resilience"
+    },
+    {
+      "position": "META Engineering",
+      "learnings": "urban development, utilities, water supply, sustainability"
+    },
+    {
+      "position": "h3o architects",
+      "learnings": "CAD, competition development, model-making, rehabilitation"
+    },
+    {
+      "position": "Domestic Data Streamers",
+      "learnings": "creative development, project management, teamwork"
+    }
+  ],
+  "registres": [
+    {
+      "title": "Data pipeline for structural models of cable net systems",
+      "description": "Case study: analysis of a sector of the Olympiastadion in Munich",
+      "date": "July 2024",
+      "link": "https://upcommons.upc.edu/entities/publication/506051b9-0bdb-420d-9336-28eebff2968f"
+    },
+    {
+      "title": "Semantic Digital Twins for Masonry Bridges Networks: Structuring Geometrical and Material Field Data",
+      "description": "Case study: analysis of a masonry bridge in Manresa - Súria railway line",
+      "date": "August 2025",
+      "link": "https://www.sciencedirect.com/science/article/pii/S0141029626004165"
+    }
+  ]
+}

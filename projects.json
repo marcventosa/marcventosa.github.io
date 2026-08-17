@@ -31,6 +31,19 @@
       { "src": "images/gravetats/habitar.png", "alt": "Gravetats - Habitar" }
     ]
   },
+  {"id": "neoenvelat",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
+    "gallery": [
+      { "src": "images/neoenvelat/axo projecte.png", "alt": "Neo Envelat - Emplaçament", "imageHeight": 90, "bw": true},
+      { "src": "images/neoenvelat/GIF_1_VentosaMarc.gif", "alt": "Neo Envelat - Planta", "imageHeight": 50},
+      { "src": "images/neoenvelat/encaix-A2-emplaçament.png", "alt": "Neo Envelat - Secció" , "imageHeight": 100, "text":"text1"},
+      { "src": "images/neoenvelat/envelat-foto-1.20.png", "alt": "Neo Envelat - Collage","imageHeight": 60} 
+    ]
+  },
   {
     "id": "casa-intramurs",
     "mobileLayout": {
@@ -39,7 +52,7 @@
       "columnCount": 1
     },
     "gallery": [
-      { "src": "images/casa-intramurs/resum_sketch-01.png", "alt": "Casa Intramurs - Resum Sketch" },
+      { "src": "images/casa-intramurs/resum_sketch-01.png", "alt": "Casa Intramurs - Resum Sketch", "imageHeight": 60 },
       { "src": "images/casa-intramurs/04 - collage-entradapost_compressed-1.png", "alt": "Casa Intramurs - Collage Entradapost" },
     {"src": "images/casa-intramurs/traces_latents.png", "alt": "Casa Intramurs - Traces Latents" },
       { "src": "images/casa-intramurs/02. Planta 1_200-01.png", "alt": "Casa Intramurs - Planta 1" },
@@ -119,7 +132,7 @@
       "columnCount": 1
     },
     "gallery": [
-      { "src": "images/pau/LAM4_Mesa de trabajo 1 copia.png", "alt": "Casa Pau - LAM4 Mesa de trabajo 1" },
+      { "src": "images/pau/LAM4_Mesa de trabajo 1 copia.png", "alt": "Casa Pau - LAM4 Mesa de trabajo 1", "imageHeight": 60 },
       {"text":[
         "En Pau té 24 anys, és el germà del mig i treballa com a comunicador i dissenyador en una empresa alternativa. Li encanta la seva feina, però encara més arribar a casa al final del dia i mirar com la llum de la tarda entra per la finestra, recordant-li Menorca. Té debilitat per l’estiu, les tardes llargues i l’arquitectura mediterrània.",
 

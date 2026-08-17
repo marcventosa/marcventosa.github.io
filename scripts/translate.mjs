@@ -2,8 +2,10 @@
 // Usage: npm run translate
 //
 // - Each //-block's BODY (after the first single "/") is translated.
-// - Title (*...*) + subtitle (before "/") are NOT translated (proper names).
-// - $italic$ spans in the body are translated too.
+// - Title (*...*) and the subtitle's FIRST line (workshop name) are NOT
+//   translated (proper names). The subtitle's remaining lines (project
+//   purpose) are translated like the body.
+// - $italic$ spans in the translated parts are translated too.
 // - Incremental: results are cached by source hash in .translate-cache.json, so
 //   re-running only re-translates blocks whose Catalan text changed.
 //
@@ -133,9 +135,31 @@ async function walk(dir) {
   return files;
 }
 
-// Translate a single block's body, preserving the header (title + subtitle).
+// Translate text while protecting $italic$ spans (translated separately, then
+// restored).
+async function translateWithItalics(text) {
+  const italics = [];
+  const protectedText = text.replace(/\$([^$]+)\$/g, (_, inner) => {
+    italics.push(inner);
+    return `⟦${italics.length - 1}⟧`;
+  });
+
+  let out = await translateOne(protectedText);
+  await sleep(DELAY);
+
+  for (let i = 0; i < italics.length; i++) {
+    const it = await translateOne(italics[i]);
+    await sleep(DELAY);
+    out = out.replace(new RegExp(`⟦${i}⟧`), `$${it}$`);
+  }
+  return out;
+}
+
+// Translate a block's translatable text, preserving the untranslatable parts:
+// the *title* and the subtitle's first line (workshop name). The subtitle's
+// remaining lines (project purpose) and the body are translated.
 async function translateBlock(block, cache) {
-  const key = hash(block);
+  const key = hash('v2:' + block);
   if (cache[key] != null) return cache[key];
 
   let header = block;
@@ -146,27 +170,26 @@ async function translateBlock(block, cache) {
     body = block.slice(sep + 1).trim();
   }
 
-  let translatedBody = '';
-  if (body) {
-    // Protect $italic$ spans.
-    const italics = [];
-    const protectedBody = body.replace(/\$([^$]+)\$/g, (_, inner) => {
-      italics.push(inner);
-      return `⟦${italics.length - 1}⟧`;
-    });
-
-    let out = await translateOne(protectedBody);
-    await sleep(DELAY);
-
-    for (let i = 0; i < italics.length; i++) {
-      const it = await translateOne(italics[i]);
-      await sleep(DELAY);
-      out = out.replace(new RegExp(`⟦${i}⟧`), `$${it}$`);
-    }
-    translatedBody = out;
+  // Parse header: *title* + subtitle (line 1 = workshop name, untranslated;
+  // the rest = purpose, translated like the body).
+  let title = '';
+  let workshop = '';
+  let purpose = '';
+  const titleMatch = header.match(/\*([^*]+)\*/);
+  let headerRest = header;
+  if (titleMatch) {
+    title = titleMatch[0];
+    headerRest = header.replace(/\*[^*]+\*/, '').trim();
   }
+  const headerLines = headerRest.split('\n');
+  workshop = (headerLines[0] || '').trim();
+  purpose = headerLines.slice(1).join('\n').trim();
 
-  const result = header ? `${header}\n/\n${translatedBody}` : translatedBody;
+  const translatedPurpose = purpose ? await translateWithItalics(purpose) : '';
+  const translatedBody = body ? await translateWithItalics(body) : '';
+
+  const newHeader = [title, workshop, translatedPurpose].filter(Boolean).join('\n');
+  const result = newHeader ? `${newHeader}\n/\n${translatedBody}` : translatedBody;
   cache[key] = result;
   await saveCache(cache);
   return result;
