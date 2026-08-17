@@ -48,14 +48,26 @@ function initMobileProjectRouter() {
   const allHideable = () =>
     document.querySelectorAll('.project-section, #misc-section, #profile');
 
+  const projectLinks = () =>
+    landingNav.querySelectorAll('.landing-nav-links .landing-nav-link');
+
+  const setActiveLink = (targetId) => {
+    projectLinks().forEach((link) => {
+      link.classList.toggle('active', link.dataset.section === targetId);
+    });
+  };
+
   const hideAll = () => {
     allHideable().forEach((s) => {
       s.classList.add('mobile-hidden-project');
       s.classList.remove('mobile-active-project');
     });
+    setActiveLink(null);
   };
 
   const showOnly = async (targetId) => {
+    setActiveLink(targetId);
+
     allHideable().forEach((s) => {
       if (s.id === targetId) {
         s.classList.remove('mobile-hidden-project');

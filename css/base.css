@@ -73,7 +73,9 @@
 /* HTML & Body Base */
 html {
     --mobile-scale: 1.4;
-    font-size: var(--base-size);
+    /* Fluid root font size: scales the whole rem-based type up with viewport
+       width on desktop (13.23px at ~<=1066px up to 16px at ~>=1850px). */
+    font-size: clamp(13.23px, 0.35vw + 9.5px, 16px);
     touch-action: manipulation;
     position: relative;
     scroll-behavior: smooth;

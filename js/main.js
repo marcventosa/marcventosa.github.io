@@ -399,6 +399,7 @@ async function loadProfileIntro() {
       const text = (await res.text()).replace(/\r\n?/g, '\n').trim();
       if (text.startsWith('<') || text.includes('<!DOCTYPE')) continue;
       el.textContent = text;
+      alignProfileLeftColumn();
       return;
     } catch (e) {
       // try next candidate
@@ -409,60 +410,169 @@ async function loadProfileIntro() {
 loadProfileIntro();
 window.addEventListener('languagechange', loadProfileIntro);
 
-fetch('profile.json')
-  .then(res => res.json())
-  .then(profile => {
-    // Trajectoria loader
-    const trajectoriaContainer = document.getElementById('trajectoria-list');
-    if (trajectoriaContainer && profile.trajectoria) {
-      const timelineList = document.createElement('div');
-      timelineList.className = 'trajectoria-timeline-list';
-      profile.trajectoria.forEach((item, idx) => {
-        const row = document.createElement('div');
-        row.className = 'trajectoria-row';
-        // Timeline point and line
-        const timelineCol = document.createElement('div');
-        timelineCol.className = 'trajectoria-timeline-col';
-        const point = document.createElement('div');
-        point.className = 'trajectoria-point';
-        if (idx === 0) point.classList.add('active');
-        timelineCol.appendChild(point);
-        if (idx < profile.trajectoria.length - 1) {
-          const line = document.createElement('div');
-          line.className = 'trajectoria-line';
-          timelineCol.appendChild(line);
-        }
-        // Item content
-        const content = document.createElement('div');
-        content.className = 'trajectoria-item';
-        content.innerHTML = `<strong>${item.position}</strong><br><span>${item.learnings}</span>`;
-        // Row layout
-        row.appendChild(timelineCol);
-        row.appendChild(content);
-        timelineList.appendChild(row);
-      });
-      trajectoriaContainer.appendChild(timelineList);
+// Load the education block (external .txt), language-aware.
+async function loadEducation() {
+  const el = document.getElementById('profile-education');
+  if (!el) return;
+  const candidates = getLang() === 'en' ? ['education.en.txt', 'education.txt'] : ['education.txt'];
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const text = (await res.text()).replace(/\r\n?/g, '\n').trim();
+      if (text.startsWith('<') || text.includes('<!DOCTYPE')) continue;
+      el.textContent = text;
+      return;
+    } catch (e) {
+      // try next candidate
     }
+  }
+}
 
-    // Registres loader
-    const registresContainer = document.getElementById('registres-list');
-    if (registresContainer && profile.registres) {
-      registresContainer.innerHTML = '';
-      profile.registres.forEach(registre => {
-        const regDiv = document.createElement('div');
-        regDiv.className = 'registre-item';
-        const titleHtml = registre.link
-          ? `<a href="${registre.link}" class="registre-title" target="_blank" rel="noopener noreferrer">${registre.title}</a>`
-          : `<strong class="registre-title">${registre.title}</strong>`;
-        regDiv.innerHTML = `
-          ${titleHtml}<br>
-          <span class="registre-desc">${registre.description}</span><br>
-          <span class='registre-date'>${registre.date}</span>
-        `;
-        registresContainer.appendChild(regDiv);
-      });
+loadEducation();
+window.addEventListener('languagechange', loadEducation);
+
+// Trajectoria renderer (clears and repopulates its container).
+function renderTrajectoria(trajectoria) {
+  const trajectoriaContainer = document.getElementById('trajectoria-list');
+  if (!trajectoriaContainer || !trajectoria) return;
+  trajectoriaContainer.innerHTML = '';
+  const timelineList = document.createElement('div');
+  timelineList.className = 'trajectoria-timeline-list';
+  trajectoria.forEach((item, idx) => {
+    const row = document.createElement('div');
+    row.className = 'trajectoria-row';
+    // Timeline point and line
+    const timelineCol = document.createElement('div');
+    timelineCol.className = 'trajectoria-timeline-col';
+    const point = document.createElement('div');
+    point.className = 'trajectoria-point';
+    if (idx === 0) point.classList.add('active');
+    timelineCol.appendChild(point);
+    if (idx < trajectoria.length - 1) {
+      const line = document.createElement('div');
+      line.className = 'trajectoria-line';
+      timelineCol.appendChild(line);
     }
+    // Item content
+    const content = document.createElement('div');
+    content.className = 'trajectoria-item';
+    content.innerHTML = `<strong>${item.position}</strong><br><span>${item.learnings}</span>`;
+    // Row layout
+    row.appendChild(timelineCol);
+    row.appendChild(content);
+    timelineList.appendChild(row);
   });
+  trajectoriaContainer.appendChild(timelineList);
+}
+
+// Registres renderer (clears and repopulates its container).
+function renderRegistres(registres) {
+  const registresContainer = document.getElementById('registres-list');
+  if (!registresContainer || !registres) return;
+  registresContainer.innerHTML = '';
+  registres.forEach(registre => {
+    const regDiv = document.createElement('div');
+    regDiv.className = 'registre-item';
+    const titleHtml = registre.link
+      ? `<a href="${registre.link}" class="registre-title" target="_blank" rel="noopener noreferrer">${registre.title}</a>`
+      : `<strong class="registre-title">${registre.title}</strong>`;
+    regDiv.innerHTML = `
+      ${titleHtml}<br>
+      <span class="registre-desc">${registre.description}</span><br>
+      <span class='registre-date'>${registre.date}</span>
+    `;
+    registresContainer.appendChild(regDiv);
+  });
+}
+
+// Load structured profile content (trajectoria + registres), language-aware.
+async function loadProfileContent() {
+  const candidates = getLang() === 'en' ? ['profile.en.json', 'profile.json'] : ['profile.json'];
+  let profile = null;
+  for (const url of candidates) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) {
+        profile = await res.json();
+        break;
+      }
+    } catch (e) {
+      // try next candidate
+    }
+  }
+  if (!profile) return;
+  renderTrajectoria(profile.trajectoria);
+  renderRegistres(profile.registres);
+}
+
+loadProfileContent();
+window.addEventListener('languagechange', loadProfileContent);
+
+// Align the "Parlem!" title with the "Formació" heading (side by side), and
+// place the profile image to the left of Parlem, between it and the name
+// button, without overlapping Parlem. Desktop only; the mobile layout uses its
+// own static stacking.
+function alignProfileLeftColumn() {
+  if (!window.matchMedia('(min-width: 769px)').matches) return;
+  const section = document.querySelector('.profile-section');
+  const content = document.querySelector('.profile-content');
+  const parlem = document.querySelector('.profile-content-column:first-child');
+  const formation = document.querySelector('h3[data-i18n="profile.formation.title"]');
+  const image = section ? section.querySelector('.profile-image') : null;
+  if (!section || !content || !parlem || !formation) return;
+
+  const sectionRect = section.getBoundingClientRect();
+  const contentRect = content.getBoundingClientRect();
+  const formationRect = formation.getBoundingClientRect();
+
+  // Push "Parlem!" down so it lines up with the "Formació" heading.
+  parlem.style.paddingTop = Math.max(0, formationRect.top - contentRect.top) + 'px';
+
+  // Image: overflowing ~5% beyond the left viewport edge, with a 5%
+  // (viewport) margin before the Parlem column, vertically centered on name.
+  if (image) {
+    const parlemRect = parlem.getBoundingClientRect();
+    const nameLink = document.querySelector('.header-left .site-title .nav-link');
+    const nameRect = nameLink ? nameLink.getBoundingClientRect() : null;
+
+    const viewportW = sectionRect.width;
+    const leftEdge = -viewportW * 0.05;
+    const rightEdge = Math.max(
+      leftEdge,
+      (parlemRect.left - sectionRect.left) - viewportW * 0.05
+    );
+    image.style.left = leftEdge + 'px';
+    image.style.right = 'auto';
+    image.style.maxWidth = (rightEdge - leftEdge) + 'px';
+
+    if (nameRect) {
+      const nameCenter = nameRect.top - sectionRect.top + nameRect.height / 2;
+      const imageHeight = image.getBoundingClientRect().height;
+      const top = imageHeight > 0
+        ? nameCenter - imageHeight / 2
+        : (formationRect.top - sectionRect.top);
+      image.style.top = top + 'px';
+    } else {
+      image.style.top = (formationRect.top - sectionRect.top) + 'px';
+    }
+  }
+}
+
+function initProfileAlignment() {
+  alignProfileLeftColumn();
+  window.addEventListener('resize', alignProfileLeftColumn);
+  window.addEventListener('languagechange', () => setTimeout(alignProfileLeftColumn, 0));
+  window.addEventListener('load', alignProfileLeftColumn);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(alignProfileLeftColumn);
+  }
+}
+
+initProfileAlignment();
+
+const profileImage = document.querySelector('.profile-image');
+if (profileImage) profileImage.addEventListener('load', alignProfileLeftColumn);
 
   //////////////// Scroll Snap
  document.addEventListener('DOMContentLoaded', () => {

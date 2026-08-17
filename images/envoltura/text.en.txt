@@ -1,13 +1,4 @@
 *Vestuari a la platja de la Barceloneta*
-Taller Carme Ribas & Miquel Mariner, $tercer temps$
+Taller Carme Ribas & Miquel Mariner, $el tercer temps$
 /
-An expanse of equestrians appears on a plot of Es Molinar.
-sakdk
-
-PROVOTA 2
-
-//
-
-segona prorva
-/
-
+QUERY LENGTH LIMIT EXCEEDED. MAX ALLOWED QUERY : 500 CHARS

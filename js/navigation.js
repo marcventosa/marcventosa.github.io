@@ -296,6 +296,7 @@ window.addEventListener('scroll', () => {
     });
 
     navLinks.forEach(link => {
+        if (link.classList.contains('landing-nav-link')) return;
         link.classList.remove('active');
         if (link.getAttribute('data-section') === currentSection) {
             link.classList.add('active');

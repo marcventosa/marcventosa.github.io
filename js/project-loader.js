@@ -82,9 +82,10 @@ function activateImage(img) {
   if (img.dataset.sizes) img.sizes = img.dataset.sizes;
 }
 
-// Parse a text block: a single "/" separates the header (title + subtitle,
-// not translated) from the actual text body (translated).
-// Header format: "*title*" + optional subtitle text.
+// Parse a text block: a single "/" separates the header (title + subtitle)
+// from the actual text body. Header format: "*title*" + optional subtitle
+// text, where the subtitle's first line is the workshop name (untranslated)
+// and its remaining lines are the project purpose (translated).
 function parseTextBlock(block) {
   let header = block;
   let body = '';
@@ -372,6 +373,16 @@ async function buildProjectSection(project) {
 
     if (item.layout || item.text || item.textSide || project.layout) {
       applyImageLayout(slide, item, project.layout || {}, imageHeight, texts);
+    }
+
+    if (window.innerWidth <= 768 && imageHeight != null) {
+      const entry = manifest[item.src];
+      if (entry && entry.w && entry.h && entry.h > entry.w) {
+        img.style.width = '100%';
+        img.style.height = `${imageHeight}dvh`;
+        img.style.maxHeight = 'none';
+        img.style.objectFit = 'cover';
+      }
     }
 
     gallery.appendChild(slide);

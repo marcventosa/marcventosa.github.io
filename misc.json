@@ -4,9 +4,9 @@
     "caption": "Fabricació d'un arc i suports catenaris transportables i muntables a partir de tauler d'aglomerat. Màquina: CNC afab Gràcia",
     "images": [
       { "src": "images/misc/fab-catenari.jpeg" },
-      { "src": "images/misc/right-stand.jpg"},
-      { "src": "images/misc/altar-catenari.jpg" },
-      { "src": "images/misc/left-stand.jpg" }
+      { "src": "images/misc/right-stand.jpg", "bw": true},
+      { "src": "images/misc/altar-catenari.jpg", "bw": true},
+      { "src": "images/misc/left-stand.jpg","bw": true }
     ]
   },
   {
@@ -22,10 +22,10 @@
     "caption": "Orígens: desenvolupament gràfic per a l'història de quatre famílies a través de les aromes.",
     "images": [
       { "src": "images/misc/general-espelmes.jpg" },
-      { "src": "images/misc/menorc.jpg" },
-      { "src": "images/misc/pirineus.jpg" },
-      { "src": "images/misc/italy.jpg" },
-      { "src": "images/misc/calamocha.jpg" }
+      { "src": "images/misc/menorc.jpg","bw": true },
+      { "src": "images/misc/pirineus.jpg","bw": true },
+      { "src": "images/misc/italy.jpg","bw": true },
+      { "src": "images/misc/calamocha.jpg", "bw": true}
     ]
   },
   {
@@ -42,7 +42,7 @@
     "caption": "Proposta PARC03 - sismografia d'una identitat",
     "images": [
       { "src": "images/misc/parc03-1.png" },
-      { "src": "images/misc/parc03-2.jpeg" }
+      { "src": "images/misc/parc03-2.jpeg","bw": true }
     ]
   },
   {
@@ -56,7 +56,7 @@
     "project": "masonry-1",
     "caption": "Semantic digital twins for masonry bridges: Structuring geometrical, material and assessment field data",
     "images": [
-      { "src": "images/misc/mapping-masonry.png" },
+      { "src": "images/misc/mapping-masonry.png", "bw": true },
       { "src": "images/misc/scan-to-bim-joncadella.png" }
     ]
   }
