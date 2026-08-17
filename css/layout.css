@@ -248,6 +248,21 @@
     }
 }
 
+/* Desktop side-by-side: place the text on the side indicated by textSide and
+   fully justify the paragraph text (both edges). */
+@media (min-width: 769px) {
+    .project-gallery .gallery-slide--portrait.gallery-slide--text-right .gallery-slide-content {
+        flex-direction: row !important;
+    }
+    .project-gallery .gallery-slide--portrait.gallery-slide--text-left .gallery-slide-content {
+        flex-direction: row-reverse !important;
+    }
+
+    .project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text {
+        text-align: justify !important;
+    }
+}
+
 .gallery-slide--left .gallery-slide-content {
     justify-content: flex-start;
 }

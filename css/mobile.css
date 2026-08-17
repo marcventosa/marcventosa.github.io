@@ -103,7 +103,8 @@
     color: #232323 !important;
     line-height: 1.05 !important;
     min-height: 48px !important;
-    padding: 0.5rem 0;
+    padding: 0.5rem 0.7rem;
+>>>>>>> a2d00a1d411703eac896e5f7aaef3959bf78c345
     margin: 0;
   }
 
@@ -122,7 +123,7 @@
     display: flex !important;
     align-items: center;
     justify-content: flex-end;
-    min-height: 0 !important;
+<<<<<<< HEAD
     padding: 0 !important;
     font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
     font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
