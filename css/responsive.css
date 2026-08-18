@@ -376,6 +376,24 @@ a.nav-link.mobile-nav-link {
     }
 }
 
+/* Desktop: guarantee the language toggle stays fixed and visible on every page */
+@media (min-width: 769px) {
+    .lang-toggle {
+        position: fixed !important;
+        bottom: 1.4rem;
+        left: 50%;
+        right: auto;
+        top: auto;
+        transform: translateX(-50%);
+        z-index: 3000;
+        visibility: visible;
+        opacity: 0.85;
+        min-height: 0;
+        min-width: 0;
+        padding: 0.35rem 0.75rem;
+    }
+}
+
 /* Print Styles */
 @media print {
     .slitscan-backdrop,

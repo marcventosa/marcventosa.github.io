@@ -457,7 +457,7 @@ function renderTrajectoria(trajectoria) {
     // Item content
     const content = document.createElement('div');
     content.className = 'trajectoria-item';
-    content.innerHTML = `<strong>${item.position}</strong><br><span>${item.learnings}</span>`;
+    content.innerHTML = `<strong>${item.position}</strong><span>${item.learnings}</span>`;
     // Row layout
     row.appendChild(timelineCol);
     row.appendChild(content);
@@ -478,8 +478,8 @@ function renderRegistres(registres) {
       ? `<a href="${registre.link}" class="registre-title" target="_blank" rel="noopener noreferrer">${registre.title}</a>`
       : `<strong class="registre-title">${registre.title}</strong>`;
     regDiv.innerHTML = `
-      ${titleHtml}<br>
-      <span class="registre-desc">${registre.description}</span><br>
+      ${titleHtml}
+      <span class="registre-desc">${registre.description}</span>
       <span class='registre-date'>${registre.date}</span>
     `;
     registresContainer.appendChild(regDiv);

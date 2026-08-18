@@ -64,7 +64,7 @@
   }
 
   .lang-toggle {
-    position: absolute;
+    position: fixed;
     bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
     left: 1rem;
     right: auto;
@@ -88,7 +88,7 @@
 
   .landing-active #title-principal,
   .landing-active #data-principal,
-  .landing-active .lang-toggle {
+  #home.landing-active ~ .lang-toggle {
     opacity: 1;
   }
 
@@ -110,19 +110,14 @@
     display: block !important;
     text-align: left;
     pointer-events: auto;
-    font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
+    font-family: "Geist", "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
     font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
     font-weight: 900 !important;
     letter-spacing: 0.02em !important;
     color: #232323 !important;
     line-height: 1.05 !important;
     min-height: 48px !important;
-<<<<<<< HEAD
-    padding: 0.5rem 0;
-=======
     padding: 0.5rem 0.7rem;
->>>>>>> a2d00a1d411703eac896e5f7aaef3959bf78c345
->>>>>>> 95958cd8d15f5fb743cc51aca081acf5d3093696
     margin: 0;
   }
 
@@ -141,14 +136,9 @@
     display: flex !important;
     align-items: center;
     justify-content: flex-end;
-<<<<<<< HEAD
     padding: 0 !important;
     cursor: pointer;
-=======
-<<<<<<< HEAD
-    padding: 0 !important;
->>>>>>> 95958cd8d15f5fb743cc51aca081acf5d3093696
-    font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
+    font-family: "Geist", "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
     font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
     font-weight: 900 !important;
     letter-spacing: 0.03em !important;
