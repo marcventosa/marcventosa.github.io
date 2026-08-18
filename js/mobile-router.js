@@ -17,6 +17,7 @@ function buildLandingNav() {
   const nameLink = document.createElement('a');
   nameLink.className = 'nav-link landing-nav-link landing-name-link';
   nameLink.dataset.section = 'profile';
+  nameLink.href = '#';
   nameLink.innerHTML = 'MARC<br>VENTOSA<br>SAN MARTINO';
   nav.appendChild(nameLink);
 
@@ -31,6 +32,7 @@ function buildLandingNav() {
     const item = document.createElement('a');
     item.className = 'nav-link landing-nav-link';
     item.dataset.section = link.dataset.section;
+    item.href = '#';
     item.textContent = link.textContent.trim();
     linksWrap.appendChild(item);
   });

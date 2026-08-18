@@ -110,13 +110,15 @@
     display: block !important;
     text-align: left;
     pointer-events: auto;
-    font-family: "BDO Grotesk", "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
+    font-family: "BDO Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
     font-size: clamp(1.3rem, 5vw, 1.85rem) !important;
     font-weight: 700 !important;
     letter-spacing: -0.01em !important;
     color: #232323 !important;
     line-height: 1.05 !important;
     min-height: 48px !important;
+    transform: scaleX(0.96);
+    transform-origin: left center;
     padding: 0.5rem 0.7rem;
     margin: 0;
   }
@@ -138,13 +140,15 @@
     justify-content: flex-end;
     padding: 0 !important;
     cursor: pointer;
-    font-family: "BDO Grotesk", "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
+    font-family: "BDO Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
     font-size: clamp(1.3rem, 5vw, 1.85rem) !important;
     font-weight: 700 !important;
     letter-spacing: 0.015em !important;
     color: #232323 !important;
     line-height: 1 !important;
     text-align: right;
+    transform: scaleX(0.96);
+    transform-origin: right center;
     transition: color 0.4s ease !important;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;

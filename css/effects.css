@@ -505,7 +505,7 @@
 .nav-link {
     color: rgb(44, 44, 44) !important; /* Ensure styles are not overwritten */
     text-decoration: none !important;
-    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
+    font-family: var(--font-family-sans) !important;
     font-size: 1.2rem !important;
     font-weight: 700 !important;
     transition: color 0.3s ease !important;

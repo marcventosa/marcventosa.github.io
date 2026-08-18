@@ -1,5 +1,5 @@
 .gallery-text-title {
-  font-family: 'Monument Grotesk';
+  font-family: 'BDO Grotesk';
   font-weight: 700;
   font-size: 1.1rem;
   text-align: center;
@@ -7,63 +7,11 @@
   margin-top: 0.2em;
   letter-spacing: 0.01em;
   display: block;
+  transform: scaleX(0.96);
+  transform-origin: center;
 }
 
 /* Typography - Font definitions and text styles */
-
-/* Font Fallbacks (approximating Monument Grotesk) */
-@font-face {
-    font-family: "Monument Grotesk Variable";
-    src: local("Helvetica Neue"), local("Arial"), local("Helvetica"), sans-serif;
-    font-weight: 100 900;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Monument Grotesk Mono Variable";
-    src: url("../fonts/monument-grotesk-mono.woff2") format("woff2");
-    font-weight: 100 900;
-    font-style: normal;
-    font-display: swap;
-}
-
-/* Uploaded Grotesk Font */
-@font-face {
-    font-family: "Uploaded Grotesk";
-    src: url("../fonts/monument-grotesk-bold.woff") format("woff");
-    font-weight: 900;
-    font-style: normal;
-    font-display: swap;
-    /* Correct the font's broken hhea vertical metrics (ascent 4495, descent -1212)
-       to the normal OS/2 typo metrics (1628 / -420) so text sits on the line box. */
-    ascent-override: 79.5%;
-    descent-override: 20.5%;
-    line-gap-override: 0%;
-}
-
-/* Ronzino Font (Collletttivo, OFL) */
-@font-face {
-    font-family: "Ronzino";
-    src: url("../fonts/ronzino-regular.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Ronzino";
-    src: url("../fonts/ronzino-medium.woff2") format("woff2");
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Ronzino";
-    src: url("../fonts/ronzino-bold.woff2") format("woff2");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
 
 /* BDO Grotesk Font (LCTipografi, OFL) */
 @font-face {
@@ -95,37 +43,16 @@
     font-display: swap;
 }
 
-/* Authentic Monument Grotesk Font Faces */
+/* Monument Grotesk Mono Font (authentic webfont, used for mono text) */
 @font-face {
-    font-family: "Monument Grotesk";
-    src: url("../fonts/monument-grotesk-regular.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Monument Grotesk";
-    src: url("../fonts/monument-grotesk-medium.woff2") format("woff2");
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Monument Grotesk";
-    src: url("../fonts/monument-grotesk-bold.woff2") format("woff2");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-@font-face {
-    font-family: "Monument Grotesk";
-    src: url("../fonts/monument-grotesk-black.woff2") format("woff2");
-    font-weight: 900;
+    font-family: "Monument Grotesk Mono Variable";
+    src: url("../fonts/monument-grotesk-mono.woff2") format("woff2");
+    font-weight: 100 900;
     font-style: normal;
     font-display: swap;
 }
 
-/* Monument Grotesk Semi Mono Font Faces */
+/* Monument Grotesk Semi Mono Font Faces (semi-mono title style, kept as-is) */
 @font-face {
     font-family: "Monument Grotesk Semi Mono";
     src: url("../fonts/monument-grotesk-semi-mono-regular.woff2") format("woff2");
@@ -148,9 +75,32 @@
     font-display: swap;
 }
 
-/* Font Variables - Authentic Monument Grotesk specifications */
+/* Ronzino Font (Collletttivo, OFL) */
+@font-face {
+    font-family: "Ronzino";
+    src: url("../fonts/ronzino-regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Ronzino";
+    src: url("../fonts/ronzino-medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Ronzino";
+    src: url("../fonts/ronzino-bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Font Variables */
 :root {
-    --font-family-sans: "Monument Grotesk Variable", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-family-sans: "BDO Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
     --font-family-mono: "Monument Grotesk Mono Variable", Monaco, Menlo, Consolas, "Courier New", monospace;
     
     /* Font sizes matching original */
@@ -325,6 +275,8 @@ p a {
     line-height: var(--line-height-normal);
     letter-spacing: var(--letter-spacing-normal);
     font-variation-settings: 'slnt' 0, 'MONO' 0.5;
+    transform: scaleX(0.96);
+    transform-origin: left center;
 }
 
 .nav-menu {
@@ -336,11 +288,13 @@ p a {
     letter-spacing: var(--letter-spacing-normal);
     font-variation-settings: 'slnt' 0, 'MONO' 0.5;
     text-align: right;
+    transform: scaleX(0.96);
+    transform-origin: right center;
 }
 
 header .nav-menu {
-    font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif;
-    font-weight: 900;
+    font-family: var(--font-family-sans);
+    font-weight: 800;
 }
 
 .project-title {
@@ -352,6 +306,8 @@ header .nav-menu {
     letter-spacing: var(--letter-spacing-normal);
     font-variation-settings: 'slnt' 0, 'MONO' 0.5;
     margin-bottom: var(--spacing-sm);
+    transform: scaleX(0.96);
+    transform-origin: left center;
 }
 
 .project-description {
@@ -384,7 +340,7 @@ header .nav-menu {
 .nav-link {
     color: #222;
     text-decoration: none;
-    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif;
+    font-family: "BDO Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.2rem;
     font-weight: 700;
     transition: color 0.3s ease;
@@ -405,17 +361,17 @@ header .nav-menu {
    Scales with viewport width on desktop/medium/large screens.
    Name and nav titles share the same size. */
 .header-left .site-title .nav-link {
-    font-size: clamp(1.05rem, 1.1vw, 1.4rem) !important;
+    font-size: clamp(1rem, 1.05vw, 1.35rem) !important;
     line-height: 1.1;
 }
 
 .header-right .nav-menu {
-    font-size: clamp(1.05rem, 1.1vw, 1.4rem) !important;
+    font-size: clamp(1rem, 1.05vw, 1.35rem) !important;
     line-height: 1.1;
 }
 
 .header-right .nav-menu .nav-link {
-    font-size: clamp(1.05rem, 1.1vw, 1.4rem) !important;
+    font-size: clamp(1rem, 1.05vw, 1.35rem) !important;
     line-height: 1.1;
 }
 
@@ -431,12 +387,14 @@ header .nav-menu {
 }
 
 .gallery-text-bold {
-  font-family: 'Monument Grotesk';
+  font-family: 'BDO Grotesk';
   font-weight: 700;
   font-size: 1.1rem;
   letter-spacing: 0.01em;
   margin-right: 0.25em;
   display: inline;
+  transform: scaleX(0.96);
+  transform-origin: left center;
 }
 
 /* Responsive Typography */
@@ -485,15 +443,15 @@ header .nav-menu {
     }
 }
 
-/* Update titles and navigation menu to use the uploaded grotesk font */
+/* Update titles and navigation menu to use the BDO Grotesk font */
 .title, .navigation-menu {
-    font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif;
-    font-weight: 900;
+    font-family: var(--font-family-sans);
+    font-weight: 800;
 }
 
 header .header-left, header .site-title {
-    font-family: "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif;
-    font-weight: 900;
+    font-family: var(--font-family-sans);
+    font-weight: 800;
 }
 
 /* Navigation Menu Typography */

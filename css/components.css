@@ -4,7 +4,7 @@
 .nav-link {
     color: #222;
     text-decoration: none;
-    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif;
+    font-family: "BDO Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.2rem;
     font-weight: 700;
     transition: color 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -457,7 +457,7 @@
     width: min(90%, 48ch) !important;
     margin: 0 auto !important;
     text-align: left !important;
-    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
+    font-family: var(--font-family-sans) !important;
 }
 
 .project-gallery .gallery-text-title {
@@ -468,7 +468,7 @@
     font-weight: 800 !important;
     font-size: 1.25rem !important;
     line-height: 1.15 !important;
-    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
+    font-family: var(--font-family-sans) !important;
 }
 
 .project-gallery .gallery-description .gallery-text {
@@ -479,7 +479,7 @@
     line-height: 1.35 !important;
     margin: 0.3rem 0 !important;
     hyphens: auto !important;
-    font-family: 'Uploaded Grotesk', 'Monument Grotesk Variable', 'Helvetica Neue', Arial, sans-serif !important;
+    font-family: var(--font-family-sans) !important;
     white-space: normal !important;
     word-wrap: break-word !important;
     letter-spacing: 0 !important;
