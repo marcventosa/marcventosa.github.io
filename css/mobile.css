@@ -110,9 +110,9 @@
     display: block !important;
     text-align: left;
     pointer-events: auto;
-    font-family: "Ronzino", "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
+    font-family: "BDO Grotesk", "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
     font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
     letter-spacing: 0.02em !important;
     color: #232323 !important;
     line-height: 1.05 !important;
@@ -138,15 +138,16 @@
     justify-content: flex-end;
     padding: 0 !important;
     cursor: pointer;
-    font-family: "Ronzino", "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
+    font-family: "BDO Grotesk", "Uploaded Grotesk", "Monument Grotesk Variable", sans-serif !important;
     font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
     letter-spacing: 0.03em !important;
     color: #232323 !important;
     line-height: 1 !important;
     text-align: right;
     transition: color 0.4s ease !important;
     -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
   .landing-nav-links .landing-nav-link.active {

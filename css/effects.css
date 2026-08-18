@@ -492,11 +492,13 @@
     z-index: 1;
 }
 
-.project-section:hover .nav-link[href="#casa-intramurs"],
-.project-section:hover .nav-link[href="#refact"],
-.project-section:hover .nav-link[href="#abans-del-cim"],
-.project-section:hover .nav-link[href="#envoltura"] {
-    color: #555;
+@media (hover: hover) and (pointer: fine) {
+    .project-section:hover .nav-link[href="#casa-intramurs"],
+    .project-section:hover .nav-link[href="#refact"],
+    .project-section:hover .nav-link[href="#abans-del-cim"],
+    .project-section:hover .nav-link[href="#envoltura"] {
+        color: #555;
+    }
 }
 
 /* Updated hover effect for links */
@@ -509,9 +511,14 @@
     transition: color 0.3s ease !important;
 }
 
-.nav-link:hover,
+@media (hover: hover) and (pointer: fine) {
+    .nav-link:hover {
+        color: yellow !important; /* Ensure hover state is not overwritten */
+    }
+}
+
 .nav-link.active {
-    color: yellow !important; /* Ensure hover and active states are not overwritten */
+    color: yellow !important; /* Ensure active state is not overwritten */
 }
 
 /* Scroll snap - only for project sections */
