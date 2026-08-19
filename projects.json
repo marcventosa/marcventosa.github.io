@@ -77,7 +77,7 @@
     },
     "gallery": [
       { "src": "images/refact/01.EMPLAÇAMENT-A2-01.png", "alt": "Refact - Emplaçament", "imageHeight": 100 },
-      
+        { "src": "images/refact/maqueta_3_1.100.jpg", "alt": "Refact - Maqueta 1.100" },
       { "src": "images/refact/05. pasarela2-01.png", "alt": "Refact - Pasarela" },
   
       { "src": "images/refact/carto_antiga-01.png", "alt": "Refact - Cartografia Antiga", "text":"text1"},
@@ -140,7 +140,7 @@
 
         "En Pau fa dos metres d’alçada, però no s’hi defineix. Només ho agraeix quan pot moure’s lliurement, sense topar amb sostres ni travar-se amb cadires. Al final, tot es resumeix a això: trobar espais on ser ell mateix."
       ]},
-      { "src": "images/pau/maquetes-tipos-pauhaus.jpg", "alt": "Casa Pau - Maquetes Tipus Pauhaus" }
+      { "src": "images/pau/maquetes-tipus-pauhaus-2.jpg", "alt": "Casa Pau - Maquetes Tipus Pauhaus" }
     ]
   }
 

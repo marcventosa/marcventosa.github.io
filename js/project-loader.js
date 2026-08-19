@@ -2,6 +2,8 @@ import { getManifest, buildSrcset } from './image-helper.js';
 import { getLang, initLangToggle } from './i18n.js';
 
 const GALLERY_SIZES = '(max-width: 768px) 100vw, 70vw';
+const COPY_WIDTH = 'min(24vw, 300px)';
+const COPY_COL_GAP = '2rem';
 
 function protectGalleryImage(image) {
   if (!(image instanceof HTMLImageElement)) return;
@@ -49,14 +51,22 @@ function buildTextBlock({ title = '', subtitle = '', body = '', align = 'center'
   }
 
   if (body) {
-    const paragraphs = Array.isArray(body) ? body : [body];
+    const rawParagraphs = Array.isArray(body) ? body : String(body).split(/\n+/);
+    const paragraphs = rawParagraphs.map((p) => p.trim()).filter(Boolean);
+    const totalChars = paragraphs.reduce((sum, p) => sum + p.length, 0);
+    const useColumns = paragraphs.length >= 3 || totalChars > 1000;
+
+    const bodyWrap = useColumns ? document.createElement('div') : textWrap;
+    if (useColumns) bodyWrap.className = 'gallery-text-columns';
 
     paragraphs.forEach((paragraph) => {
       const p = document.createElement('p');
       p.className = 'gallery-text';
       appendFormattedText(p, paragraph);
-      textWrap.appendChild(p);
+      bodyWrap.appendChild(p);
     });
+
+    if (useColumns) textWrap.appendChild(bodyWrap);
   }
 
   return textWrap;
@@ -165,7 +175,7 @@ function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, t
 
     const inner = document.createElement('div');
     inner.className = 'gallery-slide-content';
-    inner.style.width = isMobile ? '100%' : 'min(92vw, 1300px)';
+    if (isMobile) inner.style.width = '100%';
     inner.style.gap = isMobile ? '0.8rem' : 'clamp(1.5rem, 2vw, 3rem)';
 
     const mediaWrap = document.createElement('div');
@@ -189,11 +199,18 @@ function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, t
       });
 
       if (textBlock) {
-        textBlock.style.width = isMobile ? '100%' : 'min(22vw, 280px)';
+        const hasColumns = textBlock.querySelector('.gallery-text-columns');
+        const blockWidth = hasColumns && !isMobile
+          ? `calc(${COPY_WIDTH} * 2 + ${COPY_COL_GAP})`
+          : COPY_WIDTH;
+        textBlock.style.width = isMobile ? '100%' : blockWidth;
         textBlock.style.maxWidth = '100%';
-        textBlock.style.flex = isMobile ? 'none' : '0 0 min(22vw, 280px)';
+        textBlock.style.minWidth = '0';
         textBlock.style.gap = '0.2rem';
         textBlock.style.margin = '0';
+        if (hasColumns && !isMobile) {
+          image.style.setProperty('max-width', '100%', 'important');
+        }
         inner.appendChild(textBlock);
       }
     }
@@ -235,7 +252,12 @@ async function fetchProjects() {
 // Load a project's text and split into labelled blocks (text1, text2, ...)
 // separated by "//" in the file. Language-aware: uses text.txt (Catalan) or
 // text.en.txt (English), falling back to Catalan if the English file is missing.
+const textsCache = new Map();
+
 async function loadProjectTexts(projectId, lang = getLang()) {
+  const cacheKey = `${projectId}_${lang}`;
+  if (textsCache.has(cacheKey)) return textsCache.get(cacheKey);
+
   const candidates =
     lang === 'en'
       ? [`images/${projectId}/text.en.txt`, `images/${projectId}/text.txt`]
@@ -256,13 +278,44 @@ async function loadProjectTexts(projectId, lang = getLang()) {
         .forEach((block, i) => {
           texts[`text${i + 1}`] = parseTextBlock(block);
         });
+      textsCache.set(cacheKey, texts);
       return texts;
     } catch (e) {
       // try next candidate
     }
   }
 
+  textsCache.set(cacheKey, {});
   return {};
+}
+
+// Warm the lightweight data caches (projects.json, manifest, text files) so
+// tapping a project on mobile renders immediately. No images are prefetched.
+let prefetchPromise = null;
+
+function prefetchMobileProjectData(lang = getLang()) {
+  if (prefetchPromise) return prefetchPromise;
+
+  prefetchPromise = (async () => {
+    try {
+      const projects = await fetchProjects();
+      await getManifest();
+      const languages = new Set([lang]);
+      if (lang === 'en') languages.add('en');
+      const loaders = [];
+      for (const project of projects) {
+        for (const l of languages) {
+          if (textsCache.has(`${project.id}_${l}`)) continue;
+          loaders.push(loadProjectTexts(project.id, l));
+        }
+      }
+      await Promise.all(loaders);
+    } catch (e) {
+      console.error('Could not prefetch project data:', e);
+    }
+  })();
+
+  return prefetchPromise;
 }
 
 function attachGalleryNavigation(section, gallery) {
@@ -295,6 +348,17 @@ function attachGalleryNavigation(section, gallery) {
     activateSlideAt((currentIndex + 1) % slides.length);
     activateSlideAt((currentIndex - 1 + slides.length) % slides.length);
   }
+
+  function resetGallery() {
+    const slides = gallery.querySelectorAll('.gallery-slide');
+    if (!slides.length) return;
+    slides.forEach((slide) => slide.classList.remove('active'));
+    currentIndex = 0;
+    slides[0].classList.add('active');
+    activateSlideAt(0);
+  }
+
+  gallery._resetGallery = resetGallery;
 
   section.addEventListener('click', (event) => {
     const sectionRect = section.getBoundingClientRect();
@@ -399,10 +463,13 @@ async function buildProjectSection(project) {
   section.appendChild(gallery);
   attachGalleryNavigation(section, gallery);
 
-  // Activate the first slide (and its image).
+  // Activate the first slide (and its image), and preload the second one so
+  // the next swipe doesn't wait for a fetch.
   if (gallery.firstChild) {
     gallery.firstChild.classList.add('active');
     activateImage(gallery.firstChild.querySelector('img'));
+    const second = gallery.children[1];
+    if (second) activateImage(second.querySelector('img'));
   }
 
   return section;
@@ -413,7 +480,11 @@ async function loadProject(projectId) {
   if (!mainContent) return null;
 
   const existing = document.getElementById(projectId);
-  if (existing) return existing;
+  if (existing) {
+    const gallery = existing.querySelector('.project-gallery');
+    if (gallery && gallery._resetGallery) gallery._resetGallery();
+    return existing;
+  }
 
   const projects = await fetchProjects();
   const project = projects.find((p) => p.id === projectId);
@@ -449,7 +520,7 @@ async function reloadAllProjects() {
   }
 }
 
-export { loadProject, loadAllProjects, reloadAllProjects };
+export { loadProject, loadAllProjects, reloadAllProjects, prefetchMobileProjectData };
 
 initLangToggle();
 

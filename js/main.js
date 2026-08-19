@@ -216,6 +216,7 @@ import { getLang } from './i18n.js';
         // Preload critical fonts
         const fontPreloads = [
             '/fonts/bdo-grotesk-bold.woff2',
+            '/fonts/bdo-grotesk-regular.woff2',
             '/fonts/monument-grotesk-mono.woff2'
         ];
         

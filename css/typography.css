@@ -1,6 +1,6 @@
 .gallery-text-title {
   font-family: 'BDO Grotesk';
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.1rem;
   text-align: center;
   margin-bottom: 0em;
@@ -14,6 +14,13 @@
 /* Typography - Font definitions and text styles */
 
 /* BDO Grotesk Font (LCTipografi, OFL) */
+@font-face {
+    font-family: "BDO Grotesk";
+    src: url("../fonts/bdo-grotesk-regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
 @font-face {
     font-family: "BDO Grotesk";
     src: url("../fonts/bdo-grotesk-medium.woff2") format("woff2");
@@ -190,13 +197,14 @@ h4, h5, h6 {
 
 /* Paragraphs */
 p {
-    font-family: var(--font-family-sans);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
+    font-family: var(--font-family-mono);
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-normal);
+    color: var(--text-tertiary);
     line-height: var(--line-height-normal);
     letter-spacing: var(--letter-spacing-normal);
-    font-variation-settings: 'slnt' 0, 'MONO' 0;
+    font-variation-settings: 'slnt' 0, 'MONO' 1;
+    text-align: justify;
     margin-bottom: var(--spacing-sm);
 }
 
@@ -650,6 +658,14 @@ header .header-left, header .site-title {
 
 /* Registres */
 .registre-item {
+    font-family: var(--font-family-mono);
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-normal);
+    color: var(--text-tertiary);
+    line-height: var(--line-height-normal);
+    letter-spacing: var(--letter-spacing-normal);
+    font-variation-settings: 'slnt' 0, 'MONO' 1;
+    text-align: left;
     margin-bottom: 0.55rem;
     transition: color 0.2s;
     cursor: default;
@@ -664,23 +680,26 @@ header .header-left, header .site-title {
 .registre-title {
     display: block;
     font-weight: 500;
-    font-size: clamp(0.82rem, 1vw + 0.6rem, 0.9rem);
+    font-size: inherit;
+    line-height: inherit;
     margin-bottom: 0.02em;
     color: inherit;
 }
 
 .registre-desc {
     display: block;
-    font-size: clamp(0.76rem, 0.9vw + 0.55rem, 0.82rem);
-    color: #555;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
     margin: 0 0 0.02em 0;
 }
 
 .registre-date {
     display: block;
-    color: #aaa;
-    font-size: clamp(0.72rem, 0.8vw + 0.5rem, 0.78rem);
-    font-style: italic;
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    font-style: normal;
     margin-top: 0.02em;
 }
 
@@ -688,14 +707,5 @@ header .header-left, header .site-title {
     .trajectoria-item {
         font-size: 0.85rem;
         line-height: 1.35;
-    }
-    .registre-title {
-        font-size: 0.9rem;
-    }
-    .registre-desc {
-        font-size: 0.82rem;
-    }
-    .registre-date {
-        font-size: 0.78rem;
     }
 }

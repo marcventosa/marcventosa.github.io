@@ -147,12 +147,11 @@
 }
 
 .project-gallery .gallery-slide--portrait .gallery-slide-content {
-    width: min(92vw, 1300px);
+    width: calc(70vw - 20px);
     max-width: 100%;
-    display: flex !important;
-    flex-direction: row !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
     align-items: center !important;
-    justify-content: flex-start !important;
     gap: clamp(1.5rem, 2vw, 3rem);
     max-height: var(--portrait-h, 90vh) !important;
     height: var(--portrait-h, 90vh) !important;
@@ -163,15 +162,13 @@
     align-items: center !important;
     justify-content: center !important;
     min-width: 0;
-    flex: 0 1 auto;
-    margin-left: clamp(-2vw, -1vw, 0px);
     height: var(--portrait-h, 90vh) !important;
     max-height: var(--portrait-h, 90vh) !important;
 }
 
 .project-gallery .gallery-slide--portrait .gallery-slide-media .project-image {
     width: auto !important;
-    max-width: min(70vw, 820px) !important;
+    max-width: 100% !important;
     max-height: var(--portrait-h, 90vh) !important;
     height: auto !important;
     object-fit: contain !important;
@@ -180,9 +177,8 @@
 }
 
 .project-gallery .gallery-slide--portrait .gallery-side-copy {
-    width: min(22vw, 280px) !important;
+    justify-self: center !important;
     max-width: 100% !important;
-    flex: 0 0 min(22vw, 280px) !important;
     text-align: left !important;
     color: inherit !important;
     display: flex !important;
@@ -190,22 +186,15 @@
     gap: 0.2rem !important;
     margin: 0 !important;
     padding: 0 !important;
-    align-items: flex-start !important;
-}
-
-.project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text-title,
-.project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text {
-    text-align: left !important;
-    width: 100% !important;
-    max-width: none !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
 }
 
 .project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text-title {
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     display: block !important;
     margin: 0 0 0.1rem !important;
-    font-weight: 800 !important;
+    font-weight: 700 !important;
     font-size: 0.85rem !important;
     line-height: 1.2 !important;
     text-transform: uppercase !important;
@@ -230,6 +219,12 @@
     font-weight: 700 !important;
     margin: 1.2rem 0 0.6rem !important;
     white-space: pre-wrap !important;
+    text-align: justify !important;
+}
+
+.project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text-columns {
+    width: 100% !important;
+    max-width: 100% !important;
 }
 }
 
@@ -261,7 +256,7 @@
 }
 
 .gallery-side-copy {
-    width: min(30vw, 360px);
+    width: min(24vw, 300px);
     max-width: 100%;
     text-align: left;
     color: inherit;
@@ -271,23 +266,40 @@
     margin: 0 0 0.75rem;
     font-size: 1.1rem;
     text-align: left;
+    transform: scaleX(0.96);
+    transform-origin: left center;
 }
 
 .gallery-side-copy .gallery-text-subtitle {
+    font-family: var(--font-family-mono);
     font-size: 0.8rem;
     line-height: 1.4;
-    color: #888;
-    text-align: left;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    text-align: justify;
     white-space: pre-wrap;
     margin: 0 0 0.6rem;
 }
 
 .gallery-side-copy .gallery-text {
+    font-family: var(--font-family-mono);
     margin: 0.35rem 0;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     line-height: 1.5;
-    text-align: left;
+    font-weight: 400;
+    text-align: justify;
+    color: var(--text-tertiary);
     white-space: pre-wrap;
+}
+
+.gallery-text-columns {
+    column-count: 2;
+    column-gap: 2rem;
+}
+
+.gallery-text-columns .gallery-text {
+    break-inside: avoid;
+    white-space: normal;
 }
 
 .project-info {
@@ -410,8 +422,12 @@
 }
 
 .profile-text p {
-    font-size: 0.85rem;
-    line-height: 1.45;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    font-family: var(--font-family-mono);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-tertiary);
+    text-align: justify;
 }
 
 #profile-intro {
