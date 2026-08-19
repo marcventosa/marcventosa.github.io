@@ -12,9 +12,10 @@
 // Config (env vars):
 //   TRANSLATE_DELAY   ms between requests (default 1200)
 //   TRANSLATE_RETRIES retries on failure (default 4, with backoff)
+//   LIBRE_URL         LibreTranslate base URL (default http://localhost:5000)
+//   LIBRETRANSLATE_API_KEY  for the hosted API (set LIBRE_URL=https://libretranslate.com)
 //   MYMEMORY_EMAIL    raise MyMemory's daily rate limit (e.g. your@email.com)
 //   DEEPL_API_KEY     use DeepL instead of MyMemory
-//   LIBRE_URL         self-hosted LibreTranslate (default http://localhost:5000)
 
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -34,12 +35,13 @@ const DELAY = Number(process.env.TRANSLATE_DELAY) || 1200;
 const RETRIES = Number(process.env.TRANSLATE_RETRIES) || 3;
 
 // Providers, tried in order:
-//  1. LibreTranslate — self-hosted (default http://localhost:5000), no rate limit.
-//     Run: docker compose up -d  (see docker-compose.yml)
+//  1. LibreTranslate — self-hosted (docker compose up -d, default http://localhost:5000)
+//     or the hosted API (set LIBRE_URL=https://libretranslate.com + LIBRETRANSLATE_API_KEY).
 //  2. DeepL        — set DEEPL_API_KEY (best quality, free tier available)
 //  3. MyMemory     — free, no key (always tried last)
 const DEEPL_KEY = process.env.DEEPL_API_KEY || '';
 const LIBRE_URL = process.env.LIBRE_URL || 'http://localhost:5000';
+const LIBRE_API_KEY = process.env.LIBRETRANSLATE_API_KEY || '';
 const MYMEMORY_EMAIL = process.env.MYMEMORY_EMAIL || '';
 const deepl = DEEPL_KEY ? new Translator(DEEPL_KEY) : null;
 let libreAvailable = false;
@@ -65,10 +67,12 @@ async function translateDeepL(text) {
 }
 
 async function translateLibre(text) {
+  const body = { q: text, source: 'ca', target: 'en', format: 'text' };
+  if (LIBRE_API_KEY) body.api_key = LIBRE_API_KEY;
   const res = await fetch(`${LIBRE_URL}/translate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ q: text, source: 'ca', target: 'en', format: 'text' })
+    body: JSON.stringify(body)
   });
   if (!res.ok) throw new Error(`LibreTranslate ${res.status}`);
   const json = await res.json();
