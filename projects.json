@@ -197,7 +197,8 @@
     "gallery": [
       {
         "src": "images/abans-del-cim/DSC_0274.JPG",
-        "alt": "Abans del Cim - DSC_0274"
+        "alt": "Abans del Cim - DSC_0274",
+        "text": "text1"
       },
       {
         "src": "images/abans-del-cim/planta-abanscim-01.png",
@@ -262,12 +263,12 @@
     },
     "gallery": [
       {
-        "src": "images/pau/LAM4_Mesa de trabajo 1 copia.png",
+        "src": "images/pauhaus/LAM4_Mesa de trabajo 1 copia.png",
         "alt": "Casa Pau - LAM4 Mesa de trabajo 1",
         "imageHeight": 60
       },
       {
-        "src": "images/pau/maquetes-tipus-pauhaus-2.jpg",
+        "src": "images/pauhaus/maquetes-tipus-pauhaus-2.jpg",
         "alt": "Casa Pau - Maquetes Tipus Pauhaus"
       }
     ],
