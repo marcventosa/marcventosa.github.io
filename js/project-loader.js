@@ -427,15 +427,17 @@ async function buildProjectSection(project) {
     if (isDual) {
       const dualWrap = document.createElement('div');
       dualWrap.className = 'gallery-dual-wrap';
+      const heights = Array.isArray(item.imageHeight) ? item.imageHeight : [imageHeight, imageHeight];
       item.src.forEach((src, idx) => {
         const img = document.createElement('img');
         img.alt = (Array.isArray(item.alt) ? item.alt[idx] : item.alt) || '';
         img.className = 'project-image';
         const isMobileImg = window.innerWidth <= 768;
+        const h = (typeof heights[idx] === 'number') ? heights[idx] : null;
         img.style.width = isMobileImg ? '100%' : '50%';
         img.style.height = 'auto';
         if (!isMobileImg) {
-          img.style.maxHeight = imageHeight != null ? `${imageHeight}vh` : '60vh';
+          img.style.maxHeight = h != null ? `${h}vh` : '60vh';
         }
         img.style.maxWidth = '100%';
         protectGalleryImage(img);
