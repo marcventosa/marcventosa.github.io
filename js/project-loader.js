@@ -465,6 +465,7 @@ async function buildProjectSection(project) {
         const img = document.createElement('img');
         img.alt = (Array.isArray(item.alt) ? item.alt[idx] : item.alt) || '';
         img.className = 'project-image';
+        if (item.bw) img.style.filter = 'grayscale(100%)';
         const isMobileImg = window.innerWidth <= 768;
         const h = (typeof heights[idx] === 'number') ? heights[idx] : null;
         img.style.width = isMobileImg ? '100%' : '50%';
@@ -482,6 +483,7 @@ async function buildProjectSection(project) {
       const img = document.createElement('img');
       img.alt = item.alt || '';
       img.className = 'project-image';
+      if (item.bw) img.style.filter = 'grayscale(100%)';
       const isMobileImg = window.innerWidth <= 768;
       img.style.width = isMobileImg ? '100%' : 'auto';
       img.style.height = 'auto';

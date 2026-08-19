@@ -125,7 +125,7 @@ ul { list-style: none; margin: 0; padding: 0; }
   margin-bottom: 0.6rem;
   background: #fff;
 }
-.entry.dragging { opacity: 0.4; }
+.entry:nth-child(even) { background: #f7f7f6; }
 
 .entry-head { display: flex; align-items: center; gap: 0.6rem; }
 
@@ -177,6 +177,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 
 .field { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.75rem; color: var(--muted); font-weight: 600; }
 .field select, .field input[type="text"] { width: 100%; }
+.field input[type="checkbox"] { align-self: flex-start; margin-top: 0.1rem; }
 
 .height { display: flex; align-items: center; gap: 0.4rem; }
 .height input[type="range"] { flex: 1 1 auto; min-width: 0; }
