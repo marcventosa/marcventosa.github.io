@@ -1,7 +1,7 @@
 // Mobile shell: landing nav + show/hide project routing.
 // Visibility is gated by CSS (css/mobile.css, <=768px).
 
-import { loadProject, loadAllProjects } from './project-loader.js';
+import { loadProject, loadAllProjects, prefetchMobileProjectData } from './project-loader.js';
 import { loadMiscImages } from './misc-loader.js';
 
 const MOBILE_BP = 768;
@@ -47,6 +47,8 @@ function initMobileProjectRouter() {
   const landingSection = document.getElementById('home');
   if (!landingNav) return;
 
+  let navigateGuard = false;
+
   const allHideable = () =>
     document.querySelectorAll('.project-section, #misc-section, #profile');
 
@@ -68,6 +70,7 @@ function initMobileProjectRouter() {
   };
 
   const showOnly = async (targetId) => {
+    navigateGuard = true;
     setActiveLink(targetId);
     landingSection.classList.remove('landing-active');
 
@@ -91,6 +94,8 @@ function initMobileProjectRouter() {
     if (target) {
       window.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
     }
+
+    setTimeout(() => { navigateGuard = false; }, 1200);
   };
 
   landingNav.querySelectorAll('.landing-nav-link').forEach((link) => {
@@ -112,9 +117,12 @@ function initMobileProjectRouter() {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.target.id !== 'home' || !isMobile()) return;
-        if (entry.intersectionRatio >= 1.0) {
-          hideAll();
-          landingSection.classList.add('landing-active');
+        if (entry.intersectionRatio >= 1.0 && !navigateGuard) {
+          const nearTop = window.scrollY <= landingSection.offsetHeight * 0.1;
+          if (nearTop) {
+            hideAll();
+            landingSection.classList.add('landing-active');
+          }
         } else if (entry.intersectionRatio <= 0) {
           landingSection.classList.remove('landing-active');
         }
@@ -151,6 +159,25 @@ function initMobileProjectRouter() {
 }
 
 buildLandingNav();
+
+// On mobile, warm the lightweight data caches (manifest, projects.json, text
+// files) during idle time so opening a project feels instant. Images are left
+// lazy so the page isn't overloaded.
+if (isMobile()) {
+  const schedulePrefetch = () => {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => prefetchMobileProjectData(), { timeout: 4000 });
+    } else {
+      setTimeout(() => prefetchMobileProjectData(), 1500);
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', schedulePrefetch);
+  } else {
+    schedulePrefetch();
+  }
+}
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initMobileProjectRouter);
