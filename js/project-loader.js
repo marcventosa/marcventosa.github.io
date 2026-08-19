@@ -425,11 +425,14 @@ async function buildProjectSection(project) {
     const img = document.createElement('img');
     img.alt = item.alt || '';
     img.className = 'project-image';
-    img.style.width = 'auto';
+    const isMobileImg = window.innerWidth <= 768;
+    img.style.width = isMobileImg ? '100%' : 'auto';
     img.style.height = 'auto';
-    img.style.maxHeight = imageHeight != null
-      ? `${imageHeight}${window.innerWidth <= 768 ? 'dvh' : 'vh'}`
-      : (window.innerWidth <= 768 ? '80vh' : '60vh');
+    if (!isMobileImg) {
+      img.style.maxHeight = imageHeight != null
+        ? `${imageHeight}vh`
+        : '60vh';
+    }
     img.style.maxWidth = '100%';
     protectGalleryImage(img);
     prepareImage(img, item.src, manifest);
@@ -437,16 +440,6 @@ async function buildProjectSection(project) {
 
     if (item.layout || item.text || item.textSide || project.layout) {
       applyImageLayout(slide, item, project.layout || {}, imageHeight, texts);
-    }
-
-    if (window.innerWidth <= 768 && imageHeight != null) {
-      const entry = manifest[item.src];
-      if (entry && entry.w && entry.h && entry.h > entry.w) {
-        img.style.width = '100%';
-        img.style.height = `${imageHeight}dvh`;
-        img.style.maxHeight = 'none';
-        img.style.objectFit = 'cover';
-      }
     }
 
     gallery.appendChild(slide);

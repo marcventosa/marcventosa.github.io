@@ -72,6 +72,10 @@ function initMobileProjectRouter() {
 
   const showOnly = async (targetId) => {
     navigateGuard = true;
+    if (landingSettleTimer) {
+      clearTimeout(landingSettleTimer);
+      landingSettleTimer = null;
+    }
     setActiveLink(targetId);
     landingSection.classList.remove('landing-active');
 
@@ -123,6 +127,7 @@ function initMobileProjectRouter() {
             landingSettleTimer = setTimeout(() => {
               landingSettleTimer = null;
               if (navigateGuard) return;
+              if (window.scrollY > landingSection.offsetHeight * 0.15) return;
               hideAll();
               landingSection.classList.add('landing-active');
             }, 600);
@@ -143,18 +148,27 @@ function initMobileProjectRouter() {
 
   if (landingSection) homeObserver.observe(landingSection);
 
+  let lastMobile = isMobile();
+  let resizeTimer = null;
   window.addEventListener('resize', () => {
-    if (!isMobile()) {
-      document
-        .querySelectorAll('.mobile-hidden-project, .mobile-active-project')
-        .forEach((s) => {
-          s.classList.remove('mobile-hidden-project', 'mobile-active-project');
-        });
-      loadAllProjects();
-      loadMiscImages();
-    } else {
-      hideAll();
-    }
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      const nowMobile = isMobile();
+      if (nowMobile === lastMobile) return;
+      lastMobile = nowMobile;
+      if (!nowMobile) {
+        document
+          .querySelectorAll('.mobile-hidden-project, .mobile-active-project')
+          .forEach((s) => {
+            s.classList.remove('mobile-hidden-project', 'mobile-active-project');
+          });
+        loadAllProjects();
+        loadMiscImages();
+      } else {
+        hideAll();
+        landingSection.classList.add('landing-active');
+      }
+    }, 200);
   });
 
   // Rebuild projects when the language changes (mobile).

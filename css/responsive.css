@@ -277,15 +277,6 @@
 }
 
 /* Responsive Images */
-@media (max-width: 768px) {
-    .gallery-image {
-        object-fit: cover;
-        height: 100%;
-    }
-    .project-image {
-        aspect-ratio: 16/9;
-    }
-}
 
 /* Responsive Navigation */
 @media (max-width: 767px) {

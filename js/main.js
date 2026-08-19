@@ -575,8 +575,9 @@ initProfileAlignment();
 const profileImage = document.querySelector('.profile-image');
 if (profileImage) profileImage.addEventListener('load', alignProfileLeftColumn);
 
-  //////////////// Scroll Snap
+  //////////////// Scroll Snap (desktop only)
  document.addEventListener('DOMContentLoaded', () => {
+  if (window.innerWidth <= 768) return;
   // Get all project sections
   const sections = document.querySelectorAll('.project-section');
   if (!sections.length) return;
