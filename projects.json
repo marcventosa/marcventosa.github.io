@@ -20,8 +20,7 @@
           "cover": "portrait",
           "align": "left",
           "textSide": "right"
-        },
-        "text": "text3"
+        }
       },
       {
         "src": "images/gravetats/construc..png",
@@ -270,6 +269,16 @@
       {
         "src": "images/pauhaus/maquetes-tipus-pauhaus-2.jpg",
         "alt": "Casa Pau - Maquetes Tipus Pauhaus"
+      },
+      {
+        "src": "images/pauhaus/mosaic_lamines_BP6.png",
+        "alt": "mosaic_lamines_BP6.png",
+        "imageHeight": 97
+      },
+      {
+        "src": "images/pauhaus/sketch_bp6.png",
+        "alt": "sketch_bp6.png",
+        "imageHeight": 30
       }
     ],
     "label": "PAUHAUS"
