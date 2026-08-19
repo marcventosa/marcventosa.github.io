@@ -182,9 +182,9 @@ function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, t
     mediaWrap.className = 'gallery-slide-media';
     mediaWrap.appendChild(image);
 
-    image.style.width = 'auto';
+    image.style.width = isMobile ? '100%' : 'auto';
     image.style.height = 'auto';
-    image.style.maxWidth = isMobile ? '95vw' : 'min(70vw, 820px)';
+    image.style.maxWidth = isMobile ? '100vw' : 'min(70vw, 820px)';
     image.style.objectFit = 'contain';
     image.style.objectPosition = 'center';
 
