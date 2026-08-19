@@ -176,6 +176,11 @@
     display: block !important;
 }
 
+/* Tall (portrait) images fill the height: bind by max-height, not column width. */
+.project-gallery .gallery-slide.gallery-slide--img-tall .gallery-slide-media .project-image {
+    max-width: none !important;
+}
+
 .project-gallery .gallery-slide--portrait .gallery-side-copy {
     justify-self: center !important;
     max-width: 100% !important;

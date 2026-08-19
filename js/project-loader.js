@@ -149,7 +149,7 @@ function resolveText(textFragment, texts) {
   return null;
 }
 
-function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, texts = {}) {
+function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, texts = {}, manifest = null) {
   const itemLayout = item.layout || {};
   const layout = { ...projectLayout, ...itemLayout };
   const mode = layout.cover || layout.mode || 'default';
@@ -172,6 +172,11 @@ function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, t
 
     const isMobile = window.innerWidth <= 768;
 
+    // Tall (portrait) images should be bound by height, not by the narrow
+    // column width, so they fill --portrait-h instead of leaving margins.
+    const entry = (manifest && item.src && !Array.isArray(item.src)) ? manifest[item.src] : null;
+    const isTallImg = entry && entry.h > entry.w;
+
     // imageHeight (0-100) maps to viewport height via the --portrait-h variable.
     if (imageHeight != null) {
       slide.style.setProperty('--portrait-h', `${imageHeight}${isMobile ? 'dvh' : 'vh'}`);
@@ -188,9 +193,10 @@ function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, t
 
     image.style.width = isMobile ? '100%' : 'auto';
     image.style.height = 'auto';
-    image.style.maxWidth = isMobile ? '100vw' : 'min(70vw, 820px)';
+    image.style.maxWidth = isMobile ? '100vw' : (isTallImg ? 'none' : 'min(70vw, 820px)');
     image.style.objectFit = 'contain';
     image.style.objectPosition = 'center';
+    if (!isMobile && isTallImg) slide.classList.add('gallery-slide--img-tall');
 
     inner.appendChild(mediaWrap);
 
@@ -493,7 +499,7 @@ async function buildProjectSection(project) {
       slide.appendChild(img);
 
       if (item.layout || item.text || item.textSide || project.layout) {
-        applyImageLayout(slide, item, project.layout || {}, imageHeight, texts);
+        applyImageLayout(slide, item, project.layout || {}, imageHeight, texts, manifest);
       }
     }
 
