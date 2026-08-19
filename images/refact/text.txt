@@ -1,9 +1,23 @@
-//*Boavista, Porto*
+*Boavista, Porto*
 Taller Belén Ramos
 /
 Una estesa d'encavallades apareix en una parcel·la d'Es Molinar.
 sakdk
-// terreny, indústria i riu
+
+//
+
+terreny, indústria i riu
 /
 Antigament, un conjunt fabril era protagonista d’un terreny entre camps i alguns petits nuclis urbans. Durant dècades, aquesta zona ha estat edificada gradualment amb usos variats, ocupant espais verds que la pluja havia regat, i amagant rierols que abans eren part de la sonoritat del paisatge urbà.
+
 //
+
+*línies d'aigua i arquitectura*
+/
+La topografia configura el lloc com un aqüífer obert natural. El conjunt se situa de manera que queda protegit de possibles inundacions; el nou canal és alhora camí i barrera. L’aigua recollida pel sistema de cobertes es canalitza per baixants fins a retornar al canal. D’aquesta manera, es tanca el cicle de l’aigua i es minimitza la petjada de la nova construcció.
+
+//
+
+*simbiosi*
+/
+és un text d'anotació per a Refact.

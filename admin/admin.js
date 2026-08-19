@@ -1,9 +1,11 @@
-// Admin UI: list/reorder/edit gallery entries, manage images, edit text.txt.
+// Admin UI: visual editor for projects, gallery entries, text fragments and images.
 
 const $ = (sel) => document.querySelector(sel);
 
-let state = null; // { projects, manifest, texts, images }
+let state = null; // { projects, manifest, fragments:{id:[...]}, images:{id:[...]}, orphans }
 let currentId = null;
+let showHidden = false;
+let uploadMode = 'library';
 
 async function api(path, body) {
   const res = await fetch(path, {
@@ -22,22 +24,19 @@ function status(msg, isError = false) {
   el.textContent = msg;
   el.classList.toggle('error', isError);
   clearTimeout(statusTimer);
-  if (msg) statusTimer = setTimeout(() => { el.textContent = ''; }, 6000);
+  if (msg) statusTimer = setTimeout(() => { el.textContent = ''; }, 7000);
 }
 
 function setBusy(on) {
   document.querySelectorAll('button').forEach((b) => (b.disabled = on));
 }
 
-function btn(label, onClick) {
+function btn(label, onClick, cls = '') {
   const b = document.createElement('button');
   b.textContent = label;
+  if (cls) b.className = cls;
   b.addEventListener('click', onClick);
   return b;
-}
-
-function currentProject() {
-  return state.projects.find((p) => p.id === currentId);
 }
 
 function imgUrl(id, name) {
@@ -46,15 +45,21 @@ function imgUrl(id, name) {
 
 const srcToFilename = (src) => String(src).split('/').pop();
 
-function summarize(entry) {
-  if (Array.isArray(entry.src)) return '2 images: ' + entry.src.map(srcToFilename).join(' + ');
-  if (entry.src) return srcToFilename(entry.src);
-  if (entry.text != null) {
-    if (typeof entry.text === 'string') return 'text ref: ' + entry.text;
-    if (Array.isArray(entry.text)) return 'text: ' + String(entry.text[0] || '').slice(0, 60) + (entry.text[0] && entry.text[0].length > 60 ? '…' : '');
-    return 'text: ' + JSON.stringify(entry.text).slice(0, 60);
-  }
-  return JSON.stringify(entry).slice(0, 80);
+const fragLabel = (i) => 'text' + (i + 1);
+function labelToIndex(label) {
+  const m = /^text(\d+)$/.exec(String(label || '').trim().toLowerCase());
+  return m ? parseInt(m[1], 10) - 1 : null;
+}
+
+function project() {
+  return state.projects.find((p) => p.id === currentId);
+}
+function frags() {
+  if (!state.fragments[currentId]) state.fragments[currentId] = [];
+  return state.fragments[currentId];
+}
+function library() {
+  return state.images[currentId] || [];
 }
 
 function readFileAsDataURL(file) {
@@ -66,136 +71,413 @@ function readFileAsDataURL(file) {
   });
 }
 
-// ---- State loading / rendering ----
+// ---- Load / resolve ----
 
 async function loadState() {
   state = await api('/admin-api/state');
-  currentId = currentId || (state.projects[0] && state.projects[0].id);
+  resolveLinks();
+  const ids = state.projects.map((p) => p.id);
+  if (!ids.includes(currentId)) currentId = ids[0] || null;
+  renderAll();
+}
+
+function resolveLinks() {
+  for (const p of state.projects) {
+    const fr = state.fragments[p.id] || [];
+    for (const e of p.gallery || []) {
+      const i = labelToIndex(e.text);
+      e.__frag = i != null && i < fr.length ? i : null;
+    }
+  }
+}
+
+function renderAll() {
   renderProjectSelect();
-  renderCurrent();
+  renderOrphans();
+  renderGallery();
+  renderFragments();
+  renderLibrary();
+  syncHiddenCheckbox();
+}
+
+// ---- Project select / hidden / orphans ----
+
+function visibleProjects() {
+  return state.projects.filter((p) => showHidden || !p.hidden);
 }
 
 function renderProjectSelect() {
   const sel = $('#project-select');
+  const prev = currentId;
   sel.innerHTML = '';
-  for (const p of state.projects) {
+  const list = visibleProjects();
+  if (!list.length && state.projects.length) {
+    // nothing visible but projects exist: force show hidden
+    showHidden = true;
+    $('#show-hidden').checked = true;
+    return renderProjectSelect();
+  }
+  for (const p of list) {
     const opt = document.createElement('option');
     opt.value = p.id;
-    opt.textContent = p.id;
+    opt.textContent = p.hidden ? p.id + ' (hidden)' : p.id;
     if (p.id === currentId) opt.selected = true;
     sel.appendChild(opt);
   }
+  currentId = prev;
 }
 
-function renderCurrent() {
-  const p = currentProject();
-  if (!p) return;
-  renderGallery();
-  renderLibrary();
-  renderText();
+function syncHiddenCheckbox() {
+  const p = project();
+  $('#project-hidden').checked = !!p?.hidden;
+}
+
+function renderOrphans() {
+  const wrap = $('#orphans');
+  wrap.innerHTML = '';
+  const list = state.orphans || [];
+  if (!list.length) return;
+  const label = document.createElement('span');
+  label.className = 'orphans-label';
+  label.textContent = 'Orphan folders: ';
+  wrap.appendChild(label);
+  for (const o of list) {
+    const b = document.createElement('button');
+    b.textContent = `+ ${o.id}`;
+    b.title = 'Create project from folder';
+    b.addEventListener('click', () => createProject(o.id));
+    wrap.appendChild(b);
+  }
+}
+
+async function createProject(id) {
+  setBusy(true);
+  try {
+    await api('/admin-api/create-project', { id });
+    await loadState();
+    currentId = id;
+    renderAll();
+    status('Created project ' + id);
+  } catch (e) {
+    status('Create failed: ' + e.message, true);
+  }
+  setBusy(false);
+}
+
+// ---- Gallery ----
+
+function entryType(e) {
+  if (Array.isArray(e.src) && e.src.length >= 2) return 'dual';
+  if (e.src) return e.__frag != null ? 'imgtext' : 'img';
+  return 'text';
+}
+
+function summarize(e) {
+  if (Array.isArray(e.src)) return e.src.map(srcToFilename).join(' + ');
+  if (e.src) return srcToFilename(e.src);
+  return '(no image)';
 }
 
 function renderGallery() {
-  const p = currentProject();
   const list = $('#gallery-list');
   list.innerHTML = '';
+  const p = project();
+  if (!p) return;
   if (!p.gallery.length) {
-    list.innerHTML = '<li class="empty">No entries yet.</li>';
+    list.innerHTML = '<li class="empty">No entries yet. Add one above.</li>';
     return;
   }
-  p.gallery.forEach((entry, idx) => {
-    const li = document.createElement('li');
-    li.className = 'gallery-item';
-    li.draggable = true;
-    li.dataset.index = idx;
+  p.gallery.forEach((entry, idx) => list.appendChild(buildEntryCard(entry, idx)));
+}
 
-    const thumb = document.createElement('div');
-    thumb.className = 'thumb';
-    if (Array.isArray(entry.src)) {
-      entry.src.forEach((s) => {
-        const im = document.createElement('img');
-        im.src = imgUrl(p.id, srcToFilename(s));
-        im.loading = 'lazy';
-        thumb.appendChild(im);
-      });
-    } else if (entry.src) {
+function buildEntryCard(entry, idx) {
+  const li = document.createElement('li');
+  li.className = 'entry';
+  li.draggable = true;
+
+  const head = document.createElement('div');
+  head.className = 'entry-head';
+
+  const badge = document.createElement('span');
+  badge.className = 'badge';
+  badge.textContent = { img: 'IMG', dual: 'IMG×2', imgtext: 'IMG+TXT', text: 'TXT' }[entryType(entry)];
+  head.appendChild(badge);
+
+  const thumb = document.createElement('div');
+  thumb.className = 'thumb';
+  if (Array.isArray(entry.src)) {
+    entry.src.forEach((s) => {
       const im = document.createElement('img');
-      im.src = imgUrl(p.id, srcToFilename(entry.src));
+      im.src = imgUrl(currentId, srcToFilename(s));
       im.loading = 'lazy';
       thumb.appendChild(im);
-    } else {
-      thumb.classList.add('thumb-text');
-      thumb.textContent = 'TXT';
-    }
-
-    const info = document.createElement('div');
-    info.className = 'info';
-    info.textContent = summarize(entry);
-
-    const actions = document.createElement('div');
-    actions.className = 'actions';
-    actions.append(
-      btn('↑', () => move(idx, -1)),
-      btn('↓', () => move(idx, 1)),
-      btn('✎', () => toggleJson(li, idx)),
-      btn('✕', () => remove(idx))
-    );
-
-    li.append(thumb, info, actions);
-
-    const jsonEditor = document.createElement('div');
-    jsonEditor.className = 'json-editor';
-    li.appendChild(jsonEditor);
-
-    li.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('text/plain', String(idx));
-      li.classList.add('dragging');
     });
-    li.addEventListener('dragend', () => li.classList.remove('dragging'));
-    li.addEventListener('dragover', (e) => e.preventDefault());
-    li.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const from = parseInt(e.dataTransfer.getData('text/plain'), 10);
-      if (!Number.isInteger(from)) return;
-      reorderFromTo(from, idx);
-    });
-
-    list.appendChild(li);
-  });
-}
-
-function renderLibrary() {
-  const list = $('#library-list');
-  list.innerHTML = '';
-  const images = state.images[currentId] || [];
-  if (!images.length) {
-    list.innerHTML = '<li class="empty">No images in this project folder.</li>';
-    return;
-  }
-  for (const name of images) {
-    const li = document.createElement('li');
-    li.className = 'library-item';
+  } else if (entry.src) {
     const im = document.createElement('img');
-    im.src = imgUrl(currentId, name);
+    im.src = imgUrl(currentId, srcToFilename(entry.src));
     im.loading = 'lazy';
-    im.width = 90;
-    const span = document.createElement('span');
-    span.textContent = name;
-    const addBtn = btn('＋ add', () => addImageEntry(name));
-    const delBtn = btn('🗑', () => deleteImage(name));
-    li.append(im, span, addBtn, delBtn);
-    list.appendChild(li);
+    thumb.appendChild(im);
   }
+  head.appendChild(thumb);
+
+  const summary = document.createElement('span');
+  summary.className = 'summary';
+  summary.textContent = summarize(entry);
+  head.appendChild(summary);
+
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+  actions.append(
+    btn('↑', () => moveEntry(idx, -1)),
+    btn('↓', () => moveEntry(idx, 1)),
+    btn('✎', () => toggleRawJson(li, idx)),
+    btn('✕', () => removeEntry(idx))
+  );
+  head.appendChild(actions);
+
+  li.appendChild(head);
+
+  // Editor body
+  const body = document.createElement('div');
+  body.className = 'entry-body';
+  body.appendChild(buildEntryEditor(entry, idx));
+  li.appendChild(body);
+
+  // Raw JSON editor (hidden)
+  const json = document.createElement('div');
+  json.className = 'json-editor';
+  li.appendChild(json);
+
+  // Drag & drop
+  li.addEventListener('dragstart', (e) => {
+    e.dataTransfer.setData('text/plain', String(idx));
+    li.classList.add('dragging');
+  });
+  li.addEventListener('dragend', () => li.classList.remove('dragging'));
+  li.addEventListener('dragover', (e) => e.preventDefault());
+  li.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const from = parseInt(e.dataTransfer.getData('text/plain'), 10);
+    if (Number.isInteger(from)) reorderEntries(from, idx);
+  });
+
+  return li;
 }
 
-function renderText() {
-  $('#text-editor').value = state.texts[currentId] || '';
+function buildEntryEditor(entry, idx) {
+  const wrap = document.createElement('div');
+  wrap.className = 'editor-grid';
+  const type = entryType(entry);
+
+  // Image select(s)
+  if (type === 'dual') {
+    wrap.appendChild(field('Image left', imageSelect(entry, 0)));
+    wrap.appendChild(field('Image right', imageSelect(entry, 1)));
+  } else if (type === 'img' || type === 'imgtext') {
+    wrap.appendChild(field('Image', imageSelect(entry, 0)));
+  }
+
+  // Height slider(s)
+  if (type === 'dual') {
+    wrap.appendChild(field('Height left', heightSlider(entry, 0)));
+    wrap.appendChild(field('Height right', heightSlider(entry, 1)));
+  } else if (type === 'img' || type === 'imgtext') {
+    wrap.appendChild(field('Height', heightSlider(entry, 0)));
+  }
+
+  // Alt
+  if (type !== 'text') {
+    wrap.appendChild(field('Alt', altInput(entry)));
+  }
+
+  // Text link + side (single images only; dual excluded per scope)
+  if (type === 'img' || type === 'imgtext') {
+    wrap.appendChild(field('Linked text', fragSelect(entry)));
+    if (entry.__frag != null) {
+      wrap.appendChild(field('Text side', textSideSelect(entry)));
+    }
+  }
+
+  return wrap;
 }
 
-// ---- Gallery mutations ----
+function field(label, control) {
+  const d = document.createElement('label');
+  d.className = 'field';
+  const s = document.createElement('span');
+  s.textContent = label;
+  d.appendChild(s);
+  d.appendChild(control);
+  return d;
+}
 
-function move(idx, delta) {
-  const p = currentProject();
+function imageSelect(entry, slot) {
+  const sel = document.createElement('select');
+  sel.innerHTML = '<option value="">(none)</option>';
+  for (const name of library()) {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    sel.appendChild(opt);
+  }
+  const current = slot === 0 ? entry.src : (Array.isArray(entry.src) ? entry.src[1] : undefined);
+  const curName = current ? srcToFilename(current) : '';
+  if (curName) sel.value = curName;
+
+  sel.addEventListener('change', () => {
+    const name = sel.value;
+    if (!name) {
+      if (slot === 0) delete entry.src;
+      else if (Array.isArray(entry.src)) entry.src.splice(1, 1);
+      return;
+    }
+    const src = 'images/' + currentId + '/' + name;
+    if (slot === 0) entry.src = src;
+    else {
+      if (!Array.isArray(entry.src)) entry.src = [entry.src, src];
+      else entry.src[1] = src;
+    }
+    rerenderEntrySummary();
+  });
+  return sel;
+}
+
+function heightSlider(entry, slot) {
+  const wrap = document.createElement('div');
+  wrap.className = 'height';
+
+  const range = document.createElement('input');
+  range.type = 'range';
+  range.min = 0;
+  range.max = 100;
+  range.step = 1;
+
+  const num = document.createElement('input');
+  num.type = 'number';
+  num.min = 0;
+  num.max = 100;
+  num.placeholder = 'auto';
+  num.style.width = '3.2rem';
+
+  const auto = document.createElement('input');
+  auto.type = 'checkbox';
+  auto.title = 'Auto (no height cap)';
+
+  const autoLbl = document.createElement('label');
+  autoLbl.className = 'check';
+  autoLbl.appendChild(auto);
+  autoLbl.appendChild(document.createTextNode('auto'));
+
+  function getVal() {
+    if (slot === 0) {
+      return typeof entry.imageHeight === 'number' ? entry.imageHeight : null;
+    }
+    if (Array.isArray(entry.imageHeight)) {
+      return typeof entry.imageHeight[1] === 'number' ? entry.imageHeight[1] : null;
+    }
+    return null;
+  }
+  function setVal(v) {
+    if (slot === 0) {
+      if (v == null) delete entry.imageHeight;
+      else entry.imageHeight = v;
+    } else {
+      const arr = Array.isArray(entry.imageHeight) ? entry.imageHeight.slice() : [entry.imageHeight, null];
+      arr[1] = v;
+      if (arr[0] == null && arr[1] == null) delete entry.imageHeight;
+      else entry.imageHeight = arr;
+    }
+  }
+
+  const v = getVal();
+  range.value = v == null ? 60 : v;
+  num.value = v == null ? '' : v;
+  auto.checked = v == null;
+
+  range.addEventListener('input', () => {
+    num.value = range.value;
+    setVal(parseInt(range.value, 10));
+    auto.checked = false;
+  });
+  num.addEventListener('input', () => {
+    const n = num.value === '' ? null : parseInt(num.value, 10);
+    if (n == null) { auto.checked = true; setVal(null); }
+    else { range.value = Math.max(0, Math.min(100, n)); setVal(Math.max(0, Math.min(100, n))); }
+  });
+  auto.addEventListener('change', () => {
+    if (auto.checked) { setVal(null); num.value = ''; }
+    else { setVal(parseInt(range.value, 10)); num.value = range.value; }
+  });
+
+  wrap.append(range, num, autoLbl);
+  return wrap;
+}
+
+function altInput(entry) {
+  const inp = document.createElement('input');
+  inp.type = 'text';
+  inp.value = entry.alt || '';
+  inp.placeholder = 'alt text';
+  inp.addEventListener('input', () => { entry.alt = inp.value; });
+  return inp;
+}
+
+function fragSelect(entry) {
+  const sel = document.createElement('select');
+  sel.innerHTML = '<option value="">(no text)</option>';
+  frags().forEach((f, i) => {
+    const opt = document.createElement('option');
+    opt.value = String(i);
+    opt.textContent = fragLabel(i) + (f.title ? ': ' + f.title.slice(0, 24) : '');
+    sel.appendChild(opt);
+  });
+  const optNew = document.createElement('option');
+  optNew.value = 'new';
+  optNew.textContent = '+ new fragment';
+  sel.appendChild(optNew);
+
+  sel.value = entry.__frag != null ? String(entry.__frag) : '';
+
+  sel.addEventListener('change', () => {
+    if (sel.value === 'new') {
+      frags().push({ title: '', subtitle: '', body: '' });
+      entry.__frag = frags().length - 1;
+    } else if (sel.value === '') {
+      entry.__frag = null;
+    } else {
+      entry.__frag = parseInt(sel.value, 10);
+    }
+    renderGallery();
+    renderFragments();
+  });
+  return sel;
+}
+
+function textSideSelect(entry) {
+  const sel = document.createElement('select');
+  ['right', 'left', 'center'].forEach((side) => {
+    const o = document.createElement('option');
+    o.value = side;
+    o.textContent = side;
+    sel.appendChild(o);
+  });
+  sel.value = entry.textSide || 'right';
+  sel.addEventListener('change', () => {
+    entry.textSide = sel.value;
+    if (entry.layout && entry.layout.textSide) entry.layout.textSide = sel.value;
+  });
+  return sel;
+}
+
+function rerenderEntrySummary() {
+  // Re-render summaries/thumbs after image changes (cheap full re-render).
+  renderGallery();
+}
+
+// Gallery mutations
+
+function moveEntry(idx, delta) {
+  const p = project();
   const arr = p.gallery;
   const to = idx + delta;
   if (to < 0 || to >= arr.length) return;
@@ -203,36 +485,23 @@ function move(idx, delta) {
   renderGallery();
 }
 
-function reorderFromTo(from, to) {
-  const p = currentProject();
+function reorderEntries(from, to) {
+  const p = project();
   const arr = p.gallery;
   if (from === to) return;
   const [item] = arr.splice(from, 1);
-  const insertAt = from < to ? to - 1 : to;
-  arr.splice(insertAt, 0, item);
+  arr.splice(from < to ? to - 1 : to, 0, item);
   renderGallery();
 }
 
-function remove(idx) {
-  const p = currentProject();
+function removeEntry(idx) {
+  const p = project();
   if (!confirm('Remove this gallery entry?')) return;
   p.gallery.splice(idx, 1);
   renderGallery();
 }
 
-function addImageEntry(filename) {
-  const p = currentProject();
-  p.gallery.push({ src: 'images/' + currentId + '/' + filename, alt: filename });
-  renderGallery();
-}
-
-function addTextEntry() {
-  const p = currentProject();
-  p.gallery.push({ text: ['Nou paràgraf'] });
-  renderGallery();
-}
-
-function toggleJson(li, idx) {
+function toggleRawJson(li, idx) {
   const editor = li.querySelector('.json-editor');
   if (editor.style.display === 'block') {
     editor.style.display = 'none';
@@ -241,15 +510,19 @@ function toggleJson(li, idx) {
   }
   editor.style.display = 'block';
   editor.innerHTML = '';
-  const entry = currentProject().gallery[idx];
+  const entry = project().gallery[idx];
   const ta = document.createElement('textarea');
   ta.value = JSON.stringify(entry, null, 2);
-  ta.rows = 12;
+  ta.rows = 10;
   ta.spellcheck = false;
   const apply = btn('Apply', () => {
     try {
-      currentProject().gallery[idx] = JSON.parse(ta.value);
+      const parsed = JSON.parse(ta.value);
+      project().gallery[idx] = parsed;
+      const i = labelToIndex(parsed.text);
+      parsed.__frag = i != null && i < frags().length ? i : null;
       renderGallery();
+      renderFragments();
     } catch (e) {
       alert('Invalid JSON: ' + e.message);
     }
@@ -261,27 +534,135 @@ function toggleJson(li, idx) {
   editor.append(ta, apply, cancel);
 }
 
-// ---- Server actions ----
+// ---- Fragments panel ----
 
-async function saveProjects() {
-  setBusy(true);
-  try {
-    await api('/admin-api/projects', { projects: state.projects });
-    status('projects.json saved');
-  } catch (e) {
-    status('Save failed: ' + e.message, true);
+function renderFragments() {
+  const list = $('#fragment-list');
+  list.innerHTML = '';
+  const fr = frags();
+  if (!fr.length) {
+    list.innerHTML = '<li class="empty">No fragments.</li>';
+    return;
   }
-  setBusy(false);
+  fr.forEach((f, i) => list.appendChild(buildFragmentItem(f, i)));
 }
 
-async function saveText() {
-  const content = $('#text-editor').value;
+function buildFragmentItem(f, i) {
+  const li = document.createElement('li');
+  li.className = 'fragment';
+
+  const head = document.createElement('div');
+  head.className = 'frag-head';
+  const label = document.createElement('span');
+  label.className = 'badge';
+  label.textContent = fragLabel(i);
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+  actions.append(
+    btn('↑', () => moveFragment(i, -1)),
+    btn('↓', () => moveFragment(i, 1)),
+    btn('✕', () => removeFragment(i))
+  );
+  head.append(label, actions);
+  li.appendChild(head);
+
+  const title = document.createElement('input');
+  title.type = 'text';
+  title.placeholder = 'Title';
+  title.value = f.title;
+  title.addEventListener('input', () => { f.title = title.value; });
+
+  const sub = document.createElement('textarea');
+  sub.placeholder = 'Subtitle (workshop, purpose…)';
+  sub.rows = 2;
+  sub.value = f.subtitle;
+  sub.addEventListener('input', () => { f.subtitle = sub.value; });
+
+  const body = document.createElement('textarea');
+  body.placeholder = 'Body';
+  body.rows = 6;
+  body.value = f.body;
+  body.addEventListener('input', () => { f.body = body.value; });
+
+  li.append(title, sub, body);
+  return li;
+}
+
+function moveFragment(i, delta) {
+  const fr = frags();
+  const to = i + delta;
+  if (to < 0 || to >= fr.length) return;
+  [fr[i], fr[to]] = [fr[to], fr[i]];
+  swapEntryLinks(i, to);
+  renderGallery();
+  renderFragments();
+}
+
+function removeFragment(i) {
+  const fr = frags();
+  if (!confirm('Delete fragment ' + fragLabel(i) + '?')) return;
+  fr.splice(i, 1);
+  for (const e of project().gallery) {
+    if (e.__frag === i) e.__frag = null;
+    else if (e.__frag != null && e.__frag > i) e.__frag -= 1;
+  }
+  renderGallery();
+  renderFragments();
+}
+
+function swapEntryLinks(a, b) {
+  for (const e of project().gallery) {
+    if (e.__frag === a) e.__frag = b;
+    else if (e.__frag === b) e.__frag = a;
+  }
+}
+
+// ---- Library ----
+
+function renderLibrary() {
+  const list = $('#library-list');
+  list.innerHTML = '';
+  const imgs = library();
+  if (!imgs.length) {
+    list.innerHTML = '<li class="empty">No images in this project folder.</li>';
+    return;
+  }
+  for (const name of imgs) {
+    const li = document.createElement('li');
+    li.className = 'library-item';
+    const im = document.createElement('img');
+    im.src = imgUrl(currentId, name);
+    im.loading = 'lazy';
+    im.width = 90;
+    const span = document.createElement('span');
+    span.textContent = name;
+    const addBtn = btn('＋', () => { project().gallery.push({ src: 'images/' + currentId + '/' + name, alt: name }); renderGallery(); });
+    const delBtn = btn('🗑', () => deleteImage(name));
+    li.append(im, span, addBtn, delBtn);
+    list.appendChild(li);
+  }
+}
+
+// ---- Server actions ----
+
+async function saveAll() {
   setBusy(true);
   try {
-    await api('/admin-api/text', { projectId: currentId, content });
-    status('Text saved — translation running in background');
+    const clean = JSON.parse(JSON.stringify(state.projects));
+    for (const p of clean) {
+      for (const e of p.gallery || []) {
+        if (e.__frag != null) e.text = fragLabel(e.__frag);
+        else delete e.text;
+        delete e.__frag;
+      }
+    }
+    await api('/admin-api/projects', { projects: clean });
+    if (currentId) {
+      await api('/admin-api/text', { projectId: currentId, fragments: frags() });
+    }
+    status('Saved (text translated in background)');
   } catch (e) {
-    status('Text save failed: ' + e.message, true);
+    status('Save failed: ' + e.message, true);
   }
   setBusy(false);
 }
@@ -291,7 +672,7 @@ async function runOptimize() {
   status('Optimizing images…');
   try {
     const r = await api('/admin-api/optimize');
-    status(r.code === 0 ? 'Images optimized' : 'Optimize finished with code ' + r.code);
+    status(r.code === 0 ? 'Images optimized' : 'Optimize finished (code ' + r.code + ')');
     await loadState();
   } catch (e) {
     status('Optimize failed: ' + e.message, true);
@@ -304,27 +685,56 @@ async function runTranslate() {
   status('Translating…');
   try {
     const r = await api('/admin-api/translate');
-    status(r.code === 0 ? 'Translation done' : 'Translate finished with code ' + r.code);
+    status(r.code === 0 ? 'Translation done' : 'Translate finished (code ' + r.code + ')');
   } catch (e) {
     status('Translate failed: ' + e.message, true);
   }
   setBusy(false);
 }
 
-async function handleUpload(files) {
+async function runMigrate() {
+  if (!confirm('Migrate any inline text into text.txt? (idempotent)')) return;
+  setBusy(true);
+  status('Migrating…');
+  try {
+    const r = await api('/admin-api/migrate');
+    status(r.code === 0 ? 'Migration done' : 'Migrate finished (code ' + r.code + ')');
+    await loadState();
+  } catch (e) {
+    status('Migrate failed: ' + e.message, true);
+  }
+  setBusy(false);
+}
+
+async function uploadOne(file) {
+  const dataUrl = await readFileAsDataURL(file);
+  return api('/admin-api/upload', { projectId: currentId, filename: file.name, dataUrl });
+}
+
+async function handleUpload(files, mode) {
   if (!files || !files.length) return;
   setBusy(true);
   status('Uploading + optimizing…');
   try {
-    const p = currentProject();
+    const srcs = [];
     for (const f of files) {
-      const dataUrl = await readFileAsDataURL(f);
-      const r = await api('/admin-api/upload', { projectId: currentId, filename: f.name, dataUrl });
-      p.gallery.push({ src: r.src, alt: f.name });
+      const r = await uploadOne(f);
+      srcs.push(r.src);
     }
-    await api('/admin-api/projects', { projects: state.projects });
+    const p = project();
+    if (mode === 'single') {
+      p.gallery.push({ src: srcs[0], alt: srcToFilename(srcs[0]) });
+    } else if (mode === 'dual') {
+      p.gallery.push({ src: srcs.slice(0, 2), alt: srcs.map(srcToFilename).join(' + ') });
+    } else if (mode === 'imgtext') {
+      frags().push({ title: '', subtitle: '', body: '' });
+      p.gallery.push({ src: srcs[0], alt: srcToFilename(srcs[0]), __frag: frags().length - 1, textSide: 'right' });
+    } else {
+      // library only
+    }
+    await saveAll();
     await loadState();
-    status('Uploaded ' + files.length + ' image(s) and added to gallery');
+    status('Uploaded ' + files.length + ' image(s)');
   } catch (e) {
     status('Upload failed: ' + e.message, true);
   }
@@ -349,18 +759,44 @@ async function deleteImage(filename) {
 
 $('#project-select').addEventListener('change', (e) => {
   currentId = e.target.value;
-  renderCurrent();
+  renderAll();
 });
-$('#btn-save').addEventListener('click', saveProjects);
+$('#show-hidden').addEventListener('change', (e) => {
+  showHidden = e.target.checked;
+  renderProjectSelect();
+});
+$('#project-hidden').addEventListener('change', (e) => {
+  const p = project();
+  if (!p) return;
+  p.hidden = e.target.checked;
+  renderProjectSelect();
+});
+$('#btn-save').addEventListener('click', saveAll);
 $('#btn-optimize').addEventListener('click', runOptimize);
 $('#btn-translate').addEventListener('click', runTranslate);
-$('#btn-save-text').addEventListener('click', saveText);
-$('#btn-add-text').addEventListener('click', addTextEntry);
-$('#btn-add-image').addEventListener('click', () => $('#file-input').click());
-$('#btn-upload').addEventListener('click', () => $('#file-input').click());
+$('#btn-migrate').addEventListener('click', runMigrate);
+$('#btn-new-project').addEventListener('click', () => {
+  const id = prompt('New project id (folder name):');
+  if (id) createProject(id.trim());
+});
+$('#btn-add-fragment').addEventListener('click', () => {
+  frags().push({ title: '', subtitle: '', body: '' });
+  renderFragments();
+});
+$('#btn-add-image').addEventListener('click', () => openUpload('single'));
+$('#btn-add-dual').addEventListener('click', () => openUpload('dual'));
+$('#btn-add-imgtext').addEventListener('click', () => openUpload('imgtext'));
+$('#btn-upload').addEventListener('click', () => openUpload('library'));
 $('#file-input').addEventListener('change', (e) => {
-  handleUpload(e.target.files);
+  handleUpload(e.target.files, uploadMode);
   e.target.value = '';
 });
+
+function openUpload(mode) {
+  uploadMode = mode;
+  if (mode === 'dual') $('#file-input').setAttribute('multiple', '');
+  else $('#file-input').removeAttribute('multiple');
+  $('#file-input').click();
+}
 
 loadState().catch((e) => status('Could not load state: ' + e.message, true));

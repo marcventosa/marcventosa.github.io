@@ -1,5 +1,5 @@
 // Dev-only admin backend for the static portfolio.
-// Exposes a small JSON API (under /admin-api) and redirects /admin -> the editor UI.
+// Exposes a JSON API (under /admin-api) and redirects /admin -> the editor UI.
 // Only active inside the Vite dev server (`npm run admin`), never in production.
 
 import { promises as fs } from 'fs';
@@ -14,6 +14,7 @@ const MANIFEST_PATH = path.join(ROOT, 'images-manifest.json');
 const IMAGES_DIR = path.join(ROOT, 'images');
 const OPTIMIZE_SCRIPT = path.join(ROOT, 'scripts', 'optimize-images.mjs');
 const TRANSLATE_SCRIPT = path.join(ROOT, 'scripts', 'translate.mjs');
+const MIGRATE_SCRIPT = path.join(ROOT, 'scripts', 'migrate-inline-text.mjs');
 
 const IMAGE_EXT_RE = /\.(png|jpe?g|gif|webp|svg|avif)$/i;
 const VARIANT_RE = /@\d+w\.(webp|png|jpe?g)$/i;
@@ -63,6 +64,51 @@ const runNode = (scriptPath) =>
 
 const safeSegment = (s) => path.basename(String(s || ''));
 
+// --- Text fragments (the `//`-separated block system in text.txt) ---
+
+function parseBlock(block) {
+  let header = block;
+  let body = '';
+  const sep = block.indexOf('/');
+  if (sep !== -1) {
+    header = block.slice(0, sep);
+    body = block.slice(sep + 1);
+  }
+  let title = '';
+  let subtitle = '';
+  const m = header.match(/\*([^*]+)\*/);
+  if (m) {
+    title = m[1].trim();
+    subtitle = header.replace(/\*[^*]+\*/, '').trim();
+  } else {
+    subtitle = header.trim();
+  }
+  return { title, subtitle, body: body.trim() };
+}
+
+function serializeFragment(f) {
+  const title = (f.title || '').trim();
+  const subtitle = (f.subtitle || '').trim();
+  const body = (f.body || '').trim();
+  const lines = [];
+  if (title) lines.push(`*${title}*`);
+  if (subtitle) lines.push(subtitle);
+  const header = lines.join('\n');
+  if (header && body) return `${header}\n/\n${body}`;
+  if (header) return header;
+  return body;
+}
+
+async function readFragments(projectId) {
+  const p = path.join(IMAGES_DIR, projectId, 'text.txt');
+  try {
+    const raw = (await fs.readFile(p, 'utf8')).replace(/\r\n?/g, '\n');
+    return raw.split('//').map((b) => b.trim()).filter(Boolean).map(parseBlock);
+  } catch {
+    return [];
+  }
+}
+
 async function listImages(projectId) {
   const dir = path.join(IMAGES_DIR, projectId);
   let entries = [];
@@ -77,21 +123,32 @@ async function listImages(projectId) {
     .sort();
 }
 
+async function listFolders() {
+  let entries = [];
+  try {
+    entries = await fs.readdir(IMAGES_DIR, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+  return entries.filter((e) => e.isDirectory()).map((e) => e.name);
+}
+
 async function buildState() {
   const projects = await readJson(PROJECTS_PATH, []);
   const manifest = await readJson(MANIFEST_PATH, {});
-  const texts = {};
+  const fragments = {};
   const images = {};
   for (const p of projects) {
-    const id = p.id;
-    try {
-      texts[id] = await fs.readFile(path.join(IMAGES_DIR, id, 'text.txt'), 'utf8');
-    } catch {
-      texts[id] = '';
-    }
-    images[id] = await listImages(id);
+    fragments[p.id] = await readFragments(p.id);
+    images[p.id] = await listImages(p.id);
   }
-  return { projects, manifest, texts, images };
+  const known = new Set(projects.map((p) => p.id));
+  const orphans = [];
+  for (const folder of await listFolders()) {
+    if (folder === 'misc' || known.has(folder)) continue;
+    orphans.push({ id: folder, images: await listImages(folder) });
+  }
+  return { projects, manifest, fragments, images, orphans };
 }
 
 async function handleApi(req, res, pathname) {
@@ -108,17 +165,48 @@ async function handleApi(req, res, pathname) {
     }
 
     if (pathname === '/admin-api/text' && req.method === 'POST') {
-      const { projectId, content } = await readBody(req);
+      const { projectId, fragments } = await readBody(req);
       if (!projectId) throw new Error('projectId required');
+      if (!Array.isArray(fragments)) throw new Error('fragments must be an array');
       const dir = path.join(IMAGES_DIR, safeSegment(projectId));
       await fs.mkdir(dir, { recursive: true });
-      await fs.writeFile(path.join(dir, 'text.txt'), String(content ?? ''), 'utf8');
-      // Run translation in the background so a slow provider never blocks the UI.
+      const out = fragments.map(serializeFragment).filter(Boolean);
+      await fs.writeFile(path.join(dir, 'text.txt'), out.length ? out.join('\n\n//\n\n') + '\n' : '', 'utf8');
       runNode(TRANSLATE_SCRIPT).then((r) => {
         if (r.code === 0) console.log('[admin] translation done');
         else console.warn('[admin] translation finished with code', r.code);
       });
       return sendJson(res, 200, { ok: true, translating: true });
+    }
+
+    if (pathname === '/admin-api/create-project' && req.method === 'POST') {
+      const { id } = await readBody(req);
+      const safeId = safeSegment(id);
+      if (!safeId) throw new Error('id required');
+      const projects = await readJson(PROJECTS_PATH, []);
+      if (projects.some((p) => p.id === safeId)) throw new Error('project already exists');
+      const dir = path.join(IMAGES_DIR, safeId);
+      await fs.mkdir(dir, { recursive: true });
+      const textPath = path.join(dir, 'text.txt');
+      try {
+        await fs.access(textPath);
+      } catch {
+        await fs.writeFile(textPath, '', 'utf8');
+      }
+      const imgs = await listImages(safeId);
+      const gallery = imgs.map((name) => ({ src: `images/${safeId}/${name}`, alt: name }));
+      projects.push({
+        id: safeId,
+        mobileLayout: { textPosition: 'below', imageAspect: 'landscape', columnCount: 1 },
+        gallery
+      });
+      await writeJson(PROJECTS_PATH, projects);
+      return sendJson(res, 200, { ok: true });
+    }
+
+    if (pathname === '/admin-api/migrate' && req.method === 'POST') {
+      const o = await runNode(MIGRATE_SCRIPT);
+      return sendJson(res, 200, { ok: true, code: o.code, output: o.out, error: o.err });
     }
 
     if (pathname === '/admin-api/upload' && req.method === 'POST') {

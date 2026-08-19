@@ -7,7 +7,11 @@
       "columnCount": 1
     },
     "gallery": [
-      { "src": "images/gravetats/foto-maqueta-arbre-2.png", "alt": "Gravetats - Foto maqueta arbre 2", "imageHeight": 80 },
+      {
+        "src": "images/gravetats/foto-maqueta-arbre-2.png",
+        "alt": "Gravetats - Foto maqueta arbre 2",
+        "imageHeight": 80
+      },
       {
         "src": "images/gravetats/comunitat.png",
         "alt": "Gravetats - Comunitat",
@@ -15,33 +19,74 @@
         "layout": {
           "cover": "portrait",
           "align": "left",
-          "textSide": "right",
-          "text": {
-            "title": "Gravetats",
-            "body": [
-              "00"
-            ]
-          }
-        }
+          "textSide": "right"
+        },
+        "text": "text3"
       },
-      { "src": "images/gravetats/construc..png", "alt": "Gravetats - Construcció", "imageHeight": 100 },
-      { "src": "images/gravetats/emplaç-.png", "alt": "Gravetats - Emplaçament","text": "text1","textSide": "left"},
-      
-      { "src": "images/gravetats/gravetats.png", "alt": "Gravetats - Gravetats", "imageHeight": 100 },
-      { "src": "images/gravetats/habitar.png", "alt": "Gravetats - Habitar" }
+      {
+        "src": "images/gravetats/construc..png",
+        "alt": "Gravetats - Construcció",
+        "imageHeight": 100
+      },
+      {
+        "src": "images/gravetats/emplaç-.png",
+        "alt": "Gravetats - Emplaçament",
+        "text": "text1",
+        "textSide": "right"
+      },
+      {
+        "src": "images/gravetats/maqueta_emplaç.jpg",
+        "alt": "Gravetats - Empla3ament",
+        "textSide": "left"
+      },
+      {
+        "src": "images/gravetats/gravetats.png",
+        "alt": "Gravetats - Gravetats",
+        "imageHeight": 100
+      },
+      {
+        "src": [
+          "images/gravetats/habitar.png",
+          "images/gravetats/gravetats.png"
+        ],
+        "alt": "ff"
+      },
+      {
+        "src": "images/gravetats/comunitat.png",
+        "alt": "comunitat.png"
+      }
     ]
   },
-  {"id": "neoenvelat",
+  {
+    "id": "neoenvelat",
     "mobileLayout": {
       "textPosition": "below",
       "imageAspect": "landscape",
       "columnCount": 1
     },
     "gallery": [
-      { "src": "images/neoenvelat/axo projecte.png", "alt": "Neo Envelat - Emplaçament", "imageHeight": 90, "bw": true},
-      { "src": "images/neoenvelat/GIF_1_VentosaMarc.gif", "alt": "Neo Envelat - Planta", "imageHeight": 50},
-      { "src": "images/neoenvelat/encaix-A2-emplaçament.png", "alt": "Neo Envelat - Secció" , "imageHeight": 100, "text":"text1"},
-      { "src": "images/neoenvelat/envelat-foto-1.20.png", "alt": "Neo Envelat - Collage","imageHeight": 60} 
+      {
+        "src": "images/neoenvelat/axo projecte.png",
+        "alt": "Neo Envelat - Emplaçament",
+        "imageHeight": 90,
+        "bw": true
+      },
+      {
+        "src": "images/neoenvelat/GIF_1_VentosaMarc.gif",
+        "alt": "Neo Envelat - Planta",
+        "imageHeight": 50
+      },
+      {
+        "src": "images/neoenvelat/encaix-A2-emplaçament.png",
+        "alt": "Neo Envelat - Secció",
+        "imageHeight": 100,
+        "text": "text1"
+      },
+      {
+        "src": "images/neoenvelat/envelat-foto-1.20.png",
+        "alt": "Neo Envelat - Collage",
+        "imageHeight": 60
+      }
     ]
   },
   {
@@ -52,20 +97,50 @@
       "columnCount": 1
     },
     "gallery": [
-      { "src": "images/casa-intramurs/resum_sketch-01.png", "alt": "Casa Intramurs - Resum Sketch", "imageHeight": 60 },
-      { "src": "images/casa-intramurs/04 - collage-entradapost_compressed-1.png", "alt": "Casa Intramurs - Collage Entradapost" },
-    {"src": "images/casa-intramurs/traces_latents.png", "alt": "Casa Intramurs - Traces Latents" },
-      { "src": "images/casa-intramurs/02. Planta 1_200-01.png", "alt": "Casa Intramurs - Planta 1", "imageHeight": 100 },
-      { "src": "images/casa-intramurs/03. Seccio3-1.png", "alt": "Casa Intramurs - Secció 3" },
-    
-      { "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100-2.jpg", "alt": "Casa Intramurs - VentosaMarc E3 Maqueta 100 2" },
-
-      { "src": "images/casa-intramurs/DSC_0368_maqueta.png", "alt": "Casa Intramurs - Maqueta cuina" },
-      { "text": 	["La cuina es desplega mitjançant peces prefabricades que volen dialogar amb la industrialitat de les cobertes i el port.",
-                  "Els petits mòduls, fragmentats i mòbils, poden ocupar tot l’espai o replegar-se discretament, alliberant el menjador i adaptant-se a cada moment de la vida domèstica."] },
-      { "src": "images/casa-intramurs/02_Proposta-A3_20_cuina-1.png", "alt": "Casa Intramurs - Proposta A3 20 Cuina" },
-      { "src": "images/casa-intramurs/03. Seccio1-1.png", "alt": "Casa Intramurs - Secció 1" },
-      { "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100.jpg", "alt": "Casa Intramurs - VentosaMarc E3 Maqueta 100", "text": "text1" }
+      {
+        "src": "images/casa-intramurs/resum_sketch-01.png",
+        "alt": "Casa Intramurs - Resum Sketch",
+        "imageHeight": 60
+      },
+      {
+        "src": "images/casa-intramurs/04 - collage-entradapost_compressed-1.png",
+        "alt": "Casa Intramurs - Collage Entradapost"
+      },
+      {
+        "src": "images/casa-intramurs/traces_latents.png",
+        "alt": "Casa Intramurs - Traces Latents"
+      },
+      {
+        "src": "images/casa-intramurs/02. Planta 1_200-01.png",
+        "alt": "Casa Intramurs - Planta 1",
+        "imageHeight": 100
+      },
+      {
+        "src": "images/casa-intramurs/maqueta_1.100_2.jpg",
+        "alt": "Casa Intramurs - Maqueta 1.100 2",
+        "imageHeight": 70
+      },
+      {
+        "src": "images/casa-intramurs/03. Seccio3-1.png",
+        "alt": "Casa Intramurs - Secció 3"
+      },
+      {
+        "src": "images/casa-intramurs/02_Proposta-A3_20_cuina-1.png",
+        "alt": "Casa Intramurs - Proposta A3 20 Cuina"
+      },
+      {
+        "src": "images/casa-intramurs/DSC_0368_maqueta.png",
+        "alt": "Casa Intramurs - Maqueta cuina"
+      },
+      {
+        "src": "images/casa-intramurs/03. Seccio1-1.png",
+        "alt": "Casa Intramurs - Secció 1"
+      },
+      {
+        "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100.jpg",
+        "alt": "Casa Intramurs - VentosaMarc E3 Maqueta 100",
+        "text": "text1"
+      }
     ]
   },
   {
@@ -76,19 +151,36 @@
       "columnCount": 1
     },
     "gallery": [
-      { "src": "images/refact/01.EMPLAÇAMENT-A2-01.png", "alt": "Refact - Emplaçament", "imageHeight": 100 },
-        { "src": "images/refact/maqueta_3_1.100.jpg", "alt": "Refact - Maqueta 1.100" },
-      { "src": "images/refact/05. pasarela2-01.png", "alt": "Refact - Pasarela" },
-  
-      { "src": "images/refact/carto_antiga-01.png", "alt": "Refact - Cartografia Antiga", "text":"text1"},
-      { "src": "images/refact/collage-ext-01.png", "alt": "Refact - Collage Exterior" },
-
-      {"src": "images/refact/collage_interior.jpg", "alt": "Refact - Collage Interior" },
-      { "src": "images/refact/p6-titol-projecte-01.png", "alt": "Refact - Títol Projecte" },
-      { "firstWord": "línies d'aigua i arquitectura", "text": [
-        "La topografia configura el lloc com un aqüífer obert natural. El conjunt se situa de manera que queda protegit de possibles inundacions; el nou canal és alhora camí i barrera. L’aigua recollida pel sistema de cobertes es canalitza per baixants fins a retornar al canal. D’aquesta manera, es tanca el cicle de l’aigua i es minimitza la petjada de la nova construcció."
-      ]},
-      { "firstWord": "simbiosi", "text": "és un text d'anotació per a Refact." }
+      {
+        "src": "images/refact/01.EMPLAÇAMENT-A2-01.png",
+        "alt": "Refact - Emplaçament",
+        "imageHeight": 100
+      },
+      {
+        "src": "images/refact/maqueta_3_1.100.jpg",
+        "alt": "Refact - Maqueta 1.100"
+      },
+      {
+        "src": "images/refact/05. pasarela2-01.png",
+        "alt": "Refact - Pasarela"
+      },
+      {
+        "src": "images/refact/carto_antiga-01.png",
+        "alt": "Refact - Cartografia Antiga",
+        "text": "text1"
+      },
+      {
+        "src": "images/refact/collage-ext-01.png",
+        "alt": "Refact - Collage Exterior"
+      },
+      {
+        "src": "images/refact/collage_interior.jpg",
+        "alt": "Refact - Collage Interior"
+      },
+      {
+        "src": "images/refact/p6-titol-projecte-01.png",
+        "alt": "Refact - Títol Projecte"
+      }
     ]
   },
   {
@@ -99,14 +191,26 @@
       "columnCount": 1
     },
     "gallery": [
-        { "src": "images/abans-del-cim/DSC_0274.JPG", "alt": "Abans del Cim - DSC_0274" },
-        {"src": "images/abans-del-cim/planta-abanscim-01.png", "alt": "Abans del Cim - Planta Abans Cim" },
-        { "src": "images/abans-del-cim/collage.png", "alt": "Abans del Cim - Collage" },
-        { "firstWord":"refugi, clima i barri", "text": ["Montjuïc és més que una muntanya emblemàtica dins del teixit urbà de Barcelona; és el cim que ha estat testimoni de la seva evolució històrica. En aquest context, aquesta intervenció es localitza entre dues pujades significatives de la muntanya.",
-          "Es proposa l’aparició del ‘refugi de muntanya’, activant un espai que afavoreixi la contemplació i la trobada, en un indret carregat d'història, com Casaramona o el pavelló de Mies, i monumentalitat però amb una mirada cap al barri i la seva gent. El projecte també inclou la transformació de la façana del Hall 8, fent-la més permeable i convidant a la interacció, tot reforçant l’expressió de la proposta arquitectònica."
-        ]},
-        { "src": "images/abans-del-cim/DSC_0272.JPG", "alt": "Abans del Cim - DSC_0272" },
-        { "src": "images/abans-del-cim/DSC_0273.JPG", "alt": "Abans del Cim - DSC_0273" }
+      {
+        "src": "images/abans-del-cim/DSC_0274.JPG",
+        "alt": "Abans del Cim - DSC_0274"
+      },
+      {
+        "src": "images/abans-del-cim/planta-abanscim-01.png",
+        "alt": "Abans del Cim - Planta Abans Cim"
+      },
+      {
+        "src": "images/abans-del-cim/collage.png",
+        "alt": "Abans del Cim - Collage"
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0272.JPG",
+        "alt": "Abans del Cim - DSC_0272"
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0273.JPG",
+        "alt": "Abans del Cim - DSC_0273"
+      }
     ]
   },
   {
@@ -117,11 +221,29 @@
       "columnCount": 1
     },
     "gallery": [
-      { "src": "images/envoltura/BP3RIBAS (1)-01.png", "alt": "Envoltura - BP3RIBAS 01", "imageHeight": 70 },
-      { "src": "images/envoltura/BP3RIBAS (1)-02.png", "alt": "Envoltura - BP3RIBAS 02" },
-      { "src": "images/envoltura/BP3RIBAS (1)-03.png", "alt": "Envoltura - BP3RIBAS 03" },
-      { "src": "images/envoltura/BP3RIBAS (1)-1_peces.png", "alt": "Envoltura - BP3RIBAS Peces", "text": "text1", "imageHeight": 70},
-      { "src": "images/envoltura/BP3RIBAS (1)-03_proces.png", "alt": "Envoltura - BP3RIBAS 03 Proces" }
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-01.png",
+        "alt": "Envoltura - BP3RIBAS 01",
+        "imageHeight": 70
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-02.png",
+        "alt": "Envoltura - BP3RIBAS 02"
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03.png",
+        "alt": "Envoltura - BP3RIBAS 03"
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-1_peces.png",
+        "alt": "Envoltura - BP3RIBAS Peces",
+        "text": "text1",
+        "imageHeight": 70
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03_proces.png",
+        "alt": "Envoltura - BP3RIBAS 03 Proces"
+      }
     ]
   },
   {
@@ -132,16 +254,15 @@
       "columnCount": 1
     },
     "gallery": [
-      { "src": "images/pau/LAM4_Mesa de trabajo 1 copia.png", "alt": "Casa Pau - LAM4 Mesa de trabajo 1", "imageHeight": 60 },
-      {"text":[
-        "En Pau té 24 anys, és el germà del mig i treballa com a comunicador i dissenyador en una empresa alternativa. Li encanta la seva feina, però encara més arribar a casa al final del dia i mirar com la llum de la tarda entra per la finestra, recordant-li Menorca. Té debilitat per l’estiu, les tardes llargues i l’arquitectura mediterrània.",
-
-        "Tot i això, el que realment el mou és la dansa. Balla des de petit, i per ell és tant un refugi com una manera de connectar amb l'espai. Quan balla, tot encaixa: el cos, l’aire, el silenci. És una altra manera de comunicar-se, més sincera que cap paraula.",
-
-        "En Pau fa dos metres d’alçada, però no s’hi defineix. Només ho agraeix quan pot moure’s lliurement, sense topar amb sostres ni travar-se amb cadires. Al final, tot es resumeix a això: trobar espais on ser ell mateix."
-      ]},
-      { "src": "images/pau/maquetes-tipus-pauhaus-2.jpg", "alt": "Casa Pau - Maquetes Tipus Pauhaus" }
+      {
+        "src": "images/pau/LAM4_Mesa de trabajo 1 copia.png",
+        "alt": "Casa Pau - LAM4 Mesa de trabajo 1",
+        "imageHeight": 60
+      },
+      {
+        "src": "images/pau/maquetes-tipus-pauhaus-2.jpg",
+        "alt": "Casa Pau - Maquetes Tipus Pauhaus"
+      }
     ]
   }
-
 ]

@@ -14,42 +14,48 @@
         <label>Project
           <select id="project-select"></select>
         </label>
-        <button id="btn-save" class="primary">Save projects.json</button>
-        <button id="btn-optimize">Optimize images</button>
+        <label class="check"><input type="checkbox" id="show-hidden"> Show hidden</label>
+        <label class="check"><input type="checkbox" id="project-hidden"> Hidden</label>
+        <button id="btn-new-project">New project</button>
+        <button id="btn-migrate">Migrate inline text</button>
+        <button id="btn-save" class="primary">Save</button>
+        <button id="btn-optimize">Optimize</button>
         <button id="btn-translate">Translate</button>
         <span id="status"></span>
       </div>
+      <div id="orphans"></div>
     </header>
 
     <main>
-      <section class="panel">
+      <section class="panel" id="gallery-panel">
         <div class="panel-head">
           <h2>Gallery entries</h2>
           <div class="row">
-            <button id="btn-add-image">+ Upload images</button>
-            <button id="btn-add-text">+ Add text</button>
+            <button id="btn-add-image">+ Image</button>
+            <button id="btn-add-dual">+ Image+image</button>
+            <button id="btn-add-imgtext">+ Image+text</button>
           </div>
         </div>
-        <p class="hint">Drag or use ↑/↓ to reorder. Click ✎ to edit an entry as JSON. Changes are local until you press "Save projects.json".</p>
+        <p class="hint">Drag or ↑/↓ to reorder. ✎ = edit raw JSON. Text is edited in the Fragments panel (right); link an image to a fragment with the dropdown on each card.</p>
         <ul id="gallery-list"></ul>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="fragments-panel">
+        <div class="panel-head">
+          <h2>Fragments <code>text.txt</code></h2>
+          <button id="btn-add-fragment">+ Fragment</button>
+        </div>
+        <p class="hint">Blocks separated by <code>//</code>. Header <code>*Title*</code> + subtitle; <code>/</code> splits header from body; <code>$…$</code> = italic. Order = text1, text2, …</p>
+        <ul id="fragment-list"></ul>
+      </section>
+
+      <section class="panel" id="library-panel">
         <div class="panel-head">
           <h2>Image library</h2>
           <button id="btn-upload">Upload image(s)</button>
         </div>
-        <p class="hint">Images in <code>images/&lt;project&gt;/</code>. "＋" appends to the gallery; "🗑" deletes the file and its WebP variants.</p>
+        <p class="hint">Images in <code>images/&lt;project&gt;/</code>. "＋" appends to gallery; "🗑" deletes the file + WebP variants.</p>
         <ul id="library-list"></ul>
-      </section>
-
-      <section class="panel">
-        <div class="panel-head">
-          <h2>Project text <code>(text.txt)</code></h2>
-          <button id="btn-save-text" class="primary">Save text (runs translate)</button>
-        </div>
-        <p class="hint">Blocks separated by <code>//</code>. Header: <code>*Title*</code> + subtitle; a single <code>/</code> splits header from body. <code>$...$</code> = italic.</p>
-        <textarea id="text-editor" rows="18" spellcheck="false"></textarea>
       </section>
     </main>
   </div>
