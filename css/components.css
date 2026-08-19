@@ -491,3 +491,18 @@
 p.gallery-text {
     font-weight: 400 !important;
 }
+
+.gallery-dual-wrap {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.gallery-dual-wrap img {
+    flex: 1;
+    min-width: 0;
+    height: auto;
+    object-fit: contain;
+}

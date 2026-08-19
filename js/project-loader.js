@@ -327,7 +327,7 @@ function attachGalleryNavigation(section, gallery) {
     const slides = gallery.querySelectorAll('.gallery-slide');
     if (!slides.length) return;
     const slide = slides[index];
-    if (slide) activateImage(slide.querySelector('img'));
+    if (slide) slide.querySelectorAll('img').forEach(activateImage);
   }
 
   function navigateSlides(direction) {
@@ -422,24 +422,47 @@ async function buildProjectSection(project) {
       }
     }
 
-    const img = document.createElement('img');
-    img.alt = item.alt || '';
-    img.className = 'project-image';
-    const isMobileImg = window.innerWidth <= 768;
-    img.style.width = isMobileImg ? '100%' : 'auto';
-    img.style.height = 'auto';
-    if (!isMobileImg) {
-      img.style.maxHeight = imageHeight != null
-        ? `${imageHeight}vh`
-        : '60vh';
-    }
-    img.style.maxWidth = '100%';
-    protectGalleryImage(img);
-    prepareImage(img, item.src, manifest);
-    slide.appendChild(img);
+    const isDual = Array.isArray(item.src) && item.src.length === 2;
 
-    if (item.layout || item.text || item.textSide || project.layout) {
-      applyImageLayout(slide, item, project.layout || {}, imageHeight, texts);
+    if (isDual) {
+      const dualWrap = document.createElement('div');
+      dualWrap.className = 'gallery-dual-wrap';
+      item.src.forEach((src, idx) => {
+        const img = document.createElement('img');
+        img.alt = (Array.isArray(item.alt) ? item.alt[idx] : item.alt) || '';
+        img.className = 'project-image';
+        const isMobileImg = window.innerWidth <= 768;
+        img.style.width = isMobileImg ? '100%' : '50%';
+        img.style.height = 'auto';
+        if (!isMobileImg) {
+          img.style.maxHeight = imageHeight != null ? `${imageHeight}vh` : '60vh';
+        }
+        img.style.maxWidth = '100%';
+        protectGalleryImage(img);
+        prepareImage(img, src, manifest);
+        dualWrap.appendChild(img);
+      });
+      slide.appendChild(dualWrap);
+    } else {
+      const img = document.createElement('img');
+      img.alt = item.alt || '';
+      img.className = 'project-image';
+      const isMobileImg = window.innerWidth <= 768;
+      img.style.width = isMobileImg ? '100%' : 'auto';
+      img.style.height = 'auto';
+      if (!isMobileImg) {
+        img.style.maxHeight = imageHeight != null
+          ? `${imageHeight}vh`
+          : '60vh';
+      }
+      img.style.maxWidth = '100%';
+      protectGalleryImage(img);
+      prepareImage(img, item.src, manifest);
+      slide.appendChild(img);
+
+      if (item.layout || item.text || item.textSide || project.layout) {
+        applyImageLayout(slide, item, project.layout || {}, imageHeight, texts);
+      }
     }
 
     gallery.appendChild(slide);
@@ -456,13 +479,13 @@ async function buildProjectSection(project) {
   section.appendChild(gallery);
   attachGalleryNavigation(section, gallery);
 
-  // Activate the first slide (and its image), and preload the second one so
+  // Activate the first slide (and its images), and preload the second one so
   // the next swipe doesn't wait for a fetch.
   if (gallery.firstChild) {
     gallery.firstChild.classList.add('active');
-    activateImage(gallery.firstChild.querySelector('img'));
+    gallery.firstChild.querySelectorAll('img').forEach(activateImage);
     const second = gallery.children[1];
-    if (second) activateImage(second.querySelector('img'));
+    if (second) second.querySelectorAll('img').forEach(activateImage);
   }
 
   return section;

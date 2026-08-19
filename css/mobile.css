@@ -69,7 +69,8 @@
     left: 1.7rem;
     right: auto;
     top: auto;
-    transform: none;
+    transform: translateZ(0);
+    will-change: opacity;
     font-size: 3.4vw;
     line-height: 1;
     text-align: left;
