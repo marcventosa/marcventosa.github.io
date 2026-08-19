@@ -161,9 +161,12 @@ function entryType(e) {
 }
 
 function summarize(e) {
-  if (Array.isArray(e.src)) return e.src.map(srcToFilename).join(' + ');
-  if (e.src) return srcToFilename(e.src);
-  return '(no image)';
+  let s;
+  if (Array.isArray(e.src)) s = e.src.map(srcToFilename).join(' + ');
+  else if (e.src) s = srcToFilename(e.src);
+  else s = '(no image)';
+  if (e.bw) s += ' · B&W';
+  return s;
 }
 
 function renderGallery() {
@@ -181,7 +184,6 @@ function renderGallery() {
 function buildEntryCard(entry, idx) {
   const li = document.createElement('li');
   li.className = 'entry';
-  li.draggable = true;
 
   const head = document.createElement('div');
   head.className = 'entry-head';
@@ -236,19 +238,6 @@ function buildEntryCard(entry, idx) {
   json.className = 'json-editor';
   li.appendChild(json);
 
-  // Drag & drop
-  li.addEventListener('dragstart', (e) => {
-    e.dataTransfer.setData('text/plain', String(idx));
-    li.classList.add('dragging');
-  });
-  li.addEventListener('dragend', () => li.classList.remove('dragging'));
-  li.addEventListener('dragover', (e) => e.preventDefault());
-  li.addEventListener('drop', (e) => {
-    e.preventDefault();
-    const from = parseInt(e.dataTransfer.getData('text/plain'), 10);
-    if (Number.isInteger(from)) reorderEntries(from, idx);
-  });
-
   return li;
 }
 
@@ -273,9 +262,10 @@ function buildEntryEditor(entry, idx) {
     wrap.appendChild(field('Height', heightSlider(entry, 0)));
   }
 
-  // Alt
+  // Alt + B&W
   if (type !== 'text') {
     wrap.appendChild(field('Alt', altInput(entry)));
+    wrap.appendChild(field('B&W', bwInput(entry)));
   }
 
   // Text link + side (single images only; dual excluded per scope)
@@ -414,6 +404,19 @@ function altInput(entry) {
   return inp;
 }
 
+function bwInput(entry) {
+  const cb = document.createElement('input');
+  cb.type = 'checkbox';
+  cb.checked = !!entry.bw;
+  cb.title = 'Render this image in black & white';
+  cb.addEventListener('change', () => {
+    if (cb.checked) entry.bw = true;
+    else delete entry.bw;
+    markDirty();
+  });
+  return cb;
+}
+
 function fragSelect(entry) {
   const sel = document.createElement('select');
   sel.innerHTML = '<option value="">(no text)</option>';
@@ -476,16 +479,6 @@ function moveEntry(idx, delta) {
   const to = idx + delta;
   if (to < 0 || to >= arr.length) return;
   [arr[idx], arr[to]] = [arr[to], arr[idx]];
-  renderGallery();
-  markDirty();
-}
-
-function reorderEntries(from, to) {
-  const p = project();
-  const arr = p.gallery;
-  if (from === to) return;
-  const [item] = arr.splice(from, 1);
-  arr.splice(from < to ? to - 1 : to, 0, item);
   renderGallery();
   markDirty();
 }
