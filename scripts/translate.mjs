@@ -85,14 +85,40 @@ async function checkLibre() {
   }
 }
 
+// MyMemory caps queries at 500 chars, so split longer text into safe chunks
+// and translate each part, then rejoin exactly (whitespace is preserved).
+const MYMEMORY_MAX = 450;
+
+function splitForTranslation(text, max) {
+  const tokens = text.match(/\S+\s*/g) || [text];
+  const chunks = [];
+  let current = '';
+  for (const tok of tokens) {
+    if ((current + tok).length <= max || !current) {
+      current += tok;
+    } else {
+      chunks.push(current);
+      current = tok;
+    }
+  }
+  if (current) chunks.push(current);
+  return chunks;
+}
+
 async function translateMyMemory(text) {
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=ca|en`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`MyMemory ${res.status}`);
-  const json = await res.json();
-  const out = json.responseData && json.responseData.translatedText;
-  if (!out) throw new Error('MyMemory empty response');
-  return out;
+  const chunks = splitForTranslation(text, MYMEMORY_MAX);
+  const parts = [];
+  for (const chunk of chunks) {
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=ca|en`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`MyMemory ${res.status}`);
+    const json = await res.json();
+    const out = json.responseData && json.responseData.translatedText;
+    if (!out) throw new Error('MyMemory empty response');
+    parts.push(out);
+    if (chunks.length > 1) await sleep(DELAY);
+  }
+  return parts.join('');
 }
 
 async function translateOne(text) {

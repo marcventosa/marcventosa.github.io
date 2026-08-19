@@ -3,7 +3,7 @@ import { getLang, initLangToggle } from './i18n.js';
 
 const GALLERY_SIZES = '(max-width: 768px) 100vw, 70vw';
 const COPY_WIDTH = 'min(24vw, 300px)';
-const COPY_COL_GAP = '2rem';
+const COPY_COL_GAP = '1rem';
 
 function protectGalleryImage(image) {
   if (!(image instanceof HTMLImageElement)) return;
@@ -62,7 +62,7 @@ function buildTextBlock({ title = '', subtitle = '', body = '', align = 'center'
     totalChars = paragraphs.reduce((sum, p) => sum + p.length, 0);
   }
 
-  const useColumns = paragraphs.length >= 3 || totalChars > 1000;
+  const useColumns = paragraphs.length >= 4 || totalChars > 2000;
   if (useColumns) cols.classList.add('gallery-text-columns--two');
 
   paragraphs.forEach((paragraph) => {
@@ -218,9 +218,6 @@ function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, t
         textBlock.style.minWidth = '0';
         textBlock.style.gap = '0.2rem';
         textBlock.style.margin = '0';
-        if (hasColumns && !isMobile) {
-          image.style.setProperty('max-width', '100%', 'important');
-        }
         inner.appendChild(textBlock);
       }
     }
