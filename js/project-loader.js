@@ -36,28 +36,34 @@ function buildTextBlock({ title = '', subtitle = '', body = '', align = 'center'
   textWrap.className = 'gallery-side-copy';
   textWrap.dataset.align = align;
 
-  if (title) {
-    const titleEl = document.createElement('div');
+  const titleEl = title ? document.createElement('div') : null;
+  if (titleEl) {
     titleEl.className = 'gallery-text-title';
     titleEl.textContent = title;
-    textWrap.appendChild(titleEl);
   }
 
-  if (subtitle) {
-    const subEl = document.createElement('div');
+  const subEl = subtitle ? document.createElement('div') : null;
+  if (subEl) {
     subEl.className = 'gallery-text-subtitle';
     appendFormattedText(subEl, subtitle);
-    textWrap.appendChild(subEl);
   }
+
+  let useColumns = false;
+  let paragraphs = [];
 
   if (body) {
     const rawParagraphs = Array.isArray(body) ? body : String(body).split(/\n+/);
-    const paragraphs = rawParagraphs.map((p) => p.trim()).filter(Boolean);
+    paragraphs = rawParagraphs.map((p) => p.trim()).filter(Boolean);
     const totalChars = paragraphs.reduce((sum, p) => sum + p.length, 0);
-    const useColumns = paragraphs.length >= 3 || totalChars > 1000;
+    useColumns = paragraphs.length >= 3 || totalChars > 1000;
+  }
 
-    const bodyWrap = useColumns ? document.createElement('div') : textWrap;
-    if (useColumns) bodyWrap.className = 'gallery-text-columns';
+  if (useColumns) {
+    const bodyWrap = document.createElement('div');
+    bodyWrap.className = 'gallery-text-columns';
+
+    if (titleEl) bodyWrap.appendChild(titleEl);
+    if (subEl) bodyWrap.appendChild(subEl);
 
     paragraphs.forEach((paragraph) => {
       const p = document.createElement('p');
@@ -66,7 +72,17 @@ function buildTextBlock({ title = '', subtitle = '', body = '', align = 'center'
       bodyWrap.appendChild(p);
     });
 
-    if (useColumns) textWrap.appendChild(bodyWrap);
+    textWrap.appendChild(bodyWrap);
+  } else {
+    if (titleEl) textWrap.appendChild(titleEl);
+    if (subEl) textWrap.appendChild(subEl);
+
+    paragraphs.forEach((paragraph) => {
+      const p = document.createElement('p');
+      p.className = 'gallery-text';
+      appendFormattedText(p, paragraph);
+      textWrap.appendChild(p);
+    });
   }
 
   return textWrap;
