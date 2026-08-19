@@ -12,6 +12,9 @@
 // Config (env vars):
 //   TRANSLATE_DELAY   ms between requests (default 1200)
 //   TRANSLATE_RETRIES retries on failure (default 4, with backoff)
+//   MYMEMORY_EMAIL    raise MyMemory's daily rate limit (e.g. your@email.com)
+//   DEEPL_API_KEY     use DeepL instead of MyMemory
+//   LIBRE_URL         self-hosted LibreTranslate (default http://localhost:5000)
 
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -37,6 +40,7 @@ const RETRIES = Number(process.env.TRANSLATE_RETRIES) || 3;
 //  3. MyMemory     — free, no key (always tried last)
 const DEEPL_KEY = process.env.DEEPL_API_KEY || '';
 const LIBRE_URL = process.env.LIBRE_URL || 'http://localhost:5000';
+const MYMEMORY_EMAIL = process.env.MYMEMORY_EMAIL || '';
 const deepl = DEEPL_KEY ? new Translator(DEEPL_KEY) : null;
 let libreAvailable = false;
 
@@ -85,36 +89,52 @@ async function checkLibre() {
   }
 }
 
-// MyMemory caps queries at 500 chars, so split longer text into safe chunks
-// and translate each part, then rejoin exactly (whitespace is preserved).
-const MYMEMORY_MAX = 450;
+// MyMemory caps queries at 500 BYTES (not chars; accented Catalan chars are
+// 2 bytes each), so split long text into byte-safe chunks, translate each
+// part, then rejoin exactly (whitespace is preserved).
+const MYMEMORY_MAX_BYTES = 400;
 
-function splitForTranslation(text, max) {
-  const tokens = text.match(/\S+\s*/g) || [text];
+function splitForTranslation(text, maxBytes) {
   const chunks = [];
+  const tokens = text.match(/\S+\s*/g) || [text];
   let current = '';
+  const push = () => { if (current) { chunks.push(current); current = ''; } };
+
   for (const tok of tokens) {
-    if ((current + tok).length <= max || !current) {
-      current += tok;
-    } else {
-      chunks.push(current);
-      current = tok;
+    if (Buffer.byteLength(tok, 'utf8') > maxBytes) {
+      // Pathological single token (long word/URL): hard-split by characters.
+      push();
+      let rest = tok;
+      while (rest.length) {
+        let take = rest.length;
+        while (take > 1 && Buffer.byteLength(rest.slice(0, take), 'utf8') > maxBytes) take--;
+        chunks.push(rest.slice(0, take));
+        rest = rest.slice(take);
+      }
+      continue;
     }
+    if (Buffer.byteLength(current + tok, 'utf8') > maxBytes) push();
+    current += tok;
   }
-  if (current) chunks.push(current);
+  push();
   return chunks;
 }
 
 async function translateMyMemory(text) {
-  const chunks = splitForTranslation(text, MYMEMORY_MAX);
+  const chunks = splitForTranslation(text, MYMEMORY_MAX_BYTES);
   const parts = [];
   for (const chunk of chunks) {
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=ca|en`;
+    const de = MYMEMORY_EMAIL ? `&de=${encodeURIComponent(MYMEMORY_EMAIL)}` : '';
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=ca|en${de}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`MyMemory ${res.status}`);
     const json = await res.json();
     const out = json.responseData && json.responseData.translatedText;
     if (!out) throw new Error('MyMemory empty response');
+    if (out.includes('QUERY LENGTH LIMIT EXCEEDED')) throw new Error('MyMemory query too long');
+    if (out.includes('USED ALL AVAILABLE FREE TRANSLATIONS')) {
+      throw new Error('MyMemory daily limit reached — set MYMEMORY_EMAIL, DEEPL_API_KEY, or run LibreTranslate');
+    }
     parts.push(out);
     if (chunks.length > 1) await sleep(DELAY);
   }
