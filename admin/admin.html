@@ -9,7 +9,7 @@
 </head>
 <body>
   <div id="app">
-    <header>
+    <aside id="sidebar">
       <h1>Portfolio Admin</h1>
       <div id="toolbar">
         <label>Project
@@ -23,8 +23,7 @@
         <button id="btn-translate">Translate</button>
         <span id="status"></span>
       </div>
-      <div id="orphans"></div>
-    </header>
+    </aside>
 
     <main>
       <section class="panel" id="gallery-panel">
@@ -39,7 +38,9 @@
         <p class="hint">Drag or ↑/↓ to reorder. ✎ = edit raw JSON. Text is edited in the Fragments panel (right); link an image to a fragment with the dropdown on each card.</p>
         <ul id="gallery-list"></ul>
       </section>
+    </main>
 
+    <aside id="side-panel">
       <section class="panel" id="fragments-panel">
         <div class="panel-head">
           <h2>Fragments <code>text.txt</code></h2>
@@ -60,7 +61,9 @@
         <p class="hint">Images in <code>images/&lt;project&gt;/</code>. "＋" appends to gallery; "🗑" deletes the file + WebP variants.</p>
         <ul id="library-list"></ul>
       </section>
-    </main>
+
+      <div id="orphans"></div>
+    </aside>
   </div>
 
   <input type="file" id="file-input" multiple accept="image/*" hidden>
