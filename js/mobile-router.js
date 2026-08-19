@@ -48,6 +48,7 @@ function initMobileProjectRouter() {
   if (!landingNav) return;
 
   let navigateGuard = false;
+  let landingSettleTimer = null;
 
   const allHideable = () =>
     document.querySelectorAll('.project-section, #misc-section, #profile');
@@ -118,19 +119,26 @@ function initMobileProjectRouter() {
       entries.forEach((entry) => {
         if (entry.target.id !== 'home' || !isMobile()) return;
         if (entry.intersectionRatio >= 1.0 && !navigateGuard) {
-          const nearTop = window.scrollY <= landingSection.offsetHeight * 0.1;
-          if (nearTop) {
-            hideAll();
-            landingSection.classList.add('landing-active');
+          if (!landingSettleTimer) {
+            landingSettleTimer = setTimeout(() => {
+              landingSettleTimer = null;
+              if (navigateGuard) return;
+              hideAll();
+              landingSection.classList.add('landing-active');
+            }, 600);
           }
-        } else if (entry.intersectionRatio <= 0) {
-          landingSection.classList.remove('landing-active');
+        } else {
+          if (landingSettleTimer) {
+            clearTimeout(landingSettleTimer);
+            landingSettleTimer = null;
+          }
+          if (entry.intersectionRatio <= 0) {
+            landingSection.classList.remove('landing-active');
+          }
         }
       });
     },
-    // Close the project only when fully back on the landing, and fade the
-    // auxiliary texts in/out as the landing leaves and returns into view.
-    { threshold: [0, 1.0] }
+    { threshold: [0, 0.5, 1.0] }
   );
 
   if (landingSection) homeObserver.observe(landingSection);
