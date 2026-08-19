@@ -165,18 +165,20 @@ async function handleApi(req, res, pathname) {
     }
 
     if (pathname === '/admin-api/text' && req.method === 'POST') {
-      const { projectId, fragments } = await readBody(req);
+      const { projectId, fragments, translate = true } = await readBody(req);
       if (!projectId) throw new Error('projectId required');
       if (!Array.isArray(fragments)) throw new Error('fragments must be an array');
       const dir = path.join(IMAGES_DIR, safeSegment(projectId));
       await fs.mkdir(dir, { recursive: true });
       const out = fragments.map(serializeFragment).filter(Boolean);
       await fs.writeFile(path.join(dir, 'text.txt'), out.length ? out.join('\n\n//\n\n') + '\n' : '', 'utf8');
-      runNode(TRANSLATE_SCRIPT).then((r) => {
-        if (r.code === 0) console.log('[admin] translation done');
-        else console.warn('[admin] translation finished with code', r.code);
-      });
-      return sendJson(res, 200, { ok: true, translating: true });
+      if (translate) {
+        runNode(TRANSLATE_SCRIPT).then((r) => {
+          if (r.code === 0) console.log('[admin] translation done');
+          else console.warn('[admin] translation finished with code', r.code);
+        });
+      }
+      return sendJson(res, 200, { ok: true, translating: translate });
     }
 
     if (pathname === '/admin-api/create-project' && req.method === 'POST') {

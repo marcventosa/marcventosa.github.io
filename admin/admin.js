@@ -4,7 +4,6 @@ const $ = (sel) => document.querySelector(sel);
 
 let state = null; // { projects, manifest, fragments:{id:[...]}, images:{id:[...]}, orphans }
 let currentId = null;
-let showHidden = false;
 let uploadMode = 'library';
 
 async function api(path, body) {
@@ -102,22 +101,11 @@ function renderAll() {
 
 // ---- Project select / hidden / orphans ----
 
-function visibleProjects() {
-  return state.projects.filter((p) => showHidden || !p.hidden);
-}
-
 function renderProjectSelect() {
   const sel = $('#project-select');
   const prev = currentId;
   sel.innerHTML = '';
-  const list = visibleProjects();
-  if (!list.length && state.projects.length) {
-    // nothing visible but projects exist: force show hidden
-    showHidden = true;
-    $('#show-hidden').checked = true;
-    return renderProjectSelect();
-  }
-  for (const p of list) {
+  for (const p of state.projects) {
     const opt = document.createElement('option');
     opt.value = p.id;
     opt.textContent = p.hidden ? p.id + ' (hidden)' : p.id;
@@ -329,15 +317,16 @@ function imageSelect(entry, slot) {
     if (!name) {
       if (slot === 0) delete entry.src;
       else if (Array.isArray(entry.src)) entry.src.splice(1, 1);
-      return;
+    } else {
+      const src = 'images/' + currentId + '/' + name;
+      if (slot === 0) entry.src = src;
+      else {
+        if (!Array.isArray(entry.src)) entry.src = [entry.src, src];
+        else entry.src[1] = src;
+      }
+      rerenderEntrySummary();
     }
-    const src = 'images/' + currentId + '/' + name;
-    if (slot === 0) entry.src = src;
-    else {
-      if (!Array.isArray(entry.src)) entry.src = [entry.src, src];
-      else entry.src[1] = src;
-    }
-    rerenderEntrySummary();
+    markDirty();
   });
   return sel;
 }
@@ -398,15 +387,18 @@ function heightSlider(entry, slot) {
     num.value = range.value;
     setVal(parseInt(range.value, 10));
     auto.checked = false;
+    markDirty();
   });
   num.addEventListener('input', () => {
     const n = num.value === '' ? null : parseInt(num.value, 10);
     if (n == null) { auto.checked = true; setVal(null); }
     else { range.value = Math.max(0, Math.min(100, n)); setVal(Math.max(0, Math.min(100, n))); }
+    markDirty();
   });
   auto.addEventListener('change', () => {
     if (auto.checked) { setVal(null); num.value = ''; }
     else { setVal(parseInt(range.value, 10)); num.value = range.value; }
+    markDirty();
   });
 
   wrap.append(range, num, autoLbl);
@@ -418,7 +410,7 @@ function altInput(entry) {
   inp.type = 'text';
   inp.value = entry.alt || '';
   inp.placeholder = 'alt text';
-  inp.addEventListener('input', () => { entry.alt = inp.value; });
+  inp.addEventListener('input', () => { entry.alt = inp.value; markDirty(); });
   return inp;
 }
 
@@ -449,6 +441,7 @@ function fragSelect(entry) {
     }
     renderGallery();
     renderFragments();
+    markDirty();
   });
   return sel;
 }
@@ -465,6 +458,7 @@ function textSideSelect(entry) {
   sel.addEventListener('change', () => {
     entry.textSide = sel.value;
     if (entry.layout && entry.layout.textSide) entry.layout.textSide = sel.value;
+    markDirty();
   });
   return sel;
 }
@@ -483,6 +477,7 @@ function moveEntry(idx, delta) {
   if (to < 0 || to >= arr.length) return;
   [arr[idx], arr[to]] = [arr[to], arr[idx]];
   renderGallery();
+  markDirty();
 }
 
 function reorderEntries(from, to) {
@@ -492,6 +487,7 @@ function reorderEntries(from, to) {
   const [item] = arr.splice(from, 1);
   arr.splice(from < to ? to - 1 : to, 0, item);
   renderGallery();
+  markDirty();
 }
 
 function removeEntry(idx) {
@@ -499,6 +495,7 @@ function removeEntry(idx) {
   if (!confirm('Remove this gallery entry?')) return;
   p.gallery.splice(idx, 1);
   renderGallery();
+  markDirty();
 }
 
 function toggleRawJson(li, idx) {
@@ -523,6 +520,7 @@ function toggleRawJson(li, idx) {
       parsed.__frag = i != null && i < frags().length ? i : null;
       renderGallery();
       renderFragments();
+      markDirty();
     } catch (e) {
       alert('Invalid JSON: ' + e.message);
     }
@@ -570,19 +568,19 @@ function buildFragmentItem(f, i) {
   title.type = 'text';
   title.placeholder = 'Title';
   title.value = f.title;
-  title.addEventListener('input', () => { f.title = title.value; });
+  title.addEventListener('input', () => { f.title = title.value; markDirty(); });
 
   const sub = document.createElement('textarea');
   sub.placeholder = 'Subtitle (workshop, purpose…)';
   sub.rows = 2;
   sub.value = f.subtitle;
-  sub.addEventListener('input', () => { f.subtitle = sub.value; });
+  sub.addEventListener('input', () => { f.subtitle = sub.value; markDirty(); });
 
   const body = document.createElement('textarea');
   body.placeholder = 'Body';
   body.rows = 6;
   body.value = f.body;
-  body.addEventListener('input', () => { f.body = body.value; });
+  body.addEventListener('input', () => { f.body = body.value; markDirty(); });
 
   li.append(title, sub, body);
   return li;
@@ -596,6 +594,7 @@ function moveFragment(i, delta) {
   swapEntryLinks(i, to);
   renderGallery();
   renderFragments();
+  markDirty();
 }
 
 function removeFragment(i) {
@@ -608,6 +607,7 @@ function removeFragment(i) {
   }
   renderGallery();
   renderFragments();
+  markDirty();
 }
 
 function swapEntryLinks(a, b) {
@@ -636,7 +636,7 @@ function renderLibrary() {
     im.width = 90;
     const span = document.createElement('span');
     span.textContent = name;
-    const addBtn = btn('＋', () => { project().gallery.push({ src: 'images/' + currentId + '/' + name, alt: name }); renderGallery(); });
+    const addBtn = btn('＋', () => { project().gallery.push({ src: 'images/' + currentId + '/' + name, alt: name }); renderGallery(); markDirty(); });
     const delBtn = btn('🗑', () => deleteImage(name));
     li.append(im, span, addBtn, delBtn);
     list.appendChild(li);
@@ -645,24 +645,67 @@ function renderLibrary() {
 
 // ---- Server actions ----
 
-async function saveAll() {
-  setBusy(true);
+let saving = false;
+let dirty = false;
+let saveTimer = null;
+
+// Debounced autosave: call on any detected change.
+function markDirty() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    saveTimer = null;
+    saveAll({ translate: false, silent: true });
+  }, 1500);
+}
+
+function clearAutoSave() {
+  clearTimeout(saveTimer);
+  saveTimer = null;
+}
+
+async function saveAll(opts = {}) {
+  const { translate = true, silent = false } = opts;
+  if (saving) { dirty = true; return; }
+  saving = true;
+  if (!silent) setBusy(true);
   try {
-    const clean = JSON.parse(JSON.stringify(state.projects));
-    for (const p of clean) {
-      for (const e of p.gallery || []) {
-        if (e.__frag != null) e.text = fragLabel(e.__frag);
-        else delete e.text;
-        delete e.__frag;
+    do {
+      dirty = false;
+      const clean = JSON.parse(JSON.stringify(state.projects));
+      for (const p of clean) {
+        for (const e of p.gallery || []) {
+          if (e.__frag != null) e.text = fragLabel(e.__frag);
+          else delete e.text;
+          delete e.__frag;
+        }
       }
-    }
-    await api('/admin-api/projects', { projects: clean });
-    if (currentId) {
-      await api('/admin-api/text', { projectId: currentId, fragments: frags() });
-    }
-    status('Saved (text translated in background)');
+      await api('/admin-api/projects', { projects: clean });
+      if (currentId) {
+        await api('/admin-api/text', { projectId: currentId, fragments: frags(), translate });
+      }
+    } while (dirty);
+    status(translate ? 'Saved (translated in background)' : (silent ? 'Auto-saved' : 'Saved'));
   } catch (e) {
     status('Save failed: ' + e.message, true);
+  } finally {
+    saving = false;
+    if (!silent) setBusy(false);
+  }
+}
+
+async function refreshImages() {
+  setBusy(true);
+  status('Refreshing…');
+  try {
+    const fresh = await api('/admin-api/state');
+    state.images = fresh.images;
+    state.orphans = fresh.orphans;
+    state.manifest = fresh.manifest;
+    renderLibrary();
+    renderOrphans();
+    status('Images refreshed');
+  } catch (e) {
+    status('Refresh failed: ' + e.message, true);
   }
   setBusy(false);
 }
@@ -761,20 +804,21 @@ $('#project-select').addEventListener('change', (e) => {
   currentId = e.target.value;
   renderAll();
 });
-$('#show-hidden').addEventListener('change', (e) => {
-  showHidden = e.target.checked;
-  renderProjectSelect();
-});
 $('#project-hidden').addEventListener('change', (e) => {
   const p = project();
   if (!p) return;
   p.hidden = e.target.checked;
   renderProjectSelect();
+  markDirty();
 });
-$('#btn-save').addEventListener('click', saveAll);
+$('#btn-save').addEventListener('click', () => {
+  clearAutoSave();
+  saveAll({ translate: true });
+});
 $('#btn-optimize').addEventListener('click', runOptimize);
 $('#btn-translate').addEventListener('click', runTranslate);
 $('#btn-migrate').addEventListener('click', runMigrate);
+$('#btn-refresh').addEventListener('click', refreshImages);
 $('#btn-new-project').addEventListener('click', () => {
   const id = prompt('New project id (folder name):');
   if (id) createProject(id.trim());
@@ -782,6 +826,7 @@ $('#btn-new-project').addEventListener('click', () => {
 $('#btn-add-fragment').addEventListener('click', () => {
   frags().push({ title: '', subtitle: '', body: '' });
   renderFragments();
+  markDirty();
 });
 $('#btn-add-image').addEventListener('click', () => openUpload('single'));
 $('#btn-add-dual').addEventListener('click', () => openUpload('dual'));
