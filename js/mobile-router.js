@@ -1,15 +1,17 @@
 // Mobile shell: landing nav + show/hide project routing.
 // Visibility is gated by CSS (css/mobile.css, <=768px).
 
-import { loadProject, loadAllProjects, prefetchMobileProjectData } from './project-loader.js';
+import { loadProject, loadAllProjects, prefetchMobileProjectData, getHiddenProjectIds } from './project-loader.js';
 import { loadMiscImages } from './misc-loader.js';
 
 const MOBILE_BP = 768;
 const isMobile = () => window.innerWidth <= MOBILE_BP;
 
-function buildLandingNav() {
+async function buildLandingNav() {
   const overlay = document.getElementById('slitscan-overlay');
   if (!overlay || document.getElementById('landing-nav')) return;
+
+  const hidden = await getHiddenProjectIds();
 
   const nav = document.createElement('nav');
   nav.id = 'landing-nav';
@@ -22,7 +24,11 @@ function buildLandingNav() {
   nav.appendChild(nameLink);
 
   const headerLinks = Array.from(document.querySelectorAll('.main-nav .nav-link')).filter(
-    (link) => link.dataset.section && link.dataset.section !== 'home' && link.dataset.section !== 'profile'
+    (link) =>
+      link.dataset.section &&
+      link.dataset.section !== 'home' &&
+      link.dataset.section !== 'profile' &&
+      !hidden.has(link.dataset.section)
   );
 
   const linksWrap = document.createElement('div');
@@ -180,29 +186,24 @@ function initMobileProjectRouter() {
   });
 }
 
-buildLandingNav();
+async function bootstrap() {
+  await buildLandingNav();
+  initMobileProjectRouter();
 
-// On mobile, warm the lightweight data caches (manifest, projects.json, text
-// files) during idle time so opening a project feels instant. Images are left
-// lazy so the page isn't overloaded.
-if (isMobile()) {
-  const schedulePrefetch = () => {
+  // On mobile, warm the lightweight data caches (manifest, projects.json, text
+  // files) during idle time so opening a project feels instant. Images are left
+  // lazy so the page isn't overloaded.
+  if (isMobile()) {
     if ('requestIdleCallback' in window) {
       requestIdleCallback(() => prefetchMobileProjectData(), { timeout: 4000 });
     } else {
       setTimeout(() => prefetchMobileProjectData(), 1500);
     }
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', schedulePrefetch);
-  } else {
-    schedulePrefetch();
   }
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initMobileProjectRouter);
+  document.addEventListener('DOMContentLoaded', bootstrap);
 } else {
-  initMobileProjectRouter();
+  bootstrap();
 }

@@ -9,3 +9,15 @@ sakdk
 terreny, indústria i riu
 /
 In the past, a factory complex was the protagonist of a plot of land between fields and some small urban centres. Over decades, this area has been gradually built with varied uses, occupying green spaces that the rain had irrigated, and hiding streams that were previously part of the sonority of the urban landscape.
+
+//
+
+*línies d'aigua i arquitectura*
+/
+The topography configures the site as a natural open aquifer. The complex is located so that it is protected from possible flooding; the new channel is both a road and a barrier. The water collected by the roofing system is channeled through downspouts until it returns to the channel. In this way, the water cycle is closed and the footprint of the new construction is minimized.
+
+//
+
+*simbiosi*
+/
+is an annotation text for Refact.

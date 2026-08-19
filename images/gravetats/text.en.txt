@@ -8,3 +8,9 @@ QUERY LENGTH LIMIT EXCEEDED. MAX ALLOWED QUERY : 500 CHARS
 segona prorva
 /
 
+
+//
+
+*Gravetats*
+/
+00

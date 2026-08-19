@@ -253,6 +253,26 @@ async function fetchProjects() {
   return projectsCache;
 }
 
+// Ids of projects marked `hidden: true` — excluded from the site (desktop + mobile).
+let hiddenIdsPromise = null;
+function getHiddenProjectIds() {
+  if (!hiddenIdsPromise) {
+    hiddenIdsPromise = fetchProjects().then(
+      (ps) => new Set(ps.filter((p) => p.hidden).map((p) => p.id))
+    );
+  }
+  return hiddenIdsPromise;
+}
+
+// Hide nav links (desktop header) for hidden projects.
+function hideHiddenNavLinks() {
+  getHiddenProjectIds().then((hidden) => {
+    document.querySelectorAll('.main-header .nav-link[data-section]').forEach((link) => {
+      if (hidden.has(link.dataset.section)) link.classList.add('nav-link-hidden');
+    });
+  });
+}
+
 // Load a project's text and split into labelled blocks (text1, text2, ...)
 // separated by "//" in the file. Language-aware: uses text.txt (Catalan) or
 // text.en.txt (English), falling back to Catalan if the English file is missing.
@@ -510,7 +530,7 @@ async function loadProject(projectId) {
 
   const projects = await fetchProjects();
   const project = projects.find((p) => p.id === projectId);
-  if (!project) return null;
+  if (!project || project.hidden) return null;
 
   injectSlideStyle();
   const section = await buildProjectSection(project);
@@ -526,6 +546,7 @@ async function loadAllProjects() {
   injectSlideStyle();
 
   for (const project of projects) {
+    if (project.hidden) continue;
     if (document.getElementById(project.id)) continue;
     const section = await buildProjectSection(project);
     mainContent.appendChild(section);
@@ -542,9 +563,10 @@ async function reloadAllProjects() {
   }
 }
 
-export { loadProject, loadAllProjects, reloadAllProjects, prefetchMobileProjectData };
+export { loadProject, loadAllProjects, reloadAllProjects, prefetchMobileProjectData, getHiddenProjectIds };
 
 initLangToggle();
+hideHiddenNavLinks();
 
 if (window.innerWidth > 768) {
   loadAllProjects();

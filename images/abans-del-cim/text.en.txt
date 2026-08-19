@@ -1,0 +1,3 @@
+*refugi, clima i barri*
+/
+QUERY LENGTH LIMIT EXCEEDED. MAX ALLOWED QUERY : 500 CHARS
