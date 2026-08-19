@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "vite",
+    "admin": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "optimize:images": "node scripts/optimize-images.mjs",

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Admin</title>
+  <link rel="stylesheet" href="./admin.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Portfolio Admin</h1>
+      <div id="toolbar">
+        <label>Project
+          <select id="project-select"></select>
+        </label>
+        <button id="btn-save" class="primary">Save projects.json</button>
+        <button id="btn-optimize">Optimize images</button>
+        <button id="btn-translate">Translate</button>
+        <span id="status"></span>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Gallery entries</h2>
+          <div class="row">
+            <button id="btn-add-image">+ Upload images</button>
+            <button id="btn-add-text">+ Add text</button>
+          </div>
+        </div>
+        <p class="hint">Drag or use ↑/↓ to reorder. Click ✎ to edit an entry as JSON. Changes are local until you press "Save projects.json".</p>
+        <ul id="gallery-list"></ul>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Image library</h2>
+          <button id="btn-upload">Upload image(s)</button>
+        </div>
+        <p class="hint">Images in <code>images/&lt;project&gt;/</code>. "＋" appends to the gallery; "🗑" deletes the file and its WebP variants.</p>
+        <ul id="library-list"></ul>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Project text <code>(text.txt)</code></h2>
+          <button id="btn-save-text" class="primary">Save text (runs translate)</button>
+        </div>
+        <p class="hint">Blocks separated by <code>//</code>. Header: <code>*Title*</code> + subtitle; a single <code>/</code> splits header from body. <code>$...$</code> = italic.</p>
+        <textarea id="text-editor" rows="18" spellcheck="false"></textarea>
+      </section>
+    </main>
+  </div>
+
+  <input type="file" id="file-input" multiple accept="image/*" hidden>
+  <script type="module" src="./admin.js"></script>
+</body>
+</html>

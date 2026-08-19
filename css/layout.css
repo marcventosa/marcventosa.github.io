@@ -295,6 +295,10 @@
 }
 
 .gallery-text-columns {
+    column-count: 1;
+}
+
+.gallery-text-columns--two {
     column-count: 2;
     column-gap: 2rem;
 }

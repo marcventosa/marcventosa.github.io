@@ -1,0 +1,232 @@
+:root {
+  --bg: #f5f5f4;
+  --panel: #ffffff;
+  --border: #e2e2e0;
+  --text: #1a1a1a;
+  --muted: #777;
+  --accent: #111;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+}
+
+#app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.25rem;
+}
+
+h1 { font-size: 1.3rem; margin: 0; }
+
+#toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#toolbar label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+select {
+  font: inherit;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+button:hover:not(:disabled) { background: #ececec; }
+button:disabled { opacity: 0.5; cursor: default; }
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+button.primary:hover:not(:disabled) { background: #333; }
+
+#status {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-left: 0.5rem;
+}
+#status.error { color: #c0392b; }
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.panel-head h2 { font-size: 1rem; margin: 0; }
+.panel-head .row { display: flex; gap: 0.4rem; }
+
+.hint {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin: 0.5rem 0 0.75rem;
+}
+code {
+  background: #f0f0ef;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+#gallery-panel .panel { width: 100%; }
+
+ul { list-style: none; margin: 0; padding: 0; }
+
+.gallery-item,
+.library-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 0.4rem;
+  background: #fff;
+}
+
+.gallery-item.dragging { opacity: 0.4; }
+
+.thumb {
+  display: flex;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+  width: 84px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #efefef;
+  border-radius: 4px;
+}
+.thumb img {
+  height: 100%;
+  width: auto;
+  max-width: 42px;
+  object-fit: contain;
+}
+.thumb-text {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #555;
+}
+
+.gallery-item .info {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+}
+
+.gallery-item .actions {
+  display: flex;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+}
+.gallery-item .actions button { padding: 0.25rem 0.4rem; font-size: 0.8rem; }
+
+.json-editor {
+  display: none;
+  padding: 0.5rem;
+  margin-top: 0.4rem;
+  border-top: 1px dashed var(--border);
+}
+.json-editor textarea {
+  width: 100%;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.4rem;
+  resize: vertical;
+}
+.json-editor button { margin-top: 0.4rem; margin-right: 0.4rem; }
+
+.library-item img {
+  width: 90px;
+  height: 60px;
+  object-fit: contain;
+  background: #efefef;
+  border-radius: 4px;
+  flex: 0 0 auto;
+}
+.library-item span {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+}
+
+.empty {
+  color: var(--muted);
+  font-style: italic;
+  padding: 0.5rem;
+}
+
+#text-editor {
+  width: 100%;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.6rem;
+  resize: vertical;
+}
+
+@media (max-width: 900px) {
+  main { grid-template-columns: 1fr; }
+}

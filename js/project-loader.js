@@ -36,55 +36,43 @@ function buildTextBlock({ title = '', subtitle = '', body = '', align = 'center'
   textWrap.className = 'gallery-side-copy';
   textWrap.dataset.align = align;
 
-  const titleEl = title ? document.createElement('div') : null;
-  if (titleEl) {
+  const cols = document.createElement('div');
+  cols.className = 'gallery-text-columns';
+
+  if (title) {
+    const titleEl = document.createElement('div');
     titleEl.className = 'gallery-text-title';
     titleEl.textContent = title;
+    cols.appendChild(titleEl);
   }
 
-  const subEl = subtitle ? document.createElement('div') : null;
-  if (subEl) {
+  if (subtitle) {
+    const subEl = document.createElement('div');
     subEl.className = 'gallery-text-subtitle';
     appendFormattedText(subEl, subtitle);
+    cols.appendChild(subEl);
   }
 
-  let useColumns = false;
   let paragraphs = [];
+  let totalChars = 0;
 
   if (body) {
     const rawParagraphs = Array.isArray(body) ? body : String(body).split(/\n+/);
     paragraphs = rawParagraphs.map((p) => p.trim()).filter(Boolean);
-    const totalChars = paragraphs.reduce((sum, p) => sum + p.length, 0);
-    useColumns = paragraphs.length >= 3 || totalChars > 1000;
+    totalChars = paragraphs.reduce((sum, p) => sum + p.length, 0);
   }
 
-  if (useColumns) {
-    const bodyWrap = document.createElement('div');
-    bodyWrap.className = 'gallery-text-columns';
+  const useColumns = paragraphs.length >= 3 || totalChars > 1000;
+  if (useColumns) cols.classList.add('gallery-text-columns--two');
 
-    if (titleEl) bodyWrap.appendChild(titleEl);
-    if (subEl) bodyWrap.appendChild(subEl);
+  paragraphs.forEach((paragraph) => {
+    const p = document.createElement('p');
+    p.className = 'gallery-text';
+    appendFormattedText(p, paragraph);
+    cols.appendChild(p);
+  });
 
-    paragraphs.forEach((paragraph) => {
-      const p = document.createElement('p');
-      p.className = 'gallery-text';
-      appendFormattedText(p, paragraph);
-      bodyWrap.appendChild(p);
-    });
-
-    textWrap.appendChild(bodyWrap);
-  } else {
-    if (titleEl) textWrap.appendChild(titleEl);
-    if (subEl) textWrap.appendChild(subEl);
-
-    paragraphs.forEach((paragraph) => {
-      const p = document.createElement('p');
-      p.className = 'gallery-text';
-      appendFormattedText(p, paragraph);
-      textWrap.appendChild(p);
-    });
-  }
-
+  textWrap.appendChild(cols);
   return textWrap;
 }
 
@@ -215,7 +203,7 @@ function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, t
       });
 
       if (textBlock) {
-        const hasColumns = textBlock.querySelector('.gallery-text-columns');
+        const hasColumns = textBlock.querySelector('.gallery-text-columns--two');
         const blockWidth = hasColumns && !isMobile
           ? `calc(${COPY_WIDTH} * 2 + ${COPY_COL_GAP})`
           : COPY_WIDTH;
