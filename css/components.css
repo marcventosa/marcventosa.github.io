@@ -24,10 +24,6 @@
     text-decoration: none;
 }
 
-.nav-link-hidden {
-    display: none !important;
-}
-
 /* Navigation Menu - Top State */
 .nav-link.top-state {
     color: yellow;

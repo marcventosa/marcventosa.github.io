@@ -55,7 +55,8 @@
         "src": "images/gravetats/comunitat.png",
         "alt": "comunitat.png"
       }
-    ]
+    ],
+    "label": "GRAVETATS"
   },
   {
     "id": "neoenvelat",
@@ -87,7 +88,8 @@
         "alt": "Neo Envelat - Collage",
         "imageHeight": 60
       }
-    ]
+    ],
+    "label": "NEOENVELAT"
   },
   {
     "id": "casa-intramurs",
@@ -141,7 +143,8 @@
         "alt": "Casa Intramurs - VentosaMarc E3 Maqueta 100",
         "text": "text1"
       }
-    ]
+    ],
+    "label": "INTRAMURS"
   },
   {
     "id": "refact",
@@ -181,7 +184,8 @@
         "src": "images/refact/p6-titol-projecte-01.png",
         "alt": "Refact - Títol Projecte"
       }
-    ]
+    ],
+    "label": "REFACT"
   },
   {
     "id": "abans-del-cim",
@@ -211,7 +215,9 @@
         "src": "images/abans-del-cim/DSC_0273.JPG",
         "alt": "Abans del Cim - DSC_0273"
       }
-    ]
+    ],
+    "hidden": true,
+    "label": "A MONT"
   },
   {
     "id": "envoltura",
@@ -244,7 +250,8 @@
         "src": "images/envoltura/BP3RIBAS (1)-03_proces.png",
         "alt": "Envoltura - BP3RIBAS 03 Proces"
       }
-    ]
+    ],
+    "label": "ENVOLTURA"
   },
   {
     "id": "pauhaus",
@@ -263,6 +270,7 @@
         "src": "images/pau/maquetes-tipus-pauhaus-2.jpg",
         "alt": "Casa Pau - Maquetes Tipus Pauhaus"
       }
-    ]
+    ],
+    "label": "PAUHAUS"
   }
 ]

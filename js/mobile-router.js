@@ -1,7 +1,7 @@
 // Mobile shell: landing nav + show/hide project routing.
 // Visibility is gated by CSS (css/mobile.css, <=768px).
 
-import { loadProject, loadAllProjects, prefetchMobileProjectData, getHiddenProjectIds } from './project-loader.js';
+import { loadProject, loadAllProjects, prefetchMobileProjectData, ensureProjectNav } from './project-loader.js';
 import { loadMiscImages } from './misc-loader.js';
 
 const MOBILE_BP = 768;
@@ -11,7 +11,7 @@ async function buildLandingNav() {
   const overlay = document.getElementById('slitscan-overlay');
   if (!overlay || document.getElementById('landing-nav')) return;
 
-  const hidden = await getHiddenProjectIds();
+  await ensureProjectNav();
 
   const nav = document.createElement('nav');
   nav.id = 'landing-nav';
@@ -24,11 +24,7 @@ async function buildLandingNav() {
   nav.appendChild(nameLink);
 
   const headerLinks = Array.from(document.querySelectorAll('.main-nav .nav-link')).filter(
-    (link) =>
-      link.dataset.section &&
-      link.dataset.section !== 'home' &&
-      link.dataset.section !== 'profile' &&
-      !hidden.has(link.dataset.section)
+    (link) => link.dataset.section && link.dataset.section !== 'home' && link.dataset.section !== 'profile'
   );
 
   const linksWrap = document.createElement('div');

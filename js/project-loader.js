@@ -253,24 +253,30 @@ async function fetchProjects() {
   return projectsCache;
 }
 
-// Ids of projects marked `hidden: true` — excluded from the site (desktop + mobile).
-let hiddenIdsPromise = null;
-function getHiddenProjectIds() {
-  if (!hiddenIdsPromise) {
-    hiddenIdsPromise = fetchProjects().then(
-      (ps) => new Set(ps.filter((p) => p.hidden).map((p) => p.id))
-    );
+// Generate the desktop nav project links from projects.json, skipping hidden
+// projects. This avoids a "flicker" (links appearing then hiding) and never
+// leaves a blank line for hidden projects.
+let navReady = null;
+function ensureProjectNav() {
+  if (!navReady) {
+    navReady = (async () => {
+      const projects = await fetchProjects();
+      const miscLink = document.getElementById('misc-nav-link');
+      if (!miscLink) return;
+      const frag = document.createDocumentFragment();
+      for (const p of projects) {
+        if (p.hidden) continue;
+        const a = document.createElement('a');
+        a.className = 'nav-link';
+        a.dataset.section = p.id;
+        a.textContent = p.label || p.id.toUpperCase();
+        frag.appendChild(a);
+        frag.appendChild(document.createElement('br'));
+      }
+      miscLink.before(frag);
+    })();
   }
-  return hiddenIdsPromise;
-}
-
-// Hide nav links (desktop header) for hidden projects.
-function hideHiddenNavLinks() {
-  getHiddenProjectIds().then((hidden) => {
-    document.querySelectorAll('.main-header .nav-link[data-section]').forEach((link) => {
-      if (hidden.has(link.dataset.section)) link.classList.add('nav-link-hidden');
-    });
-  });
+  return navReady;
 }
 
 // Load a project's text and split into labelled blocks (text1, text2, ...)
@@ -563,10 +569,10 @@ async function reloadAllProjects() {
   }
 }
 
-export { loadProject, loadAllProjects, reloadAllProjects, prefetchMobileProjectData, getHiddenProjectIds };
+export { loadProject, loadAllProjects, reloadAllProjects, prefetchMobileProjectData, ensureProjectNav };
 
 initLangToggle();
-hideHiddenNavLinks();
+ensureProjectNav();
 
 if (window.innerWidth > 768) {
   loadAllProjects();
