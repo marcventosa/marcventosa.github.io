@@ -68,8 +68,7 @@
       {
         "src": "images/neoenvelat/axo projecte.png",
         "alt": "Neo Envelat - Emplaçament",
-        "imageHeight": 90,
-        "bw": true
+        "imageHeight": 90
       },
       {
         "src": "images/neoenvelat/GIF_1_VentosaMarc.gif",
