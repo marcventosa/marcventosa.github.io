@@ -14,6 +14,25 @@ function protectGalleryImage(image) {
   image.addEventListener('dragstart', (event) => event.preventDefault());
 }
 
+// Build the CSS filter for an image from its per-entry options.
+// - bw        → grayscale
+// - contrast  → contrast() around the original (100 = unchanged)
+// - threshold → hard black/white cut-off (handy for scanned line plans):
+//   pixels darker than the threshold become pure black, the rest pure white.
+//   Implemented as an extreme contrast step: grayscale → brightness (places the
+//   knee at the threshold luminance) → huge contrast snaps each pixel to 0/1.
+function imageFilter(item) {
+  if (item.threshold) {
+    const t = Math.min(0.99, Math.max(0.01, item.threshold / 100));
+    const b = 0.5 / t;
+    return `grayscale(100%) brightness(${b.toFixed(3)}) contrast(1000)`;
+  }
+  const parts = [];
+  if (item.bw) parts.push('grayscale(100%)');
+  if (item.contrast != null) parts.push(`contrast(${item.contrast}%)`);
+  return parts.join(' ') || null;
+}
+
 // Append text to a node, turning any "$...$" spans into <em> (italic).
 function appendFormattedText(parent, text) {
   const parts = String(text).split(/\$([^$]+)\$/);
@@ -178,9 +197,11 @@ function applyImageLayout(slide, item, projectLayout = {}, imageHeight = null, t
     const isTallImg = entry && entry.h > entry.w;
 
     // imageHeight (0-100) maps to viewport height via the --portrait-h variable.
-    if (imageHeight != null) {
-      slide.style.setProperty('--portrait-h', `${imageHeight}${isMobile ? 'dvh' : 'vh'}`);
-    }
+    // Always set --portrait-h — even without an explicit imageHeight — so the
+    // CSS fallback can't override the default. Slides with side text get a
+    // taller default image (the text sits beside it), plain slides a shorter one.
+    const effImageHeight = imageHeight != null ? imageHeight : (resolvedText ? 88 : 60);
+    slide.style.setProperty('--portrait-h', `${effImageHeight}${isMobile ? 'dvh' : 'vh'}`);
 
     const inner = document.createElement('div');
     inner.className = 'gallery-slide-content';
@@ -465,7 +486,8 @@ async function buildProjectSection(project) {
         const img = document.createElement('img');
         img.alt = (Array.isArray(item.alt) ? item.alt[idx] : item.alt) || '';
         img.className = 'project-image';
-        if (item.bw) img.style.filter = 'grayscale(100%)';
+        const filt = imageFilter(item);
+        if (filt) img.style.filter = filt;
         const isMobileImg = window.innerWidth <= 768;
         const h = (typeof heights[idx] === 'number') ? heights[idx] : null;
         img.style.width = isMobileImg ? '100%' : '50%';
@@ -483,7 +505,8 @@ async function buildProjectSection(project) {
       const img = document.createElement('img');
       img.alt = item.alt || '';
       img.className = 'project-image';
-      if (item.bw) img.style.filter = 'grayscale(100%)';
+      const filt = imageFilter(item);
+      if (filt) img.style.filter = filt;
       const isMobileImg = window.innerWidth <= 768;
       img.style.width = isMobileImg ? '100%' : 'auto';
       img.style.height = 'auto';

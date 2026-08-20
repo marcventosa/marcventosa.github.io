@@ -6,10 +6,13 @@
 //   translated (proper names). The subtitle's remaining lines (project
 //   purpose) are translated like the body.
 // - $italic$ spans in the translated parts are translated too.
+// - Glossary: glossary.json provides CA->EN terms (forced in the output) plus
+//   protected tokens (proper nouns, acronyms, URLs, numbers) kept verbatim.
+//   Editing glossary.json re-translates the affected content.
 // - Incremental: results are cached by source hash in .translate-cache.json, so
 //   re-running only re-translates blocks whose Catalan text changed.
 //
-// Config (env vars):
+// Config (env vars, or a .env file at the repo root):
 //   TRANSLATE_DELAY   ms between requests (default 1200)
 //   TRANSLATE_RETRIES retries on failure (default 4, with backoff)
 //   LIBRE_URL         LibreTranslate base URL (default http://localhost:5000)
@@ -17,7 +20,7 @@
 //   MYMEMORY_EMAIL    raise MyMemory's daily rate limit (e.g. your@email.com)
 //   DEEPL_API_KEY     use DeepL instead of MyMemory
 
-import { promises as fs } from 'fs';
+import { promises as fs, readFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
@@ -34,6 +37,23 @@ const STRINGS_EN_PATH = path.join(ROOT, 'strings.en.json');
 const DELAY = Number(process.env.TRANSLATE_DELAY) || 1200;
 const RETRIES = Number(process.env.TRANSLATE_RETRIES) || 3;
 
+// ---- .env loader (no external dependency) ----
+function loadDotEnv() {
+  try {
+    const raw = readFileSync(path.join(ROOT, '.env'), 'utf8');
+    for (const line of raw.split(/\r?\n/)) {
+      const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/);
+      if (m && process.env[m[1]] === undefined) {
+        process.env[m[1]] = m[2].replace(/^['"]|['"]$/g, '');
+      }
+    }
+  } catch (e) {
+    // no .env file — env vars only
+  }
+}
+
+loadDotEnv();
+
 // Providers, tried in order:
 //  1. LibreTranslate — self-hosted (docker compose up -d, default http://localhost:5000)
 //     or the hosted API (set LIBRE_URL=https://libretranslate.com + LIBRETRANSLATE_API_KEY).
@@ -48,6 +68,91 @@ let libreAvailable = false;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const hash = (s) => crypto.createHash('sha1').update(s).digest('hex');
+
+// ---- Glossary --------------------------------------------------------------
+const GLOSSARY_PATH = path.join(ROOT, 'glossary.json');
+let glossary = { terms: {}, protected: [] };
+let glossaryHash = '';
+
+const pad = (i) => String(i).padStart(2, '0');
+const LETTERS = '[A-Za-zÀ-ÖØ-öø-ÿ0-9]';
+
+function escapeRe(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Regex matching any of the given phrases (longest first), only when NOT
+// surrounded by letters/digits (so "META" won't match inside "metallic").
+function phraseRegex(phrases, flags = 'gi') {
+  const sorted = [...phrases].sort((a, b) => b.length - a.length);
+  return new RegExp(`(?<!${LETTERS})(?:${sorted.map(escapeRe).join('|')})(?!${LETTERS})`, flags);
+}
+
+async function loadGlossary() {
+  try {
+    const g = JSON.parse(await fs.readFile(GLOSSARY_PATH, 'utf8'));
+    glossary = { terms: g.terms || {}, protected: g.protected || [] };
+  } catch (e) {
+    glossary = { terms: {}, protected: [] };
+  }
+  glossaryHash = hash(JSON.stringify(glossary));
+}
+
+// Replace non-translatable content with ASCII placeholders before sending to a
+// provider, then restore the original values afterwards. Glossary terms become
+// their English equivalent; protected names, URLs/emails and numbers are kept
+// verbatim. ASCII placeholders survive every provider (MyMemory mangles the
+// non-ASCII ⟦…⟧ tokens used for italics, so those are shielded here too).
+function protectText(input) {
+  const tokens = [];
+  const glossaryHits = [];
+  let text = input;
+
+  // 1. Shield $italic$ placeholders (⟦N⟧) from all other protections below.
+  text = text.replace(/⟦(\d+)⟧/g, (m) => {
+    tokens.push(m);
+    return `TX${pad(tokens.length - 1)}`;
+  });
+
+  // 2. Protected proper names / acronyms — kept verbatim.
+  if (glossary.protected.length) {
+    text = text.replace(phraseRegex(glossary.protected), (m) => {
+      tokens.push(m);
+      return `TX${pad(tokens.length - 1)}`;
+    });
+  }
+
+  // 3. URLs / emails.
+  text = text.replace(/https?:\/\/\S+|www\.\S+|[\w.+-]+@[\w-]+\.[\w.]+/g, (m) => {
+    tokens.push(m);
+    return `TX${pad(tokens.length - 1)}`;
+  });
+
+  // 4. Numbers & dimensions — kept verbatim by every provider.
+  text = text.replace(/\b\d[\d_.,/-]*\d?\b/g, (m) => {
+    tokens.push(m);
+    return `TX${pad(tokens.length - 1)}`;
+  });
+
+  // 5. Glossary terms — forced to their English equivalent. Applied last so the
+  //    inserted GX placeholders are never reprocessed above.
+  if (Object.keys(glossary.terms).length) {
+    text = text.replace(phraseRegex(Object.keys(glossary.terms)), (m) => {
+      glossaryHits.push(glossary.terms[m.toLowerCase()] || m);
+      return `GX${pad(glossaryHits.length - 1)}`;
+    });
+  }
+
+  return {
+    text,
+    restore(out) {
+      let s = out;
+      s = s.replace(/GX(\d{2})/g, (_, i) => glossaryHits[Number(i)]);
+      s = s.replace(/TX(\d{2})/g, (_, i) => tokens[Number(i)]);
+      return s;
+    }
+  };
+}
 
 async function loadCache() {
   try {
@@ -148,6 +253,7 @@ async function translateMyMemory(text) {
 async function translateOne(text) {
   if (!text || !text.trim()) return text;
 
+  const { text: safe, restore } = protectText(text);
   const providers = [];
   if (libreAvailable) providers.push(['libre', translateLibre]);
   if (deepl) providers.push(['deepl', translateDeepL]);
@@ -157,7 +263,7 @@ async function translateOne(text) {
     let lastErr;
     for (let attempt = 0; attempt <= RETRIES; attempt++) {
       try {
-        return await fn(text);
+        return restore(await fn(safe));
       } catch (e) {
         lastErr = e;
         if (attempt < RETRIES) {
@@ -209,7 +315,7 @@ async function translateWithItalics(text) {
 // the *title* and the subtitle's first line (workshop name). The subtitle's
 // remaining lines (project purpose) and the body are translated.
 async function translateBlock(block, cache) {
-  const key = hash('v2:' + block);
+  const key = hash('v4:' + block + ':' + glossaryHash);
   if (cache[key] != null) return cache[key];
 
   let header = block;
@@ -239,7 +345,9 @@ async function translateBlock(block, cache) {
   const translatedBody = body ? await translateWithItalics(body) : '';
 
   const newHeader = [title, workshop, translatedPurpose].filter(Boolean).join('\n');
-  const result = newHeader ? `${newHeader}\n/\n${translatedBody}` : translatedBody;
+  const result = newHeader
+    ? `${newHeader}\n/\n${translatedBody}`
+    : (sep === 0 ? `/\n${translatedBody}` : translatedBody);
   cache[key] = result;
   await saveCache(cache);
   return result;
@@ -251,13 +359,14 @@ async function translateStrings(cache) {
     const out = {};
     for (const [key, value] of Object.entries(src)) {
       const ckey = 's:' + key;
-      if (cache[ckey] != null && cache[`${ckey}:src`] === hash(value)) {
+      if (cache[ckey] != null && cache[`${ckey}:src`] === hash(value) && cache[`${ckey}:gl`] === glossaryHash) {
         out[key] = cache[ckey];
       } else {
         out[key] = await translateOne(value);
         await sleep(DELAY);
         cache[ckey] = out[key];
         cache[`${ckey}:src`] = hash(value);
+        cache[`${ckey}:gl`] = glossaryHash;
         await saveCache(cache);
       }
     }
@@ -274,13 +383,14 @@ async function translateProfile(cache) {
     const content = (await fs.readFile(srcPath, 'utf8')).replace(/\r\n?/g, '\n').trim();
     const key = 'profile';
     let out;
-    if (cache[key] != null && cache[`${key}:src`] === hash(content)) {
+    if (cache[key] != null && cache[`${key}:src`] === hash(content) && cache[`${key}:gl`] === glossaryHash) {
       out = cache[key];
     } else {
       out = await translateOne(content);
       await sleep(DELAY);
       cache[key] = out;
       cache[`${key}:src`] = hash(content);
+      cache[`${key}:gl`] = glossaryHash;
       await saveCache(cache);
     }
     const outPath = path.join(ROOT, 'profile.en.txt');
@@ -293,6 +403,8 @@ async function translateProfile(cache) {
 
 async function main() {
   const cache = await loadCache();
+  await loadGlossary();
+  console.log(`Glossary: ${Object.keys(glossary.terms).length} terms, ${glossary.protected.length} protected words`);
   libreAvailable = await checkLibre();
   if (libreAvailable) console.log(`LibreTranslate: ${LIBRE_URL}`);
   else console.warn(`LibreTranslate not reachable at ${LIBRE_URL} — using fallbacks.`);
@@ -344,7 +456,7 @@ if (isWatch) {
   };
 
   const watcher = watch(
-    ['images/**/text.txt', 'strings.json', 'profile.txt'],
+    ['images/**/text.txt', 'strings.json', 'profile.txt', 'glossary.json'],
     {
       ignoreInitial: true,
       ignored: ['**/*.en.txt', '.translate-cache.json', '**/node_modules/**']

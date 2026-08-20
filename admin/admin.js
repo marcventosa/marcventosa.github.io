@@ -91,7 +91,7 @@ function resolveLinks() {
 }
 
 function renderAll() {
-  renderProjectSelect();
+  renderProjectList();
   renderOrphans();
   renderGallery();
   renderFragments();
@@ -99,20 +99,22 @@ function renderAll() {
   syncHiddenCheckbox();
 }
 
-// ---- Project select / hidden / orphans ----
+// ---- Project list / hidden / orphans ----
 
-function renderProjectSelect() {
-  const sel = $('#project-select');
-  const prev = currentId;
-  sel.innerHTML = '';
+function renderProjectList() {
+  const list = $('#project-list');
+  list.innerHTML = '';
   for (const p of state.projects) {
-    const opt = document.createElement('option');
-    opt.value = p.id;
-    opt.textContent = p.hidden ? p.id + ' (hidden)' : p.id;
-    if (p.id === currentId) opt.selected = true;
-    sel.appendChild(opt);
+    const li = document.createElement('li');
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'project-item' + (p.id === currentId ? ' active' : '');
+    b.dataset.id = p.id;
+    b.textContent = (p.label || p.id.toUpperCase()) + (p.hidden ? ' · hidden' : '');
+    b.title = p.id;
+    li.appendChild(b);
+    list.appendChild(li);
   }
-  currentId = prev;
 }
 
 function syncHiddenCheckbox() {
@@ -166,6 +168,8 @@ function summarize(e) {
   else if (e.src) s = srcToFilename(e.src);
   else s = '(no image)';
   if (e.bw) s += ' · B&W';
+  if (e.contrast != null) s += ` · C${e.contrast}%`;
+  if (e.threshold) s += ` · T${e.threshold}`;
   return s;
 }
 
@@ -221,6 +225,7 @@ function buildEntryCard(entry, idx) {
     btn('↑', () => moveEntry(idx, -1)),
     btn('↓', () => moveEntry(idx, 1)),
     btn('✎', () => toggleRawJson(li, idx)),
+    btn('🗑', () => deleteEntryFiles(idx), 'danger'),
     btn('✕', () => removeEntry(idx))
   );
   head.appendChild(actions);
@@ -262,10 +267,12 @@ function buildEntryEditor(entry, idx) {
     wrap.appendChild(field('Height', heightSlider(entry, 0)));
   }
 
-  // Alt + B&W
+  // Alt + B&W + filters
   if (type !== 'text') {
     wrap.appendChild(field('Alt', altInput(entry)));
     wrap.appendChild(field('B&W', bwInput(entry)));
+    wrap.appendChild(field('Contrast', imageSlider(entry, 'contrast', 50, 400, 100, 'Contrast around the original (100 = unchanged)')));
+    wrap.appendChild(field('Black threshold', imageSlider(entry, 'threshold', 0, 100, 0, 'Pixels darker than the threshold become black, lighter become white (0 = off). Great for scanned line plans.')));
   }
 
   // Text link + side (single images only; dual excluded per scope)
@@ -417,6 +424,62 @@ function bwInput(entry) {
   return cb;
 }
 
+// Range + number slider that stores a numeric option on the entry, deleting it
+// when back at the default so the JSON stays clean.
+function imageSlider(entry, key, min, max, def, title) {
+  const wrap = document.createElement('div');
+  wrap.className = 'height';
+
+  const range = document.createElement('input');
+  range.type = 'range';
+  range.min = min;
+  range.max = max;
+  range.step = 1;
+
+  const num = document.createElement('input');
+  num.type = 'number';
+  num.min = min;
+  num.max = max;
+  num.style.width = '3.2rem';
+
+  const resetBtn = document.createElement('button');
+  resetBtn.type = 'button';
+  resetBtn.textContent = 'reset';
+  resetBtn.title = title || `Reset to default (${def})`;
+
+  const getVal = () => (entry[key] != null ? entry[key] : def);
+  const setVal = (v) => {
+    if (v === def) delete entry[key];
+    else entry[key] = v;
+    markDirty();
+  };
+
+  const v = getVal();
+  range.value = v;
+  num.value = v;
+
+  range.addEventListener('input', () => {
+    num.value = range.value;
+    setVal(parseInt(range.value, 10));
+  });
+  num.addEventListener('input', () => {
+    const n = num.value === '' ? null : parseInt(num.value, 10);
+    if (n == null) return;
+    const clamped = Math.max(min, Math.min(max, n));
+    range.value = clamped;
+    num.value = clamped;
+    setVal(clamped);
+  });
+  resetBtn.addEventListener('click', () => {
+    range.value = def;
+    num.value = def;
+    setVal(def);
+  });
+
+  wrap.append(range, num, resetBtn);
+  return wrap;
+}
+
 function fragSelect(entry) {
   const sel = document.createElement('select');
   sel.innerHTML = '<option value="">(no text)</option>';
@@ -483,12 +546,54 @@ function moveEntry(idx, delta) {
   markDirty();
 }
 
-function removeEntry(idx) {
+async function removeEntry(idx) {
+  const ok = await askConfirm({
+    title: 'Remove entry',
+    text: 'Remove this entry from the gallery? The image files stay on disk.',
+    actionLabel: 'Remove'
+  });
+  if (!ok) return;
   const p = project();
-  if (!confirm('Remove this gallery entry?')) return;
   p.gallery.splice(idx, 1);
   renderGallery();
   markDirty();
+}
+
+async function deleteEntryFiles(idx) {
+  const p = project();
+  const entry = p.gallery[idx];
+  if (!entry) return;
+  const files = entryFilenames(entry);
+  if (!files.length) {
+    await removeEntry(idx);
+    return;
+  }
+  const ok = await askConfirm({
+    title: 'Delete image files',
+    text: 'Delete the source file and its WebP variants, then remove the entry?',
+    files: files.map((f) => f + ' (source + WebP variants)'),
+    actionLabel: 'Delete files'
+  });
+  if (!ok) return;
+  setBusy(true);
+  status('Deleting…');
+  try {
+    for (const f of files) {
+      await api('/admin-api/delete-image', { projectId: currentId, filename: f });
+    }
+    p.gallery.splice(idx, 1);
+    renderGallery();
+    markDirty();
+    status('Deleted ' + files.join(', '));
+  } catch (e) {
+    status('Delete failed: ' + e.message, true);
+  }
+  setBusy(false);
+}
+
+function entryFilenames(entry) {
+  const srcs = Array.isArray(entry.src) ? entry.src : [entry.src];
+  return srcs.filter(Boolean).map(srcToFilename).filter((v, i, a) => a.indexOf(v) === i);
 }
 
 function toggleRawJson(li, idx) {
@@ -707,7 +812,7 @@ async function runOptimize() {
   setBusy(true);
   status('Optimizing images…');
   try {
-    const r = await api('/admin-api/optimize');
+    const r = await api('/admin-api/optimize', {});
     status(r.code === 0 ? 'Images optimized' : 'Optimize finished (code ' + r.code + ')');
     await loadState();
   } catch (e) {
@@ -720,24 +825,10 @@ async function runTranslate() {
   setBusy(true);
   status('Translating…');
   try {
-    const r = await api('/admin-api/translate');
+    const r = await api('/admin-api/translate', {});
     status(r.code === 0 ? 'Translation done' : 'Translate finished (code ' + r.code + ')');
   } catch (e) {
     status('Translate failed: ' + e.message, true);
-  }
-  setBusy(false);
-}
-
-async function runMigrate() {
-  if (!confirm('Migrate any inline text into text.txt? (idempotent)')) return;
-  setBusy(true);
-  status('Migrating…');
-  try {
-    const r = await api('/admin-api/migrate');
-    status(r.code === 0 ? 'Migration done' : 'Migrate finished (code ' + r.code + ')');
-    await loadState();
-  } catch (e) {
-    status('Migrate failed: ' + e.message, true);
   }
   setBusy(false);
 }
@@ -778,9 +869,15 @@ async function handleUpload(files, mode) {
 }
 
 async function deleteImage(filename) {
-  if (!confirm('Delete image "' + filename + '" and its WebP variants?')) return;
+  const ok = await askConfirm({
+    title: 'Delete image',
+    text: 'Delete the source file and its WebP variants?',
+    files: [filename + ' (source + WebP variants)'],
+    actionLabel: 'Delete'
+  });
+  if (!ok) return;
   setBusy(true);
-  status('Deleting + optimizing…');
+  status('Deleting…');
   try {
     await api('/admin-api/delete-image', { projectId: currentId, filename });
     await loadState();
@@ -791,17 +888,168 @@ async function deleteImage(filename) {
   setBusy(false);
 }
 
+// ---- Two-step confirmation modal ----
+
+let confirmResolve = null;
+
+function askConfirm({ title = 'Confirm', text = '', files = [], actionLabel = 'Confirm' } = {}) {
+  $('#confirm-title').textContent = title;
+  $('#confirm-text').textContent = text;
+  const list = $('#confirm-files');
+  list.innerHTML = '';
+  for (const f of files) {
+    const li = document.createElement('li');
+    li.textContent = f;
+    list.appendChild(li);
+  }
+  $('#confirm-ok').textContent = actionLabel;
+  $('#confirm-modal').classList.remove('hidden');
+  return new Promise((resolve) => {
+    confirmResolve = resolve;
+  });
+}
+
+function closeConfirm(result) {
+  $('#confirm-modal').classList.add('hidden');
+  if (confirmResolve) {
+    confirmResolve(result);
+    confirmResolve = null;
+  }
+}
+
+// ---- Glossary editor ----
+
+let glossaryData = { terms: {}, protected: [] };
+
+function renderGlossaryEditor(data) {
+  const termsList = $('#glossary-terms');
+  const protectedList = $('#glossary-protected');
+  termsList.innerHTML = '';
+  protectedList.innerHTML = '';
+
+  const terms = data.terms || {};
+  Object.entries(terms).forEach(([ca, en]) => {
+    const li = document.createElement('li');
+    li.className = 'glossary-row';
+    const caIn = document.createElement('input');
+    caIn.type = 'text';
+    caIn.value = ca;
+    caIn.placeholder = 'Catalan term';
+    const enIn = document.createElement('input');
+    enIn.type = 'text';
+    enIn.value = en;
+    enIn.placeholder = 'English translation';
+    const del = btn('✕', () => {
+      li.remove();
+    });
+    li.append(caIn, enIn, del);
+    termsList.appendChild(li);
+  });
+
+  (data.protected || []).forEach((word) => {
+    const li = document.createElement('li');
+    li.className = 'glossary-row';
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.value = word;
+    inp.placeholder = 'Proper noun / acronym';
+    const del = btn('✕', () => {
+      li.remove();
+    });
+    li.append(inp, del);
+    protectedList.appendChild(li);
+  });
+
+  $('#glossary-add-term').onclick = () => {
+    const li = document.createElement('li');
+    li.className = 'glossary-row';
+    const caIn = document.createElement('input');
+    caIn.type = 'text';
+    caIn.placeholder = 'Catalan term';
+    const enIn = document.createElement('input');
+    enIn.type = 'text';
+    enIn.placeholder = 'English translation';
+    const del = btn('✕', () => {
+      li.remove();
+    });
+    li.append(caIn, enIn, del);
+    termsList.appendChild(li);
+    caIn.focus();
+  };
+
+  $('#glossary-add-protected').onclick = () => {
+    const li = document.createElement('li');
+    li.className = 'glossary-row';
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.placeholder = 'Proper noun / acronym';
+    const del = btn('✕', () => {
+      li.remove();
+    });
+    li.append(inp, del);
+    protectedList.appendChild(li);
+    inp.focus();
+  };
+}
+
+function collectGlossary() {
+  const terms = {};
+  $('#glossary-terms').querySelectorAll('li').forEach((li) => {
+    const [caIn, enIn] = li.querySelectorAll('input');
+    const ca = caIn.value.trim();
+    const en = enIn.value.trim();
+    if (ca && en) terms[ca.toLowerCase()] = en;
+  });
+  const protectedWords = [];
+  $('#glossary-protected').querySelectorAll('li').forEach((li) => {
+    const v = li.querySelector('input').value.trim();
+    if (v) protectedWords.push(v);
+  });
+  return { terms, protected: protectedWords };
+}
+
+async function openGlossary() {
+  try {
+    glossaryData = await api('/admin-api/glossary');
+  } catch (e) {
+    status('Could not load glossary: ' + e.message, true);
+    return;
+  }
+  renderGlossaryEditor(glossaryData);
+  $('#glossary-modal').classList.remove('hidden');
+}
+
+function closeGlossary() {
+  $('#glossary-modal').classList.add('hidden');
+}
+
+async function saveGlossary() {
+  setBusy(true);
+  try {
+    const data = collectGlossary();
+    await api('/admin-api/glossary', data);
+    glossaryData = data;
+    closeGlossary();
+    status('Glossary saved — run Translate to apply it');
+  } catch (e) {
+    status('Glossary save failed: ' + e.message, true);
+  }
+  setBusy(false);
+}
+
 // ---- Wiring ----
 
-$('#project-select').addEventListener('change', (e) => {
-  currentId = e.target.value;
+$('#project-list').addEventListener('click', (e) => {
+  const btn = e.target.closest('.project-item');
+  if (!btn) return;
+  currentId = btn.dataset.id;
   renderAll();
 });
 $('#project-hidden').addEventListener('change', (e) => {
   const p = project();
   if (!p) return;
   p.hidden = e.target.checked;
-  renderProjectSelect();
+  renderProjectList();
   markDirty();
 });
 $('#btn-save').addEventListener('click', () => {
@@ -810,7 +1058,13 @@ $('#btn-save').addEventListener('click', () => {
 });
 $('#btn-optimize').addEventListener('click', runOptimize);
 $('#btn-translate').addEventListener('click', runTranslate);
-$('#btn-migrate').addEventListener('click', runMigrate);
+$('#btn-glossary').addEventListener('click', openGlossary);
+$('#glossary-close').addEventListener('click', closeGlossary);
+$('#glossary-cancel').addEventListener('click', closeGlossary);
+$('#glossary-save').addEventListener('click', saveGlossary);
+$('#confirm-ok').addEventListener('click', () => closeConfirm(true));
+$('#confirm-cancel').addEventListener('click', () => closeConfirm(false));
+$('#confirm-close').addEventListener('click', () => closeConfirm(false));
 $('#btn-refresh').addEventListener('click', refreshImages);
 $('#btn-new-project').addEventListener('click', () => {
   const id = prompt('New project id (folder name):');

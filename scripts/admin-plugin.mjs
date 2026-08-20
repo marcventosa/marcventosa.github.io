@@ -11,6 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const PROJECTS_PATH = path.join(ROOT, 'projects.json');
 const MANIFEST_PATH = path.join(ROOT, 'images-manifest.json');
+const GLOSSARY_PATH = path.join(ROOT, 'glossary.json');
 const IMAGES_DIR = path.join(ROOT, 'images');
 const OPTIMIZE_SCRIPT = path.join(ROOT, 'scripts', 'optimize-images.mjs');
 const TRANSLATE_SCRIPT = path.join(ROOT, 'scripts', 'translate.mjs');
@@ -179,6 +180,20 @@ async function handleApi(req, res, pathname) {
         });
       }
       return sendJson(res, 200, { ok: true, translating: translate });
+    }
+
+    if (pathname === '/admin-api/glossary' && req.method === 'GET') {
+      return sendJson(res, 200, await readJson(GLOSSARY_PATH, { terms: {}, protected: [] }));
+    }
+
+    if (pathname === '/admin-api/glossary' && req.method === 'POST') {
+      const { terms, protected: protectedWords } = await readBody(req);
+      const clean = {
+        terms: terms && typeof terms === 'object' && !Array.isArray(terms) ? terms : {},
+        protected: Array.isArray(protectedWords) ? protectedWords : []
+      };
+      await writeJson(GLOSSARY_PATH, clean);
+      return sendJson(res, 200, { ok: true });
     }
 
     if (pathname === '/admin-api/create-project' && req.method === 'POST') {

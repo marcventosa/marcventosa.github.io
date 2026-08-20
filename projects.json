@@ -31,7 +31,8 @@
         "src": "images/gravetats/emplaç-.png",
         "alt": "Gravetats - Emplaçament",
         "text": "text1",
-        "textSide": "right"
+        "textSide": "right",
+        "imageHeight": 100
       },
       {
         "src": "images/gravetats/maqueta_emplaç.jpg",
@@ -48,11 +49,8 @@
           "images/gravetats/habitar.png",
           "images/gravetats/gravetats.png"
         ],
-        "alt": "ff"
-      },
-      {
-        "src": "images/gravetats/comunitat.png",
-        "alt": "comunitat.png"
+        "alt": "ff",
+        "imageHeight": 90
       }
     ],
     "label": "GRAVETATS"
@@ -126,7 +124,9 @@
       },
       {
         "src": "images/casa-intramurs/02_Proposta-A3_20_cuina-1.png",
-        "alt": "Casa Intramurs - Proposta A3 20 Cuina"
+        "alt": "Casa Intramurs - Proposta A3 20 Cuina",
+        "imageHeight": 88,
+        "text": "text2"
       },
       {
         "src": "images/casa-intramurs/DSC_0368_maqueta.png",
@@ -135,11 +135,6 @@
       {
         "src": "images/casa-intramurs/03. Seccio1-1.png",
         "alt": "Casa Intramurs - Secció 1"
-      },
-      {
-        "src": "images/casa-intramurs/VentosaMarc-E3-maqueta100.jpg",
-        "alt": "Casa Intramurs - VentosaMarc E3 Maqueta 100",
-        "text": "text1"
       }
     ],
     "label": "INTRAMURS"
@@ -233,7 +228,8 @@
       },
       {
         "src": "images/envoltura/BP3RIBAS (1)-02.png",
-        "alt": "Envoltura - BP3RIBAS 02"
+        "alt": "Envoltura - BP3RIBAS 02",
+        "contrast": 118
       },
       {
         "src": "images/envoltura/BP3RIBAS (1)-03.png",
@@ -277,7 +273,8 @@
       {
         "src": "images/pauhaus/sketch_bp6.png",
         "alt": "sketch_bp6.png",
-        "imageHeight": 30
+        "imageHeight": 30,
+        "bw": true
       }
     ],
     "label": "PAUHAUS"

@@ -1,34 +1,40 @@
 {
-  "trajectoria": [
+"trajectoria": [
     {
       "position": "LMDEC",
+      "year": "2025",
       "learnings": "ponts obra de fàbrica, patrimoni històric, digital twins, programació web, producció científica"
     },
     {
       "position": "DOPEC",
+      "year": "2024",
       "learnings": "urbanització, aigües, pressupost, seguiment del projecte i obra"
     },
      {
       "position": "Escola de Camins",
+      "year": "2024",
       "learnings": "coordinació exposició 50 anys, disseny interactiu"
     },
     {
       "position": "KU Leuven",
+      "year": "2023",
       "learnings": "erasmus, estructures hidràuliques, disseny universal, resiliència"
     },
     {
       "position": "META Engineering",
+      "year": "2023",
       "learnings": "urbanització, serveis, abastiment, sostenibilitat"
     },
     {
       "position": "h3o architects",
+      "year": "2022",
       "learnings": "CAD, desenvolupament concursos, model-making, rehabilitació"
     },
     {
       "position": "Domestic Data Streamers",
+      "year": "2019",
       "learnings": "desenvolupament creatiu, gestió de projectes, treball en equip"
     }
-    
   ],
   "registres": [
     {

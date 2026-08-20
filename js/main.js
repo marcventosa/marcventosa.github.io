@@ -459,9 +459,14 @@ function renderTrajectoria(trajectoria) {
     const content = document.createElement('div');
     content.className = 'trajectoria-item';
     content.innerHTML = `<strong>${item.position}</strong><span>${item.learnings}</span>`;
+    // Year, right-aligned to the position name
+    const yearEl = document.createElement('div');
+    yearEl.className = 'trajectoria-year';
+    yearEl.textContent = item.year || '';
     // Row layout
     row.appendChild(timelineCol);
     row.appendChild(content);
+    row.appendChild(yearEl);
     timelineList.appendChild(row);
   });
   trajectoriaContainer.appendChild(timelineList);
@@ -481,7 +486,7 @@ function renderRegistres(registres) {
     regDiv.innerHTML = `
       ${titleHtml}
       <span class="registre-desc">${registre.description}</span>
-      <span class='registre-date'>${registre.date}</span>
+      <span class="registre-date">${registre.date}</span>
     `;
     registresContainer.appendChild(regDiv);
   });

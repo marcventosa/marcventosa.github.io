@@ -220,8 +220,8 @@
     ]
   },
   "images/casa-intramurs/DSC_0368_maqueta.png": {
-    "w": 1485,
-    "h": 1295,
+    "w": 1330,
+    "h": 1182,
     "variants": [
       {
         "src": "images/casa-intramurs/DSC_0368_maqueta@480w.webp",
@@ -236,8 +236,8 @@
         "w": 1200
       },
       {
-        "src": "images/casa-intramurs/DSC_0368_maqueta@1485w.webp",
-        "w": 1485
+        "src": "images/casa-intramurs/DSC_0368_maqueta@1330w.webp",
+        "w": 1330
       }
     ]
   },
@@ -1198,6 +1198,46 @@
       {
         "src": "images/pauhaus/maquetes-tipus-pauhaus-2@1296w.webp",
         "w": 1296
+      }
+    ]
+  },
+  "images/pauhaus/mosaic_lamines_BP6.png": {
+    "w": 1360,
+    "h": 2872,
+    "variants": [
+      {
+        "src": "images/pauhaus/mosaic_lamines_BP6@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/pauhaus/mosaic_lamines_BP6@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/pauhaus/mosaic_lamines_BP6@1200w.webp",
+        "w": 1200
+      },
+      {
+        "src": "images/pauhaus/mosaic_lamines_BP6@1360w.webp",
+        "w": 1360
+      }
+    ]
+  },
+  "images/pauhaus/sketch_bp6.png": {
+    "w": 927,
+    "h": 691,
+    "variants": [
+      {
+        "src": "images/pauhaus/sketch_bp6@480w.webp",
+        "w": 480
+      },
+      {
+        "src": "images/pauhaus/sketch_bp6@800w.webp",
+        "w": 800
+      },
+      {
+        "src": "images/pauhaus/sketch_bp6@927w.webp",
+        "w": 927
       }
     ]
   },

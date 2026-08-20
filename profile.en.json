@@ -2,30 +2,37 @@
   "trajectoria": [
     {
       "position": "LMDEC",
+      "year": "2025",
       "learnings": "masonry bridges, historic heritage, digital twins, web development, scientific production"
     },
     {
       "position": "DOPEC",
+      "year": "2024",
       "learnings": "urban development, water systems, budgeting, project and construction monitoring"
     },
     {
       "position": "Escola de Camins",
+      "year": "2024",
       "learnings": "coordination of the 50th anniversary exhibition, interactive design"
     },
     {
       "position": "KU Leuven",
+      "year": "2023",
       "learnings": "Erasmus, hydraulic structures, universal design, resilience"
     },
     {
       "position": "META Engineering",
+      "year": "2023",
       "learnings": "urban development, utilities, water supply, sustainability"
     },
     {
       "position": "h3o architects",
+      "year": "2022",
       "learnings": "CAD, competition development, model-making, rehabilitation"
     },
     {
       "position": "Domestic Data Streamers",
+      "year": "2019",
       "learnings": "creative development, project management, teamwork"
     }
   ],

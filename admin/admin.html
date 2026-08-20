@@ -11,18 +11,23 @@
   <div id="app">
     <aside id="sidebar">
       <h1>Portfolio Admin</h1>
-      <div id="toolbar">
-        <label>Project
-          <select id="project-select"></select>
-        </label>
-        <label class="check"><input type="checkbox" id="project-hidden"> Hidden</label>
-        <button id="btn-new-project">New project</button>
-        <button id="btn-migrate">Migrate inline text</button>
+
+      <section class="side-section">
+        <h2>Projects</h2>
+        <ul id="project-list"></ul>
+        <label class="check"><input type="checkbox" id="project-hidden"> Hidden on site</label>
+        <button id="btn-new-project" class="ghost">+ New project</button>
+      </section>
+
+      <section class="side-section">
+        <h2>Actions</h2>
         <button id="btn-save" class="primary">Save</button>
-        <button id="btn-optimize">Optimize</button>
+        <button id="btn-optimize">Optimize images</button>
         <button id="btn-translate">Translate</button>
-        <span id="status"></span>
-      </div>
+        <button id="btn-glossary">Glossary</button>
+      </section>
+
+      <span id="status"></span>
     </aside>
 
     <main>
@@ -67,6 +72,45 @@
   </div>
 
   <input type="file" id="file-input" multiple accept="image/*" hidden>
+
+  <div id="glossary-modal" class="modal hidden">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h2>Translation glossary</h2>
+        <button id="glossary-close" title="Close">✕</button>
+      </div>
+      <p class="hint">Terms map Catalan → English and are forced in translated output (longest phrase wins). Protected words are kept verbatim (proper nouns, acronyms, place names). Saved to <code>glossary.json</code>; the next <em>Translate</em> re-translates affected content.</p>
+
+      <h3>Terms</h3>
+      <ul id="glossary-terms"></ul>
+      <button id="glossary-add-term">+ Term</button>
+
+      <h3>Protected</h3>
+      <ul id="glossary-protected"></ul>
+      <button id="glossary-add-protected">+ Word</button>
+
+      <div class="modal-actions">
+        <button id="glossary-save" class="primary">Save glossary</button>
+        <button id="glossary-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirm-modal" class="modal hidden">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h2 id="confirm-title">Confirm</h2>
+        <button id="confirm-close">×</button>
+      </div>
+      <p id="confirm-text" class="hint"></p>
+      <ul id="confirm-files"></ul>
+      <div class="modal-actions">
+        <button id="confirm-cancel">Cancel</button>
+        <button id="confirm-ok" class="primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="./admin.js"></script>
 </body>
 </html>

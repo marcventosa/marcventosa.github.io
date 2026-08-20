@@ -4,6 +4,20 @@ import { getManifest, buildSrcset } from './image-helper.js';
 
 const rand = (min, max) => Math.random() * (max - min) + min;
 
+// CSS filter for a misc image: bw, contrast, or a hard black/white threshold.
+function miscImageFilter(item) {
+  if (item.threshold) {
+    const t = Math.min(0.99, Math.max(0.01, item.threshold / 100));
+    const b = 0.5 / t;
+    return `grayscale(1) brightness(${b.toFixed(3)}) contrast(1000)`;
+  }
+  const parts = [];
+  if (item.bw) parts.push('grayscale(1)');
+  if (item.contrast != null) parts.push(`contrast(${item.contrast / 100})`);
+  else if (item.bw) parts.push('contrast(1.08)');
+  return parts.join(' ') || 'none';
+}
+
 const DRIFT_BUFFER = 48;
 const MAX_VERTICAL_DRIFT = 20;
 const MISC_SIZES = '(max-width: 600px) 50vw, 300px';
@@ -180,7 +194,7 @@ async function loadMiscImages() {
             img.src = newImg.src;
             img.className = newImg.className;
             img.alt = group.project || group.caption || '';
-            img.style.filter = imgData.bw ? 'grayscale(1) contrast(1.08)' : 'none';
+            img.style.filter = miscImageFilter(imgData);
             fitImage(img);
             const srcset = buildSrcset(manifest, imgData.src);
             if (srcset) {

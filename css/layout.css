@@ -153,8 +153,8 @@
     grid-template-columns: 1fr 1fr;
     align-items: center !important;
     gap: clamp(1.5rem, 2vw, 3rem);
-    max-height: var(--portrait-h, 90vh) !important;
-    height: var(--portrait-h, 90vh) !important;
+    max-height: var(--portrait-h, 60vh) !important;
+    height: var(--portrait-h, 60vh) !important;
 }
 
 .project-gallery .gallery-slide--portrait .gallery-slide-media {
@@ -162,14 +162,14 @@
     align-items: center !important;
     justify-content: center !important;
     min-width: 0;
-    height: var(--portrait-h, 90vh) !important;
-    max-height: var(--portrait-h, 90vh) !important;
+    height: var(--portrait-h, 60vh) !important;
+    max-height: var(--portrait-h, 60vh) !important;
 }
 
 .project-gallery .gallery-slide--portrait .gallery-slide-media .project-image {
     width: auto !important;
     max-width: 100% !important;
-    max-height: var(--portrait-h, 90vh) !important;
+    max-height: var(--portrait-h, 60vh) !important;
     height: auto !important;
     object-fit: contain !important;
     object-position: center !important;
@@ -191,6 +191,8 @@
     gap: 0.2rem !important;
     margin: 0 !important;
     padding: 0 !important;
+    max-height: 100% !important;
+    overflow-y: auto !important;
 }
 
 .project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text-title {
