@@ -33,6 +33,7 @@ const IMAGES_DIR = path.join(ROOT, 'images');
 const CACHE_PATH = path.join(ROOT, '.translate-cache.json');
 const STRINGS_PATH = path.join(ROOT, 'strings.json');
 const STRINGS_EN_PATH = path.join(ROOT, 'strings.en.json');
+const PUBLIC_DIR = path.join(ROOT, 'public');
 
 const DELAY = Number(process.env.TRANSLATE_DELAY) || 1200;
 const RETRIES = Number(process.env.TRANSLATE_RETRIES) || 3;
@@ -371,7 +372,8 @@ async function translateStrings(cache) {
       }
     }
     await fs.writeFile(STRINGS_EN_PATH, JSON.stringify(out, null, 2) + '\n', 'utf8');
-    console.log('Translated strings: strings.json -> strings.en.json');
+    await fs.writeFile(path.join(PUBLIC_DIR, 'strings.en.json'), JSON.stringify(out, null, 2) + '\n', 'utf8');
+    console.log('Translated strings: strings.json -> strings.en.json (and public/)');
   } catch (e) {
     console.warn('Could not translate strings.json:', e.message);
   }

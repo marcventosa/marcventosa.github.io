@@ -376,18 +376,56 @@ function attachGalleryNavigation(section, gallery) {
   let currentIndex = 0;
   let touchStartX = 0;
   let touchEndX = 0;
+  let touchInCopy = false;
+
+  const REVEAL_CLASS = 'mobile-text-revealed';
+
+  function slidesList() {
+    return gallery.querySelectorAll('.gallery-slide');
+  }
+
+  // On mobile, a slide with side copy has its text revealed one gesture after
+  // the image (overlaid, faded in). Desktop never reveals, so this is a no-op
+  // there and the existing desktop behavior is preserved.
+  function hasRevealableText(slide) {
+    return window.innerWidth <= 768 && !!slide.querySelector('.gallery-side-copy');
+  }
+
+  function isRevealed(slide) {
+    return slide.classList.contains(REVEAL_CLASS);
+  }
 
   function activateSlideAt(index) {
-    const slides = gallery.querySelectorAll('.gallery-slide');
+    const slides = slidesList();
     if (!slides.length) return;
     const slide = slides[index];
     if (slide) slide.querySelectorAll('img').forEach(activateImage);
   }
 
+  // Two-step navigation on mobile: the first forward gesture reveals the text
+  // belonging to the current image; only the next gesture advances. Backward
+  // reverses (hide the text, then go to the previous image).
   function navigateSlides(direction) {
-    const slides = gallery.querySelectorAll('.gallery-slide');
+    const slides = slidesList();
     if (!slides.length) return;
-    slides.forEach((slide) => slide.classList.remove('active'));
+
+    const currentSlide = slides[currentIndex];
+    if (hasRevealableText(currentSlide)) {
+      if (direction === 'next' && !isRevealed(currentSlide)) {
+        currentSlide.classList.add(REVEAL_CLASS);
+        activateSlideAt(currentIndex);
+        return;
+      }
+      if (direction === 'prev' && isRevealed(currentSlide)) {
+        currentSlide.classList.remove(REVEAL_CLASS);
+        return;
+      }
+    }
+
+    slides.forEach((slide) => {
+      slide.classList.remove('active');
+      slide.classList.remove(REVEAL_CLASS);
+    });
 
     if (direction === 'next') {
       currentIndex = (currentIndex + 1) % slides.length;
@@ -404,9 +442,12 @@ function attachGalleryNavigation(section, gallery) {
   }
 
   function resetGallery() {
-    const slides = gallery.querySelectorAll('.gallery-slide');
+    const slides = slidesList();
     if (!slides.length) return;
-    slides.forEach((slide) => slide.classList.remove('active'));
+    slides.forEach((slide) => {
+      slide.classList.remove('active');
+      slide.classList.remove(REVEAL_CLASS);
+    });
     currentIndex = 0;
     slides[0].classList.add('active');
     activateSlideAt(0);
@@ -415,6 +456,10 @@ function attachGalleryNavigation(section, gallery) {
   gallery._resetGallery = resetGallery;
 
   section.addEventListener('click', (event) => {
+    // On mobile, taps inside the revealed copy (to scroll or select) never
+    // navigate. Desktop keeps its existing behavior.
+    if (window.innerWidth <= 768 && event.target.closest && event.target.closest('.gallery-side-copy')) return;
+
     const sectionRect = section.getBoundingClientRect();
     const clickX = event.clientX;
     const midpoint = sectionRect.left + sectionRect.width / 2;
@@ -428,19 +473,23 @@ function attachGalleryNavigation(section, gallery) {
 
   section.addEventListener('touchstart', (event) => {
     touchStartX = event.changedTouches[0].screenX;
+    touchInCopy = window.innerWidth <= 768
+      && !!(event.target.closest && event.target.closest('.gallery-side-copy'));
   }, { passive: true });
 
   section.addEventListener('touchend', (event) => {
     touchEndX = event.changedTouches[0].screenX;
     const swipeThreshold = 50;
 
-    if (Math.abs(touchEndX - touchStartX) > swipeThreshold) {
+    // Gestures that start inside the copy scroll the text instead of navigating.
+    if (!touchInCopy && Math.abs(touchEndX - touchStartX) > swipeThreshold) {
       if (touchEndX < touchStartX) {
         navigateSlides('next');
       } else {
         navigateSlides('prev');
       }
     }
+    touchInCopy = false;
   }, { passive: true });
 }
 

@@ -1,7 +1,7 @@
 *Avinguda Paral·lel, Barcelona*
 Taller Cristina Gamboa, $hcc etsab$
 /
-60 housing cluster.
+60 housing-cluster.
 
 //
 

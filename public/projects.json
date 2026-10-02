@@ -1,0 +1,282 @@
+[
+  {
+    "id": "gravetats",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
+    "gallery": [
+      {
+        "src": "images/gravetats/foto-maqueta-arbre-2.png",
+        "alt": "Gravetats - Foto maqueta arbre 2",
+        "imageHeight": 80
+      },
+      {
+        "src": "images/gravetats/comunitat.png",
+        "alt": "Gravetats - Comunitat",
+        "imageHeight": 100,
+        "layout": {
+          "cover": "portrait",
+          "align": "left",
+          "textSide": "right"
+        }
+      },
+      {
+        "src": "images/gravetats/construc..png",
+        "alt": "Gravetats - Construcció",
+        "imageHeight": 100
+      },
+      {
+        "src": "images/gravetats/emplaç-.png",
+        "alt": "Gravetats - Emplaçament",
+        "text": "text1",
+        "textSide": "right",
+        "imageHeight": 100
+      },
+      {
+        "src": "images/gravetats/maqueta_emplaç.jpg",
+        "alt": "Gravetats - Empla3ament",
+        "textSide": "left"
+      },
+      {
+        "src": "images/gravetats/gravetats.png",
+        "alt": "Gravetats - Gravetats",
+        "imageHeight": 100
+      },
+      {
+        "src": [
+          "images/gravetats/habitar.png",
+          "images/gravetats/gravetats.png"
+        ],
+        "alt": "ff",
+        "imageHeight": 90
+      }
+    ],
+    "label": "GRAVETATS"
+  },
+  {
+    "id": "neoenvelat",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
+    "gallery": [
+      {
+        "src": "images/neoenvelat/axo projecte.png",
+        "alt": "Neo Envelat - Emplaçament",
+        "imageHeight": 90
+      },
+      {
+        "src": "images/neoenvelat/GIF_1_VentosaMarc.gif",
+        "alt": "Neo Envelat - Planta",
+        "imageHeight": 50
+      },
+      {
+        "src": "images/neoenvelat/encaix-A2-emplaçament.png",
+        "alt": "Neo Envelat - Secció",
+        "imageHeight": 100,
+        "text": "text1"
+      },
+      {
+        "src": "images/neoenvelat/envelat-foto-1.20.png",
+        "alt": "Neo Envelat - Collage",
+        "imageHeight": 60
+      }
+    ],
+    "label": "NEOENVELAT"
+  },
+  {
+    "id": "casa-intramurs",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
+    "gallery": [
+      {
+        "src": "images/casa-intramurs/resum_sketch-01.png",
+        "alt": "Casa Intramurs - Resum Sketch",
+        "imageHeight": 60
+      },
+      {
+        "src": "images/casa-intramurs/04 - collage-entradapost_compressed-1.png",
+        "alt": "Casa Intramurs - Collage Entradapost"
+      },
+      {
+        "src": "images/casa-intramurs/traces_latents.png",
+        "alt": "Casa Intramurs - Traces Latents"
+      },
+      {
+        "src": "images/casa-intramurs/02. Planta 1_200-01.png",
+        "alt": "Casa Intramurs - Planta 1",
+        "imageHeight": 100
+      },
+      {
+        "src": "images/casa-intramurs/maqueta_1.100_2.jpg",
+        "alt": "Casa Intramurs - Maqueta 1.100 2",
+        "imageHeight": 70
+      },
+      {
+        "src": "images/casa-intramurs/03. Seccio3-1.png",
+        "alt": "Casa Intramurs - Secció 3"
+      },
+      {
+        "src": "images/casa-intramurs/02_Proposta-A3_20_cuina-1.png",
+        "alt": "Casa Intramurs - Proposta A3 20 Cuina",
+        "imageHeight": 88,
+        "text": "text2"
+      },
+      {
+        "src": "images/casa-intramurs/DSC_0368_maqueta.png",
+        "alt": "Casa Intramurs - Maqueta cuina"
+      },
+      {
+        "src": "images/casa-intramurs/03. Seccio1-1.png",
+        "alt": "Casa Intramurs - Secció 1"
+      }
+    ],
+    "label": "INTRAMURS"
+  },
+  {
+    "id": "refact",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
+    "gallery": [
+      {
+        "src": "images/refact/01.EMPLAÇAMENT-A2-01.png",
+        "alt": "Refact - Emplaçament",
+        "imageHeight": 100
+      },
+      {
+        "src": "images/refact/maqueta_3_1.100.jpg",
+        "alt": "Refact - Maqueta 1.100"
+      },
+      {
+        "src": "images/refact/05. pasarela2-01.png",
+        "alt": "Refact - Pasarela"
+      },
+      {
+        "src": "images/refact/carto_antiga-01.png",
+        "alt": "Refact - Cartografia Antiga",
+        "text": "text1"
+      },
+      {
+        "src": "images/refact/collage-ext-01.png",
+        "alt": "Refact - Collage Exterior"
+      },
+      {
+        "src": "images/refact/collage_interior.jpg",
+        "alt": "Refact - Collage Interior"
+      },
+      {
+        "src": "images/refact/p6-titol-projecte-01.png",
+        "alt": "Refact - Títol Projecte"
+      }
+    ],
+    "label": "REFACT"
+  },
+  {
+    "id": "abans-del-cim",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
+    "gallery": [
+      {
+        "src": "images/abans-del-cim/DSC_0274.JPG",
+        "alt": "Abans del Cim - DSC_0274",
+        "text": "text1"
+      },
+      {
+        "src": "images/abans-del-cim/planta-abanscim-01.png",
+        "alt": "Abans del Cim - Planta Abans Cim"
+      },
+      {
+        "src": "images/abans-del-cim/collage.png",
+        "alt": "Abans del Cim - Collage"
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0272.JPG",
+        "alt": "Abans del Cim - DSC_0272"
+      },
+      {
+        "src": "images/abans-del-cim/DSC_0273.JPG",
+        "alt": "Abans del Cim - DSC_0273"
+      }
+    ],
+    "hidden": true,
+    "label": "A MONT"
+  },
+  {
+    "id": "envoltura",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
+    "gallery": [
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-01.png",
+        "alt": "Envoltura - BP3RIBAS 01",
+        "imageHeight": 70
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-02.png",
+        "alt": "Envoltura - BP3RIBAS 02",
+        "contrast": 118
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03.png",
+        "alt": "Envoltura - BP3RIBAS 03"
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-1_peces.png",
+        "alt": "Envoltura - BP3RIBAS Peces",
+        "text": "text1",
+        "imageHeight": 70
+      },
+      {
+        "src": "images/envoltura/BP3RIBAS (1)-03_proces.png",
+        "alt": "Envoltura - BP3RIBAS 03 Proces"
+      }
+    ],
+    "label": "ENVOLTURA"
+  },
+  {
+    "id": "pauhaus",
+    "mobileLayout": {
+      "textPosition": "below",
+      "imageAspect": "landscape",
+      "columnCount": 1
+    },
+    "gallery": [
+      {
+        "src": "images/pauhaus/LAM4_Mesa de trabajo 1 copia.png",
+        "alt": "Casa Pau - LAM4 Mesa de trabajo 1",
+        "imageHeight": 60
+      },
+      {
+        "src": "images/pauhaus/maquetes-tipus-pauhaus-2.jpg",
+        "alt": "Casa Pau - Maquetes Tipus Pauhaus"
+      },
+      {
+        "src": "images/pauhaus/mosaic_lamines_BP6.png",
+        "alt": "mosaic_lamines_BP6.png",
+        "imageHeight": 97
+      },
+      {
+        "src": "images/pauhaus/sketch_bp6.png",
+        "alt": "sketch_bp6.png",
+        "imageHeight": 30,
+        "bw": true
+      }
+    ],
+    "label": "PAUHAUS"
+  }
+]

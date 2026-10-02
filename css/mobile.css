@@ -245,8 +245,21 @@
     box-sizing: border-box !important;
   }
 
-  /* Portrait slides: shown entirely (no crop); text sits below the image so
-     the page scrolls slightly to read it. */
+  /* Text slides: the gallery scrolls with the page and any text that overflows
+     the image is not clipped, so the slide must grow to fit it. */
+  .project-gallery:has(.gallery-side-copy) {
+    overflow-x: clip !important;
+    overflow-y: visible !important;
+  }
+
+  .gallery-slide:has(.gallery-side-copy) {
+    overflow: visible !important;
+    min-height: 100dvh;
+    display: flex !important;
+  }
+
+  /* Portrait slides: shown entirely (no crop). Any text is overlaid on the
+     image and revealed by the next forward gesture (see mobile-text-revealed). */
   .gallery-slide--portrait .gallery-slide-content {
     width: 100% !important;
     max-width: 100% !important;
@@ -257,6 +270,7 @@
     gap: 0.8rem !important;
     height: auto !important;
     max-height: none !important;
+    position: relative !important;
   }
 
   .gallery-slide--portrait .gallery-slide-media {
@@ -265,27 +279,75 @@
     max-height: none !important;
     margin-left: 0 !important;
     flex: none !important;
+    position: relative !important;
   }
 
+  /* Whole-image fade: one left → right wash covers the entire image (the final
+     look). It simply fades in with a single opacity transition one gesture
+     after the image — no directional wipe. */
+  .gallery-slide--portrait .gallery-slide-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.96) 0%,
+      rgba(255, 255, 255, 0.9) 70%,
+      rgba(255, 255, 255, 0.6) 88%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
 
+  .gallery-slide--portrait.mobile-text-revealed .gallery-slide-media::after {
+    opacity: 1;
+  }
 
+  /* The text: anchored left over the image, right edge left clear so it stays
+     clickable for the next item (see attachGalleryNavigation). It is NOT
+     height-capped to the image: long copy grows past the image bottom and the
+     page scrolls, so nothing is clipped or trapped in an inner scroll area. */
   .gallery-slide--portrait .gallery-side-copy {
-    width: 100% !important;
-    max-width: 100% !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: auto !important;
+    bottom: 0 !important;
+    width: 88% !important;
+    max-width: 88% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    box-sizing: border-box;
+    z-index: 1;
     flex: none !important;
-    text-align: left !important;
-    margin: 0 !important;
-    padding: 0 0.5rem !important;
     display: flex !important;
     flex-direction: column !important;
+    justify-content: flex-end !important;
     gap: 0.4rem !important;
+    text-align: left !important;
+    margin: 0 !important;
+    padding: 0.85rem !important;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
   }
 
+  .gallery-slide--portrait.mobile-text-revealed .gallery-side-copy {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Typography ported from the desktop side-by-side layout (layout.css). */
   .gallery-slide--portrait .gallery-side-copy .gallery-text-title {
     display: block !important;
     font-size: 0.85rem !important;
-    font-weight: 600 !important;
-    margin-bottom: 0.1rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    margin: 0 0 0.1rem !important;
     text-align: left !important;
     text-transform: uppercase !important;
     letter-spacing: 0.02em !important;
@@ -293,10 +355,11 @@
 
   .gallery-slide--portrait .gallery-side-copy .gallery-text-subtitle {
     display: block !important;
-    font-size: 0.9rem !important;
-    line-height: 1.4 !important;
+    font-size: 0.72rem !important;
+    line-height: 1.35 !important;
     letter-spacing: 0 !important;
-    font-weight: 400 !important;
+    font-weight: 700 !important;
+    color: inherit !important;
     text-align: left !important;
     margin: 0 !important;
     white-space: pre-wrap !important;
@@ -304,13 +367,18 @@
 
   .gallery-slide--portrait .gallery-side-copy .gallery-text {
     display: block !important;
-    font-size: 0.8rem !important;
+    font-size: 0.72rem !important;
     line-height: 1.35 !important;
     color: #888 !important;
     font-weight: 700 !important;
-    text-align: left !important;
-    margin: 1rem 0 0.5rem !important;
+    text-align: justify !important;
+    margin: 1.2rem 0 0.6rem !important;
     white-space: pre-wrap !important;
+  }
+
+  .gallery-slide--portrait .gallery-side-copy .gallery-text-columns {
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .gallery-slide--text-only {

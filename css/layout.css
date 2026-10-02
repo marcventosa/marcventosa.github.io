@@ -521,6 +521,22 @@
     white-space: pre-line;
 }
 
+#wip-label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-family: "Monument Grotesk Mono Variable", "Monument Grotesk Mono", monospace;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    color: inherit;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 /* Data at the very bottom */
 #data-principal {
     position: absolute;
