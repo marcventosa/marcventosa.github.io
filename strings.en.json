@@ -1,7 +1,15 @@
 {
+<<<<<<< HEAD
   "landing.title": "architecture\n& engineering",
   "profile.contact.title": "Let's talk!",
   "profile.formation.title": "Education",
   "profile.trajectoria.title": "Career",
   "profile.registres.title": "Records"
+=======
+  "landing.title": "arquitectura\ni enginyeria",
+  "profile.contact.title": "Parlem!",
+  "profile.formation.title": "Formació",
+  "profile.trajectoria.title": "Trajectòria",
+  "profile.registres.title": "Registres"
+>>>>>>> 494f332f52e049bbe884323e4e87403a2fc46932
 }
