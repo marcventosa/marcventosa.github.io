@@ -150,7 +150,9 @@
     width: calc(70vw - 20px);
     max-width: 100%;
     display: grid !important;
-    grid-template-columns: 1fr 1fr;
+    /* Wider image column, narrower copy column: the paragraph column is a bit
+       narrower so the text runs taller (more lines up and down). */
+    grid-template-columns: 1.35fr 1fr;
     align-items: center !important;
     gap: clamp(1.5rem, 2vw, 3rem);
     max-height: var(--portrait-h, 60vh) !important;
@@ -176,9 +178,11 @@
     display: block !important;
 }
 
-/* Tall (portrait) images fill the height: bind by max-height, not column width. */
+/* Tall (portrait) images fill the height, but must still respect the column
+   width — otherwise they overflow the grid cell and get clipped by the
+   gallery's overflow:hidden (cut off on the side by the text). */
 .project-gallery .gallery-slide.gallery-slide--img-tall .gallery-slide-media .project-image {
-    max-width: none !important;
+    max-width: 100% !important;
 }
 
 .project-gallery .gallery-slide--portrait .gallery-side-copy {
