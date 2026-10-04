@@ -42,6 +42,38 @@ function imgUrl(id, name) {
   return '/images/' + encodeURIComponent(id) + '/' + encodeURIComponent(name);
 }
 
+// Click a gallery thumbnail to open it full size in a lightbox overlay.
+function ensureLightbox() {
+  let el = $('#lightbox');
+  if (el) return el;
+  el = document.createElement('div');
+  el.id = 'lightbox';
+  el.className = 'lightbox hidden';
+  const im = document.createElement('img');
+  im.alt = '';
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'lightbox-close';
+  close.textContent = '✕';
+  close.setAttribute('aria-label', 'Close');
+  el.append(im, close);
+  el.addEventListener('click', () => el.classList.add('hidden'));
+  document.body.appendChild(el);
+  return el;
+}
+
+function openLightbox(url) {
+  const el = ensureLightbox();
+  el.querySelector('img').src = url;
+  el.classList.remove('hidden');
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  const el = document.getElementById('lightbox');
+  if (el) el.classList.add('hidden');
+});
+
 const srcToFilename = (src) => String(src).split('/').pop();
 
 const fragLabel = (i) => 'text' + (i + 1);
@@ -189,6 +221,7 @@ function buildEntryCard(entry, idx) {
   const li = document.createElement('li');
   li.className = 'entry';
 
+  // Top row: type badge, file summary, row actions.
   const head = document.createElement('div');
   head.className = 'entry-head';
 
@@ -196,23 +229,6 @@ function buildEntryCard(entry, idx) {
   badge.className = 'badge';
   badge.textContent = { img: 'IMG', dual: 'IMG×2', imgtext: 'IMG+TXT', text: 'TXT' }[entryType(entry)];
   head.appendChild(badge);
-
-  const thumb = document.createElement('div');
-  thumb.className = 'thumb';
-  if (Array.isArray(entry.src)) {
-    entry.src.forEach((s) => {
-      const im = document.createElement('img');
-      im.src = imgUrl(currentId, srcToFilename(s));
-      im.loading = 'lazy';
-      thumb.appendChild(im);
-    });
-  } else if (entry.src) {
-    const im = document.createElement('img');
-    im.src = imgUrl(currentId, srcToFilename(entry.src));
-    im.loading = 'lazy';
-    thumb.appendChild(im);
-  }
-  head.appendChild(thumb);
 
   const summary = document.createElement('span');
   summary.className = 'summary';
@@ -232,11 +248,38 @@ function buildEntryCard(entry, idx) {
 
   li.appendChild(head);
 
+  // Two-column body: the image fills the left column at full card height,
+  // the setup controls sit to its right.
+  const grid = document.createElement('div');
+  grid.className = 'entry-main';
+
+  const thumb = document.createElement('div');
+  thumb.className = 'thumb';
+  const addThumb = (s) => {
+    const im = document.createElement('img');
+    const url = imgUrl(currentId, srcToFilename(s));
+    im.src = url;
+    im.loading = 'lazy';
+    im.title = 'Click to enlarge';
+    im.addEventListener('click', (e) => { e.stopPropagation(); openLightbox(url); });
+    thumb.appendChild(im);
+  };
+  if (Array.isArray(entry.src)) {
+    entry.src.forEach(addThumb);
+  } else if (entry.src) {
+    addThumb(entry.src);
+  }
+  const hasThumb = thumb.childElementCount > 0;
+  if (hasThumb) grid.appendChild(thumb);
+
   // Editor body
   const body = document.createElement('div');
   body.className = 'entry-body';
   body.appendChild(buildEntryEditor(entry, idx));
-  li.appendChild(body);
+  grid.appendChild(body);
+
+  if (hasThumb) li.appendChild(grid);
+  else li.appendChild(body);
 
   // Raw JSON editor (hidden)
   const json = document.createElement('div');

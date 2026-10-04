@@ -312,18 +312,36 @@ ul { list-style: none; margin: 0; padding: 0; }
   flex: 0 0 auto;
 }
 
+/* Two-column card body: the image fills the left column at the full height of
+   the card, the setup controls sit to its right. No grey fill — the image just
+   occupies the column at full height. */
+.entry-main {
+  display: flex;
+  align-items: stretch;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
 .thumb {
   display: flex;
-  gap: 0.25rem;
+  gap: 0.35rem;
+  align-items: stretch;
   flex: 0 0 auto;
-  width: 80px;
-  height: 52px;
-  align-items: center;
-  justify-content: center;
+  max-width: 45%;
   overflow: hidden;
-  background: #efefef;
+  cursor: zoom-in;
 }
-.thumb img { height: 100%; width: auto; max-width: 40px; object-fit: contain; }
+.thumb img {
+  height: auto;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  flex: 0 1 auto;
+  min-width: 0;
+  display: block;
+}
+.thumb img:hover { outline: 2px solid var(--accent); outline-offset: -2px; }
+.entry-main .entry-body { flex: 1 1 auto; min-width: 0; margin-top: 0; }
 
 .summary {
   flex: 1 1 auto;
@@ -468,3 +486,38 @@ ul { list-style: none; margin: 0; padding: 0; }
 }
 #confirm-ok { background: var(--text); color: #fff; }
 #confirm-ok:hover:not(:disabled) { background: #b00020; border-color: #b00020; color: #fff; }
+
+/* ---- Image lightbox: click a thumbnail to view it full size ---- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 2rem;
+  cursor: zoom-out;
+}
+.lightbox.hidden { display: none; }
+.lightbox img {
+  max-width: 96vw;
+  max-height: 92vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+.lightbox .lightbox-close {
+  position: fixed;
+  top: 1rem;
+  right: 1.25rem;
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 0.35rem 0.7rem;
+  background: #fff;
+  color: #000;
+  border: none;
+  cursor: pointer;
+}
