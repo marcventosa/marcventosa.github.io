@@ -150,9 +150,9 @@
     width: calc(70vw - 20px);
     max-width: 100%;
     display: grid !important;
-    /* Wider image column, narrower copy column: the paragraph column is a bit
+    /* Wider image column, narrower copy column: the paragraph column is
        narrower so the text runs taller (more lines up and down). */
-    grid-template-columns: 1.35fr 1fr;
+    grid-template-columns: 1.6fr 1fr;
     align-items: center !important;
     gap: clamp(1.5rem, 2vw, 3rem);
     max-height: var(--portrait-h, 60vh) !important;
