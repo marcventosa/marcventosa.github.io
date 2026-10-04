@@ -1,7 +1,2 @@
-<<<<<<< HEAD
 Welcome!
-More than a portfolio, this space is meant to be a living archive of past processes and notes. A collection of cut-out fragments, a digital record that lets me return to them, copy from them, confront what has already been made, and build on those paths and detours.
-=======
-Benvinguts!
-Més que un portfoli, aquest espai vol ser un arxiu viu de processos i anotacions passades. Una col·lecció de trossos retallats, una eina de registre digital que em permeti tornar-hi, copiar-ne, confrontar-me amb allò ja creat, i construir a partir d’aquests camins i desviacions.
->>>>>>> 494f332f52e049bbe884323e4e87403a2fc46932
+More than a portfolio, this space is a living archive of past processes and annotations. A collection of cut pieces, a digital recording tool that allows me to return to it, copy it, confront what has already been created, and build from these paths and deviations.

@@ -16,6 +16,8 @@
 @media (max-width: 768px) {
   :root {
     --viewport-height: 100dvh;
+    /* Shared side gutter for the profile content and the landing nav/aux texts. */
+    --mobile-gutter: 2rem;
   }
 
   .main-header {
@@ -46,7 +48,7 @@
   #title-principal {
     position: absolute;
     top: calc(1.25rem + env(safe-area-inset-top, 0px));
-    right: 1rem;
+    right: var(--mobile-gutter);
     left: auto;
     width: auto;
     text-align: right;
@@ -56,7 +58,7 @@
   #data-principal {
     position: absolute;
     bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px) + 3.4vw + 0.2rem);
-    left: 1.7rem;
+    left: var(--mobile-gutter);
     right: auto;
     width: auto;
     text-align: left;
@@ -66,7 +68,7 @@
   .lang-toggle {
     position: fixed;
     bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
-    left: 1.7rem;
+    left: var(--mobile-gutter);
     right: auto;
     top: auto;
     transform: translateZ(0);
@@ -101,13 +103,99 @@
     bottom: 0;
     display: block;
     pointer-events: none;
-    z-index: 3;
+    z-index: 11; /* above the profile overlay so the name stays pinned on top */
+  }
+
+  /* Mobile profile overlay: the profile fades in over the landing (like desktop),
+     the name link stays pinned, and every other landing element fades out. */
+  body.mobile-profile-open {
+    overflow: hidden;
+  }
+
+  body.mobile-profile-open #profile {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: calc(min(60vw, 350px) - 2rem + env(safe-area-inset-top, 0px))
+      var(--mobile-gutter) calc(3rem + env(safe-area-inset-bottom, 0px)) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    background: #fff !important;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+
+  body.mobile-profile-open #profile.profile-fade-in {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* The name link lives inside #slitscan-overlay (z-index 2), which would cap it
+     below the profile overlay. Lift that layer above the profile (background
+     transparent, landing text faded) so the name stays pinned on top. */
+  body.mobile-profile-open #slitscan-overlay {
+    z-index: 12;
+    background: transparent;
+  }
+
+  body.mobile-profile-open #slitscan-overlay-text {
+    opacity: 0 !important;
+    transition: opacity 0.4s ease;
+  }
+
+  /* The project links fade out over the profile, but the language switcher
+     stays visible (and clickable) in the mobile profile. */
+  body.mobile-profile-open .landing-nav-links {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.4s ease !important;
+  }
+
+  body.mobile-profile-open .lang-toggle {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Profile photo: mirror the desktop treatment, where the photo hangs off the
+     viewport edge (to the left on desktop). On mobile it bleeds off the TOP and
+     LEFT edges. It sits behind the pinned name, which stays readable over it. */
+  body.mobile-profile-open .profile-image {
+    position: absolute !important;
+    top: -4rem !important;
+    left: -10vw !important;
+    right: auto !important;
+    max-width: min(80vw, 460px) !important;
+    max-height: none !important;
+    margin: 0 !important;
+    transform: rotate(-4deg);
+    transform-origin: top left;
+    z-index: 0;
+  }
+
+  /* Slitscan fades to white in sync with the profile overlay. */
+  #slitscan-canvas {
+    transition: opacity 0.6s ease;
   }
 
   .landing-name-link {
     position: absolute;
     top: calc(1.25rem + env(safe-area-inset-top, 0px));
-    left: 1rem;
+    left: var(--mobile-gutter);
     display: block !important;
     text-align: left;
     pointer-events: auto;
@@ -120,14 +208,25 @@
     min-height: 48px !important;
     transform: scaleX(0.96);
     transform-origin: left center;
-    padding: 0.5rem 0.7rem;
+    padding: 0.5rem 0;
     margin: 0;
+  }
+
+  /* The name is the profile toggle: it turns yellow while the profile is open
+     (clicked) and returns to its normal dark colour when closed. High
+     specificity so it wins over the base `.landing-name-link` colour. */
+  body.mobile-profile-open #landing-nav .landing-name-link,
+  body.mobile-profile-open #landing-nav .landing-name-link:hover,
+  body.mobile-profile-open #landing-nav .landing-name-link:active,
+  body.mobile-profile-open #landing-nav .landing-name-link:focus {
+    color: yellow !important;
+    opacity: 1 !important;
   }
 
   .landing-nav-links {
     position: absolute;
     bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px));
-    right: 1rem;
+    right: var(--mobile-gutter);
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -291,9 +390,10 @@
     inset: 0;
     background: linear-gradient(
       to right,
-      rgba(255, 255, 255, 0.96) 0%,
-      rgba(255, 255, 255, 0.9) 70%,
-      rgba(255, 255, 255, 0.6) 88%,
+      rgba(255, 255, 255, 0.97) 0%,
+      rgba(255, 255, 255, 0.94) 52%,
+      rgba(255, 255, 255, 0.9) 66%,
+      rgba(255, 255, 255, 0.55) 82%,
       rgba(255, 255, 255, 0) 100%
     );
     opacity: 0;
@@ -305,17 +405,19 @@
     opacity: 1;
   }
 
-  /* The text: anchored left over the image, right edge left clear so it stays
-     clickable for the next item (see attachGalleryNavigation). It is NOT
-     height-capped to the image: long copy grows past the image bottom and the
-     page scrolls, so nothing is clipped or trapped in an inner scroll area. */
+  /* The text: anchored left over the image. Its width is capped to the opaque
+     left stretch of the left → right fade above, so the copy stays legible and
+     the clear right margin grows into a larger tap target for the next item
+     (see attachGalleryNavigation). It is NOT height-capped to the image: long
+     copy grows past the image bottom and the page scrolls, so nothing is
+     clipped or trapped in an inner scroll area. */
   .gallery-slide--portrait .gallery-side-copy {
     position: absolute !important;
     left: 0 !important;
     right: auto !important;
     bottom: 0 !important;
-    width: 88% !important;
-    max-width: 88% !important;
+    width: 70% !important;
+    max-width: 70% !important;
     height: auto !important;
     max-height: none !important;
     overflow: visible !important;
@@ -341,26 +443,32 @@
     pointer-events: auto;
   }
 
-  /* Typography ported from the desktop side-by-side layout (layout.css). */
+  /* Typography ported from the desktop side-by-side layout (layout.css).
+     Title and subtitle are boxed to the same left column as the body copy
+     (typography.css forces .gallery-text to 75%), so the whole fragment shares
+     one justified left edge. The title keeps its 0.96 scale transform, so its
+     width is pre-divided to land on the same visual right edge. */
   .gallery-slide--portrait .gallery-side-copy .gallery-text-title {
     display: block !important;
+    width: calc(75% / 0.96) !important;
     font-size: 0.85rem !important;
     font-weight: 700 !important;
     line-height: 1.2 !important;
     margin: 0 0 0.1rem !important;
-    text-align: left !important;
+    text-align: justify !important;
     text-transform: uppercase !important;
     letter-spacing: 0.02em !important;
   }
 
   .gallery-slide--portrait .gallery-side-copy .gallery-text-subtitle {
     display: block !important;
+    width: 75% !important;
     font-size: 0.72rem !important;
     line-height: 1.35 !important;
     letter-spacing: 0 !important;
     font-weight: 700 !important;
     color: inherit !important;
-    text-align: left !important;
+    text-align: justify !important;
     margin: 0 !important;
     white-space: pre-wrap !important;
   }

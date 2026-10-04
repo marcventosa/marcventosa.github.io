@@ -72,7 +72,71 @@ function initMobileProjectRouter() {
     setActiveLink(null);
   };
 
+  const isProfileOpen = () => document.body.classList.contains('mobile-profile-open');
+
+  const fadeSlitscan = (visible) => {
+    if (window.slitScan && typeof window.slitScan.setVisibility === 'function') {
+      window.slitScan.setVisibility(visible);
+    }
+  };
+
+  // Profile opens as a fade-in overlay over the landing (mobile), with the name
+  // link pinned on top and no scroll. Tapping the name again closes it.
+  const openProfile = () => {
+    navigateGuard = true;
+    if (landingSettleTimer) {
+      clearTimeout(landingSettleTimer);
+      landingSettleTimer = null;
+    }
+    setActiveLink('profile');
+    landingSection.classList.remove('landing-active');
+    document.body.classList.add('mobile-profile-open');
+
+    allHideable().forEach((s) => {
+      if (s.id === 'profile') {
+        s.classList.remove('mobile-hidden-project');
+        s.classList.add('mobile-active-project');
+      } else {
+        s.classList.add('mobile-hidden-project');
+        s.classList.remove('mobile-active-project');
+      }
+    });
+
+    fadeSlitscan(false);
+
+    const target = document.getElementById('profile');
+    if (target) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => target.classList.add('profile-fade-in'));
+      });
+    }
+
+    setTimeout(() => { navigateGuard = false; }, 1200);
+  };
+
+  const closeProfile = () => {
+    const target = document.getElementById('profile');
+    if (target) target.classList.remove('profile-fade-in');
+
+    setTimeout(() => {
+      if (!document.body.classList.contains('mobile-profile-open')) return;
+      document.body.classList.remove('mobile-profile-open');
+      if (target) {
+        target.classList.remove('mobile-active-project');
+        target.classList.add('mobile-hidden-project');
+      }
+      landingSection.classList.add('landing-active');
+      fadeSlitscan(true);
+      setActiveLink(null);
+    }, 600);
+  };
+
   const showOnly = async (targetId) => {
+    if (targetId === 'profile') {
+      openProfile();
+      return;
+    }
+
     navigateGuard = true;
     if (landingSettleTimer) {
       clearTimeout(landingSettleTimer);
@@ -93,7 +157,7 @@ function initMobileProjectRouter() {
 
     if (targetId === 'misc-section') {
       await loadMiscImages();
-    } else if (targetId !== 'profile') {
+    } else {
       await loadProject(targetId);
     }
 
@@ -111,6 +175,10 @@ function initMobileProjectRouter() {
       e.stopPropagation();
       if (!isMobile()) return;
       const targetId = link.dataset.section;
+      if (targetId === 'profile' && isProfileOpen()) {
+        closeProfile();
+        return;
+      }
       showOnly(targetId);
     });
   });
@@ -124,6 +192,7 @@ function initMobileProjectRouter() {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.target.id !== 'home' || !isMobile()) return;
+        if (isProfileOpen()) return;
         if (entry.intersectionRatio >= 1.0 && !navigateGuard) {
           if (!landingSettleTimer) {
             landingSettleTimer = setTimeout(() => {
@@ -159,6 +228,10 @@ function initMobileProjectRouter() {
       if (nowMobile === lastMobile) return;
       lastMobile = nowMobile;
       if (!nowMobile) {
+        document.body.classList.remove('mobile-profile-open');
+        document
+          .querySelectorAll('.profile-fade-in')
+          .forEach((s) => s.classList.remove('profile-fade-in'));
         document
           .querySelectorAll('.mobile-hidden-project, .mobile-active-project')
           .forEach((s) => {
@@ -177,6 +250,8 @@ function initMobileProjectRouter() {
   window.addEventListener('languagechange', () => {
     if (isMobile()) {
       document.querySelectorAll('.project-section').forEach((s) => s.remove());
+      // Keep an open profile overlay visible; only projects need rebuilding.
+      if (isProfileOpen()) return;
       hideAll();
     }
   });
