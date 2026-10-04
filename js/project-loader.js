@@ -9,9 +9,43 @@ function protectGalleryImage(image) {
   if (!(image instanceof HTMLImageElement)) return;
 
   image.draggable = false;
-  image.oncontextmenu = (event) => event.preventDefault();
-  image.addEventListener('contextmenu', (event) => event.preventDefault());
   image.addEventListener('dragstart', (event) => event.preventDefault());
+  // Block the OS menu but offer a save that uses the project-N filename.
+  const saveWithName = (event) => {
+    event.preventDefault();
+    downloadGalleryImage(image);
+  };
+  image.oncontextmenu = saveWithName;
+  image.addEventListener('contextmenu', saveWithName);
+}
+
+// Trigger a download of the image's current (largest loaded) source, named
+// "<project>-<n>". Uses a temporary same-origin <a download>.
+function downloadGalleryImage(img) {
+  const src = img.currentSrc || img.src || img.dataset.src;
+  if (!src) return;
+  const name = img.dataset.downloadName || (img.alt || 'image');
+  const ext = (String(src).match(/\.(jpe?g|png|webp)$/i) || ['.jpg'])[0];
+  const a = document.createElement('a');
+  a.href = src;
+  a.download = name + ext;
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+// Public download name for a gallery image: "<project>-<n>" (1-based, in
+// gallery order), with dual images suffixed "-a"/"-b". The real file on disk
+// is untouched; this only affects the name the browser uses on save/download.
+function downloadName(projectId, index, slot) {
+  const base = `${projectId}-${index}`;
+  return slot != null ? `${base}${slot === 0 ? 'a' : 'b'}` : base;
+}
+
+function applyDownloadName(img, name) {
+  img.dataset.downloadName = name;
+  img.setAttribute('download', name);
 }
 
 // Build the CSS filter for an image from its per-entry options.
@@ -511,7 +545,7 @@ async function buildProjectSection(project) {
   const manifest = await getManifest();
   const texts = await loadProjectTexts(project.id);
 
-  project.gallery.forEach((item) => {
+  project.gallery.forEach((item, galleryIndex) => {
     if (!item.src) return;
     const slide = document.createElement('div');
     slide.className = 'gallery-slide';
@@ -546,6 +580,7 @@ async function buildProjectSection(project) {
         }
         img.style.maxWidth = '100%';
         protectGalleryImage(img);
+        applyDownloadName(img, downloadName(project.id, galleryIndex + 1, idx));
         prepareImage(img, src, manifest);
         dualWrap.appendChild(img);
       });
@@ -566,6 +601,7 @@ async function buildProjectSection(project) {
       }
       img.style.maxWidth = '100%';
       protectGalleryImage(img);
+      applyDownloadName(img, downloadName(project.id, galleryIndex + 1));
       prepareImage(img, item.src, manifest);
       slide.appendChild(img);
 
