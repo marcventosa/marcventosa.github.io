@@ -220,6 +220,10 @@
 
 .project-gallery .gallery-slide--portrait .gallery-side-copy .gallery-text {
     display: block !important;
+    /* typography.css forces .gallery-text to 75% width, which shrank the body
+       against the full-width title/subtitle and broke the shared column edge.
+       Let it fill the copy column so every fragment line justifies together. */
+    width: 100% !important;
     font-size: 0.72rem !important;
     line-height: 1.35 !important;
     color: #888 !important;
