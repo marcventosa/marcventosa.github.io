@@ -366,6 +366,28 @@ ul { list-style: none; margin: 0; padding: 0; }
   gap: 0.5rem;
 }
 
+/* Boxed group inside the editor, e.g. all the image adjustments together. */
+.subcard {
+  grid-column: 1 / -1;
+  border: 1px solid var(--border-light);
+  background: rgba(0, 0, 0, 0.015);
+  padding: 0.5rem 0.6rem 0.6rem;
+}
+.subcard-title {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--faint);
+  margin: 0 0 0.45rem;
+}
+.subcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.5rem;
+}
+
 .field { display: flex; flex-direction: column; gap: 0.2rem; font-family: var(--font-sans); font-size: 0.74rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
 .field select, .field input[type="text"] { width: 100%; }
 .field input[type="checkbox"] { align-self: flex-start; margin-top: 0.15rem; accent-color: var(--accent-ink); }

@@ -76,6 +76,37 @@ document.addEventListener('keydown', (e) => {
 
 const srcToFilename = (src) => String(src).split('/').pop();
 
+// Mirror of the public site's project-loader imageFilter(): builds the CSS
+// filter string for an entry's bw / contrast / threshold options, so the admin
+// thumbnail previews exactly what the live image will look like.
+function entryFilter(entry) {
+  if (entry.threshold) {
+    const t = Math.min(0.99, Math.max(0.01, entry.threshold / 100));
+    const b = 0.5 / t;
+    return `grayscale(100%) brightness(${b.toFixed(3)}) contrast(1000)`;
+  }
+  const parts = [];
+  if (entry.bw) parts.push('grayscale(100%)');
+  if (entry.contrast != null) parts.push(`contrast(${entry.contrast}%)`);
+  return parts.join(' ') || '';
+}
+
+// Re-apply the current filter to every thumbnail in an entry card, called live
+// as the B&W / contrast / threshold controls change.
+function refreshThumbs(card, entry) {
+  const filter = entryFilter(entry);
+  card.querySelectorAll('.thumb img').forEach((im) => { im.style.filter = filter; });
+}
+
+// Update an entry's summary text and thumbnails after an option changes.
+function refreshCard(entry, idx) {
+  const card = document.querySelectorAll('#gallery-list .entry')[idx];
+  if (!card) return;
+  const summary = card.querySelector('.summary');
+  if (summary) summary.textContent = summarize(entry);
+  refreshThumbs(card, entry);
+}
+
 const fragLabel = (i) => 'text' + (i + 1);
 function labelToIndex(label) {
   const m = /^text(\d+)$/.exec(String(label || '').trim().toLowerCase());
@@ -269,6 +300,9 @@ function buildEntryCard(entry, idx) {
   } else if (entry.src) {
     addThumb(entry.src);
   }
+  // Preview the entry's bw / contrast / threshold settings on the thumbnail.
+  const filter = entryFilter(entry);
+  if (filter) thumb.querySelectorAll('img').forEach((im) => { im.style.filter = filter; });
   const hasThumb = thumb.childElementCount > 0;
   if (hasThumb) grid.appendChild(thumb);
 
@@ -302,20 +336,14 @@ function buildEntryEditor(entry, idx) {
     wrap.appendChild(field('Image', imageSelect(entry, 0)));
   }
 
-  // Height slider(s)
-  if (type === 'dual') {
-    wrap.appendChild(field('Height left', heightSlider(entry, 0)));
-    wrap.appendChild(field('Height right', heightSlider(entry, 1)));
-  } else if (type === 'img' || type === 'imgtext') {
-    wrap.appendChild(field('Height', heightSlider(entry, 0)));
-  }
-
-  // Alt + B&W + filters
+  // Alt
   if (type !== 'text') {
     wrap.appendChild(field('Alt', altInput(entry)));
-    wrap.appendChild(field('B&W', bwInput(entry)));
-    wrap.appendChild(field('Contrast', imageSlider(entry, 'contrast', 50, 400, 100, 'Contrast around the original (100 = unchanged)')));
-    wrap.appendChild(field('Black threshold', imageSlider(entry, 'threshold', 0, 100, 0, 'Pixels darker than the threshold become black, lighter become white (0 = off). Great for scanned line plans.')));
+  }
+
+  // Image adjustments grouped in their own subcard for clarity.
+  if (type !== 'text') {
+    wrap.appendChild(adjustmentsCard(entry, idx));
   }
 
   // Text link + side (single images only; dual excluded per scope)
@@ -327,6 +355,35 @@ function buildEntryEditor(entry, idx) {
   }
 
   return wrap;
+}
+
+// Subcard grouping the visual image adjustments: height, B&W, contrast and
+// black threshold.
+function adjustmentsCard(entry, idx) {
+  const card = document.createElement('div');
+  card.className = 'subcard';
+
+  const title = document.createElement('div');
+  title.className = 'subcard-title';
+  title.textContent = 'Image adjustments';
+  card.appendChild(title);
+
+  const grid = document.createElement('div');
+  grid.className = 'subcard-grid';
+
+  const type = entryType(entry);
+  if (type === 'dual') {
+    grid.appendChild(field('Height left', heightSlider(entry, 0)));
+    grid.appendChild(field('Height right', heightSlider(entry, 1)));
+  } else if (type === 'img' || type === 'imgtext') {
+    grid.appendChild(field('Height', heightSlider(entry, 0)));
+  }
+  grid.appendChild(field('B&W', bwInput(entry, idx)));
+  grid.appendChild(field('Contrast', imageSlider(entry, 'contrast', 50, 400, 100, 'Contrast around the original (100 = unchanged)', idx)));
+  grid.appendChild(field('Black threshold', imageSlider(entry, 'threshold', 0, 100, 0, 'Pixels darker than the threshold become black, lighter become white (0 = off). Great for scanned line plans.', idx)));
+
+  card.appendChild(grid);
+  return card;
 }
 
 function field(label, control) {
@@ -454,7 +511,7 @@ function altInput(entry) {
   return inp;
 }
 
-function bwInput(entry) {
+function bwInput(entry, idx) {
   const cb = document.createElement('input');
   cb.type = 'checkbox';
   cb.checked = !!entry.bw;
@@ -463,13 +520,14 @@ function bwInput(entry) {
     if (cb.checked) entry.bw = true;
     else delete entry.bw;
     markDirty();
+    refreshCard(entry, idx);
   });
   return cb;
 }
 
 // Range + number slider that stores a numeric option on the entry, deleting it
 // when back at the default so the JSON stays clean.
-function imageSlider(entry, key, min, max, def, title) {
+function imageSlider(entry, key, min, max, def, title, idx) {
   const wrap = document.createElement('div');
   wrap.className = 'height';
 
@@ -495,6 +553,7 @@ function imageSlider(entry, key, min, max, def, title) {
     if (v === def) delete entry[key];
     else entry[key] = v;
     markDirty();
+    refreshCard(entry, idx);
   };
 
   const v = getVal();
